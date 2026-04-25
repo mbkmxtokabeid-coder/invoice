@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="light" data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable">
+
+<head>
+
+    <meta charset="utf-8" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>Ikhtiar Berkah Kasir</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Kasir Ikhtiar Berkah" name="description" />
+    <meta content="Ikhtiar Berkah" name="author" />
+
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="{{asset('images/ikhtiarberkah.png')}}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+    <!-- Layout config Js -->
+    <script src="{{asset('js/layout.js')}}"></script>
+    <!-- Bootstrap Css -->
+    <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+    <!-- Icons Css -->
+    <link href="{{asset('css/icons.min.css')}}" rel="stylesheet" type="text/css" />
+    <!-- App Css-->
+    <link href="{{asset('css/app.min.css')}}" rel="stylesheet" type="text/css" />
+
+</head>
+    <body class="auth-bg 100-vh">
+        <div class="account-pages">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-11">
+                        <div class="auth-full-page-content d-flex min-vh-100 py-sm-1 py-1">
+                            <div class="w-100">
+                                <div class="d-flex flex-column h-100 py-0 py-xl-4">
+
+                                    <div class="text-center mb-3">
+                                        <a href="index.html">
+                                            <span class="logo-lg">
+                                                <img src="{{asset('images/ikhtiarberkah.png')}}" alt="" height="100">
+                                            </span>
+                                        </a>
+                                    </div>
+
+                                    <div class="card my-auto overflow-hidden col-lg-6 align-self-center">
+                                        <form action="{{ route('password.email') }}" method="POST" id="login_form">
+                                          @csrf
+                                        <div class="row g-0">
+                                         <div class="col-lg-12">
+                                          <div class="p-lg-5 p-4">
+                                           <div class="text-center">
+                                            <h5 class="mb-0">Reset Password</h5>
+                                             <p class="text-muted mt-2">Silahkan masukkan email Anda</p>
+                                           </div>
+                                           
+                                           @if (session('status'))
+                                            <div class="alert alert-info" role="alert">
+                                                {{ session('status') }}
+                                            </div>
+                                        @endif
+                                           
+                                            @if(session()->has('error'))
+                                              <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
+                                                {{ session('error') }}
+                                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                              </div>
+                                            @endif
+
+                                           <div class="mt-4">
+                                            <form action="index.html" class="auth-input">
+                                             <div class="mb-3">
+                                               <input type="email" class="form-control @error('email') is-invalid @enderror" id="username" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus placeholder="Masukkan Email">
+
+                                               @error('email')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                               @enderror
+
+                                             </div>
+
+                                            <div class="mt-2">
+                                               <button class="btn btn-primary w-100" type="submit">Send Password Reset Link</button>
+                                              </div>
+
+                                            </form>
+                                           </div>
+                                          </div>
+                                         </div>
+
+                                        </div>
+                                    </div>
+                                    <!-- end card -->
+                                  </form>
+                                    <div class="mt-5 text-center">
+                                        <p class="mb-0 text-muted">©
+                                            <script>document.write(new Date().getFullYear())</script> Ikhtiar Berkah
+
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end col -->
+                </div>
+                <!-- end row -->
+            </div>
+            <!-- end container -->
+        </div>
+
+    <!-- JAVASCRIPT -->
+
+    <script src="{{asset('libs/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{{asset('libs/simplebar/simplebar.min.js')}}"></script>
+    <script src="{{asset('libs/node-waves/waves.min.js')}}"></script>
+    <script src="{{asset('libs/feather-icons/feather.min.js')}}"></script>
+    <script src="{{asset('js/plugins.js')}}"></script>
+
+    <!-- password-addon init -->
+
+    <script src="{{asset('js/pages/password-addon.init.js')}}"></script>
+    {{-- <script src="{{asset('js/app.js')}}"></script> --}}
+
+</body>
+</html>

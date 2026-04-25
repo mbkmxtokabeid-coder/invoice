@@ -1,0 +1,142 @@
+[19-Jun-2023 07:37:52 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/bootstrap/paths.php): failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/server.php on line 7
+[19-Jun-2023 07:37:52 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/bootstrap/paths.php): failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/server.php on line 7
+[19-Jun-2023 07:37:52 UTC] PHP Fatal error:  require(): Failed opening required '/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/bootstrap/paths.php' (include_path='.:/opt/cpanel/ea-php56/root/usr/share/pear') in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/server.php on line 7
+[19-Jun-2023 07:39:15 UTC] PHP Parse error:  syntax error, unexpected '?' in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/bootstrap/app.php on line 15
+[19-Jun-2023 07:55:53 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/bootstrap/paths.php): Failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/server.php on line 7
+[19-Jun-2023 07:55:53 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/bootstrap/paths.php): Failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/server.php on line 7
+[19-Jun-2023 07:55:53 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/bootstrap/paths.php' (include_path='.:/opt/cpanel/ea-php81/root/usr/share/pear') in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/server.php:7
+Stack trace:
+#0 {main}
+  thrown in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/server.php on line 7
+[19-Jun-2023 07:56:31 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Foundation\Application" not found in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/bootstrap/app.php:14
+Stack trace:
+#0 /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/server.php(7): require()
+#1 {main}
+  thrown in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/bootstrap/app.php on line 14
+[19-Jun-2023 08:09:12 UTC] PHP Warning:  require_once(/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/public_html/index.php): Failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/server.php on line 21
+[19-Jun-2023 08:09:12 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/public_html/index.php' (include_path='.:/opt/cpanel/ea-php81/root/usr/share/pear') in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/server.php:21
+Stack trace:
+#0 {main}
+  thrown in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/server.php on line 21
+[19-Jun-2023 08:53:46 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php): failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 08:53:46 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php): failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 08:53:46 UTC] PHP Fatal error:  require(): Failed opening required '/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php56/root/usr/share/pear') in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 08:54:18 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 08:54:18 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 08:54:18 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php81/root/usr/share/pear') in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php:34
+Stack trace:
+#0 {main}
+  thrown in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 08:54:54 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 08:54:54 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 08:54:54 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php81/root/usr/share/pear') in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php:34
+Stack trace:
+#0 {main}
+  thrown in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 08:54:55 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 08:54:55 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 08:54:55 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php81/root/usr/share/pear') in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php:34
+Stack trace:
+#0 {main}
+  thrown in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 08:57:39 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 08:57:39 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 08:57:39 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php81/root/usr/share/pear') in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php:34
+Stack trace:
+#0 {main}
+  thrown in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 08:58:15 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 08:58:15 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 08:58:15 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php81/root/usr/share/pear') in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php:34
+Stack trace:
+#0 {main}
+  thrown in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 08:58:16 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 08:58:16 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 08:58:16 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php81/root/usr/share/pear') in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php:34
+Stack trace:
+#0 {main}
+  thrown in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 09:01:12 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 09:01:12 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 09:01:12 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php81/root/usr/share/pear') in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php:34
+Stack trace:
+#0 {main}
+  thrown in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 09:01:14 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 09:01:14 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 09:01:14 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php81/root/usr/share/pear') in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php:34
+Stack trace:
+#0 {main}
+  thrown in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 09:01:31 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 09:01:31 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 09:01:31 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php81/root/usr/share/pear') in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php:34
+Stack trace:
+#0 {main}
+  thrown in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 09:01:36 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 09:01:36 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 09:01:36 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php81/root/usr/share/pear') in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php:34
+Stack trace:
+#0 {main}
+  thrown in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 09:05:14 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 09:05:14 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 09:05:14 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php81/root/usr/share/pear') in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php:34
+Stack trace:
+#0 {main}
+  thrown in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 09:05:17 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 09:05:17 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 09:05:17 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php81/root/usr/share/pear') in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php:34
+Stack trace:
+#0 {main}
+  thrown in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 09:05:21 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 09:05:21 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 09:05:21 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php81/root/usr/share/pear') in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php:34
+Stack trace:
+#0 {main}
+  thrown in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 09:06:58 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 09:06:58 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 09:06:58 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php81/root/usr/share/pear') in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php:34
+Stack trace:
+#0 {main}
+  thrown in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 09:06:58 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 09:06:58 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 09:06:58 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php81/root/usr/share/pear') in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php:34
+Stack trace:
+#0 {main}
+  thrown in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 09:07:05 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 09:07:05 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 09:07:05 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php81/root/usr/share/pear') in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php:34
+Stack trace:
+#0 {main}
+  thrown in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 09:07:22 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 09:07:22 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 09:07:22 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php81/root/usr/share/pear') in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php:34
+Stack trace:
+#0 {main}
+  thrown in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 09:08:29 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 09:08:29 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 09:08:29 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php81/root/usr/share/pear') in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php:34
+Stack trace:
+#0 {main}
+  thrown in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 09:08:31 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 09:08:31 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 09:08:31 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php81/root/usr/share/pear') in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php:34
+Stack trace:
+#0 {main}
+  thrown in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 34
+[19-Jun-2023 09:09:24 UTC] PHP Warning:  require_once(/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../bootstrap/app.php): Failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 47
+[19-Jun-2023 09:09:24 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/../bootstrap/app.php' (include_path='.:/opt/cpanel/ea-php81/root/usr/share/pear') in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php:47
+Stack trace:
+#0 {main}
+  thrown in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/index.php on line 47

@@ -1,0 +1,4 @@
+[03-Nov-2023 02:33:03 UTC] PHP Fatal error:  Uncaught Error: Class "App\Http\Controllers\Controller" not found in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/app/Http/Controllers/BudgetController.php:10
+Stack trace:
+#0 {main}
+  thrown in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/app/Http/Controllers/BudgetController.php on line 10

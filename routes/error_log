@@ -1,0 +1,4 @@
+[03-Nov-2023 02:31:45 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Support\Facades\Auth" not found in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/routes/web.php:36
+Stack trace:
+#0 {main}
+  thrown in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/routes/web.php on line 36

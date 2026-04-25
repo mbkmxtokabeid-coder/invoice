@@ -1,0 +1,1094 @@
+window.onload = function () {
+  timeFrame('month');
+  timeRange('year');
+  // timeRangePO('month');
+}
+function getChartColorsArray(e) {
+  if (null !== document.getElementById(e)) {
+    var o = document.getElementById(e).getAttribute("data-colors");
+    if (o)
+      return (o = JSON.parse(o)).map(function (e) {
+        var o = e.replace(" ", "");
+        return -1 === o.indexOf(",")
+          ? getComputedStyle(
+            document.documentElement
+          ).getPropertyValue(o) || o
+          : 2 == (e = e.split(",")).length
+            ? "rgba(" +
+            getComputedStyle(
+              document.documentElement
+            ).getPropertyValue(e[0]) +
+            "," +
+            e[1] +
+            ")"
+            : o;
+      });
+    // console.warn("data-colors atributes not found on", e);
+  }
+}
+
+// console.log(totalPerHari);
+// CHART BAR UNTUK UMUM (DILUAR PO)
+var options,
+  chart,
+  linechartBasicColors = getChartColorsArray("stacked_column_chart"),
+  barchartColors =
+    (linechartBasicColors &&
+      ((options = {
+        chart: {
+          height: 365,
+          type: "bar",
+          toolbar: { show: false },
+          zoom: { enabled: true },
+        },
+        plotOptions: {
+          bar: {
+            horizontal: false,
+            columnWidth: "60%",
+            endingShape: "rounded",
+          },
+        },
+        dataLabels: { enabled: false },
+        labels: hourArrayJS,
+        series: [
+          {
+            name: "Income",
+            data: totalJamArrayJS,
+          },
+        ],
+        xaxis: {
+          categories: hourArrayJS,
+        },
+        yaxis: {
+          min: -100000, // Nilai minimum di sumbu Y
+          max: 5000000, // Nilai maksimum di sumbu Y (Rp 5.000.000)
+          // forceNiceScale: true, // Paksa agar skala terlihat lebih rapi 
+          tickAmount: 5, // Dibagi menjadi 5 bagian (setiap 1.000.000) 
+          axisBorder: { show: false },
+          axisTicks: { show: false },
+          labels: {
+            show: true,
+            formatter: function (val) {
+              // let ticks = [500000, 1000000, 2000000, 3000000, 4000000, 5000000, 10000000, 20000000];
+              return "Rp " + val.toLocaleString();
+            },
+          },
+        },
+        grid: {
+          xaxis: { lines: { show: true } },
+          yaxis: { lines: { show: false } },
+        },
+        colors: linechartBasicColors,
+        legend: { show: false },
+        fill: { opacity: 1 },
+      }),
+      (chart = new ApexCharts(
+        document.querySelector("#stacked_column_chart"),
+        options
+      )).render()));
+
+var options, charts,
+  donutchartColors = getChartColorsArray("structure_widget"),
+  chartColors =
+    (donutchartColors &&
+      ((options = {
+        chart: { height: 300, type: "donut" },
+        series: datasMonthJS,
+        labels: ["Terbayar", "Belum Bayar"],
+        colors: ["#28a745", "#dc3545"],
+        plotOptions: { pie: { startAngle: 10, donut: { size: "78%" } } },
+        legend: { show: !1 },
+        dataLabels: {
+          style: {
+            fontSize: "11px",
+            fontFamily: "DM Sans,sans-serif",
+            colors: void 0,
+          },
+          background: {
+            enabled: !0,
+            foreColor: "#fff",
+            padding: 4,
+            borderRadius: 2,
+            borderWidth: 1,
+            borderColor: "#fff",
+            opacity: 1,
+          },
+        },
+        responsive: [
+          {
+            breakpoint: 600,
+            options: { chart: { height: 240 }, legend: { show: !1 } },
+          },
+        ],
+      }),
+        (charts = new ApexCharts(
+          document.querySelector("#structure_widget"),
+          options
+        )).render())
+    );
+
+// TimeFrame untuk button
+function timeFrame(period) {
+  const elementHarga = document.getElementById('harga');
+  const buttons = document.getElementsByClassName('tombol');
+  for (let i = 0; i < buttons.length; i++) {
+    buttons[i].classList.remove('btn-info');
+    buttons[i].classList.add('btn-soft-info');
+  }
+  const selectedButton = document.getElementById('btn-' + period);
+  selectedButton.classList.remove('btn-soft-info');
+  selectedButton.classList.add('btn-info');
+
+  const now = new Date();
+  const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 15, 0); //start pukul 8 karena indonesia gmt+7 maka 8+7
+  const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 24, 0); //end pukul 17 karena Indonesia gmt+7 maka 17+7
+  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1, 0, 1, 0, 0);
+  const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
+  const startOfYear = new Date(now.getFullYear(), 0, 1);
+  const endOfYear = new Date(now.getFullYear(), 10, 31, 23, 59, 59);
+  const currentYear = now.getFullYear();
+  const currentMonth = ("0" + (now.getMonth() + 1)).slice(-2); // Format dua digit
+
+  // Sinkronisasi panjang array
+// Fungsi untuk membuat array jam otomatis dari startHour ke endHour
+if (period === 'day') {
+  chart.updateOptions({
+    dataLabels: { enabled: false },
+    labels: hourArrayJS,
+    series: [
+      {
+        name: "Income",
+        data: totalJamArrayJS.map((value, index) => {
+          // Konversi waktu ke WIB secara langsung
+          let utcTime = new Date(hourArrayJS[index]);
+          let localTime = new Date(utcTime.setHours(utcTime.getHours() + 7));
+          return { x: localTime.toISOString().slice(11, 16), y: value };
+        }),
+        color:'#28A745',
+      },
+    ],
+    xaxis: {
+      type: 'category',
+      categories: hourArrayJS.map(time => {
+        let utcTime = new Date(time);
+        let localTime = new Date(utcTime.setHours(utcTime.getHours()));
+        return localTime.toISOString().slice(11, 16);
+      }), // Konversi waktu ke WIB
+      labels: {
+        formatter: function (val) {
+          return val; // Menampilkan jam dalam format HH:mm di zona waktu WIB
+        },
+      },
+    },
+    
+    yaxis: {
+      min: 0, // Nilai minimum di sumbu Y
+      max: 5000000, // Nilai maksimum di sumbu Y (Rp 5.000.000)
+      tickAmount: 5, // Dibagi menjadi 5 bagian (setiap 1.000.000) 
+      axisBorder: { show: false },
+      axisTicks: { show: false },
+      labels: {
+        show: true,
+        formatter: function (val) {
+          return "Rp " + val.toLocaleString();
+        },
+      },
+    },
+    plotOptions: {
+      bar: {
+        distributed: true, // Membuat tiap bar punya warna berbeda
+        borderRadius: 2, // Menambahkan border radius di ujung bar
+        columnWidth: "50%", // Ukuran lebar bar
+        endingShape: "rounded", // Ujung bar terlihat lebih smooth
+      },
+    },
+  });
+
+  if (elementHarga) {
+    elementHarga.innerHTML = `Rp. ${totalPerHari.toLocaleString()}<span class="text-muted d-inline-block fs-17 align-middle ms-0 ms-sm-2">Incomes</span>`;
+  }
+}
+
+
+
+else if (period === 'week') {
+  console.log("ðŸš€ Running Weekly Chart Update...");
+console.log("ðŸŸ¢ Entered Weekly Chart Update Block");
+
+// ðŸ”¹ Ambil tanggal hari ini dengan zona waktu Indonesia (GMT+7)
+let today = new Date();
+let dayOfWeek = today.getDay(); // 0 = Minggu, 1 = Senin, ..., 6 = Sabtu
+
+// ðŸ”¹ Start of Week HARUS Senin (Waktu Indonesia WIB)
+let startOfWeek = new Date(today);
+startOfWeek.setDate(today.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
+startOfWeek.setHours(0, 0, 0, 0);
+startOfWeek.setTime(startOfWeek.getTime() + (7 * 60 * 60 * 1000)); // Tambahkan GMT+7
+
+// ðŸ”¹ End of Week HARUS Hari Ini (Waktu Indonesia WIB)
+let endOfWeek = new Date(today);
+endOfWeek.setHours(23, 59, 59, 999);
+endOfWeek.setTime(endOfWeek.getTime() + (7 * 60 * 60 * 1000)); // Tambahkan GMT+7
+
+console.log("ðŸ“… Start of Week (Senin, WIB):", startOfWeek.toISOString());
+console.log("ðŸ“… End of Week (Hari Ini, WIB):", endOfWeek.toISOString());
+
+// ðŸ”¹ 1. Buat daftar tanggal dari Senin hingga hari ini
+let fullWeekDates = [];
+let currentDate = new Date(startOfWeek);
+
+while (currentDate <= endOfWeek) {
+    let formattedDate = currentDate.toISOString().split("T")[0]; // Format YYYY-MM-DD
+    fullWeekDates.push(formattedDate);
+    console.log("âœ… Adding Date to X-Axis:", formattedDate);
+    currentDate.setDate(currentDate.getDate() + 1);
+}
+
+console.log("ðŸ”¹ Full Week Dates (X-Axis):", fullWeekDates);
+
+// ðŸ”¹ 2. Inisialisasi Data Chart
+let weekDataMap = new Map(fullWeekDates.map(date => [date, -500000])); // Default -500000
+
+// ðŸ”¹ 3. Isi Data dari weekArrayJS
+weekArrayJS.forEach((date, index) => {
+    weekDataMap.set(date, Number(totalMingguanArrayJS[index]));
+});
+
+// ðŸ”¹ 4. Ambil kembali data yang sudah diurutkan sesuai minggu ini
+let finalWeeklyData = fullWeekDates.map(date => weekDataMap.get(date));
+
+// ðŸ”¹ 5. Hitung Total Income
+let totalIncome = finalWeeklyData.reduce((sum, val) => (val > 0 ? sum + val : sum), 0);
+let totalNegatif = finalWeeklyData.reduce((sum, val) => (val < 0 ? sum + val : sum), 0);
+let netIncome = totalIncome + totalNegatif;
+
+console.log("âœ… Total Positif:", totalIncome);
+console.log("âœ… Total Negatif:", totalNegatif);
+console.log("âœ… Total Income Setelah Perhitungan:", netIncome);
+
+// ðŸ”¹ 6. Update Chart
+chart.updateOptions({
+    dataLabels: { enabled: false },
+    labels: fullWeekDates,
+    series: [{
+        name: "Income",
+        data: finalWeeklyData,
+        color:'#28A745',
+    }],
+    xaxis: {
+        type: 'category',
+        categories: fullWeekDates,
+        labels: {
+            format: 'dd MMM',
+        },
+    },
+    yaxis: {
+        min: -1000000,
+        max: 5000000,
+        tickAmount: 5,
+        axisBorder: { show: false },
+        axisTicks: { show: false },
+        labels: {
+            show: true,
+            formatter: function (val) {
+                return "Rp " + val.toLocaleString();
+            },
+        },
+    },
+});
+
+// ðŸ”¹ 7. Update Teks Total Income
+elementHarga.innerHTML = `
+    Total Income <strong>Rp ${totalIncome.toLocaleString()}</strong> 
+    - Negatif <strong>Rp ${Math.abs(totalNegatif).toLocaleString()}</strong> 
+    = <strong>Rp ${netIncome.toLocaleString()}</strong>
+`;
+
+// Kondisi per bulan
+}else if (period === 'month') {
+  let now = new Date();
+  let currentYear = now.getFullYear();
+  let currentMonth = ("0" + (now.getMonth() + 1)).slice(-2);
+  let currentDay = ("0" + now.getDate()).slice(-2); // Ambil tanggal hari ini
+
+  // âœ… Pastikan hanya sampai tanggal hari ini, bukan akhir bulan
+  let fullDateArray = Array.from({ length: now.getDate() }, (_, i) => 
+      `${currentYear}-${currentMonth}-${("0" + (i + 1)).slice(-2)}`
+  );
+
+  // âœ… Mapping data untuk tanggal yang ada, jika tidak ada isi -500000
+  let dataMap = new Map(dateArrayJS.map((date, index) => [date, totalHarianArrayJS[index] ?? -500000]));
+  let filteredTotalHarianArray = fullDateArray.map(date => Number(dataMap.get(date) ?? -500000));
+
+  // âœ… Pisahkan nilai positif dan negatif
+  let totalPositif = filteredTotalHarianArray
+      .filter(val => val > 0)
+      .reduce((acc, val) => acc + val, 0); // Jumlah total nilai positif
+
+  let totalNegatif = filteredTotalHarianArray
+      .filter(val => val < 0)
+      .reduce((acc, val) => acc + val, 0); // Jumlah total nilai negatif
+
+  let totalIncome = totalPositif + totalNegatif; // Hasil akhirnya
+
+  console.log("Total Positif:", totalPositif);
+  console.log("Total Negatif:", totalNegatif);
+  console.log("Total Income Setelah Perhitungan:", totalIncome);
+
+  // âœ… Update Chart
+  chart.updateOptions({
+      series: [{
+          name: "Income",
+          data: filteredTotalHarianArray
+      }],
+      xaxis: {
+          type: 'category', 
+          categories: fullDateArray,
+          labels: {
+              formatter: function (value) {
+                  return value.split("-")[2]; // Ambil tanggal saja (dd)
+              }
+          }
+      },
+      yaxis: {
+          min: -1000000,
+          max: 5000000,
+          tickAmount: 6,
+          forceNiceScale: true,
+          labels: {
+              formatter: function (val) {
+                  return "Rp " + val.toLocaleString();
+              }
+          }
+      },
+      plotOptions: {
+          bar: {
+              colors: {
+                  ranges: [
+                      { from: -1000000, to: 0, color: '#F15B46' }, // Merah untuk negatif
+                      { from: 0, to: 100000000, color: '#28A745' } // Hijau untuk positif
+                  ]
+              }
+          }
+      },
+      dataLabels: { enabled: false }
+  });
+
+  if (elementHarga) {
+      elementHarga.innerHTML = `Total Income Rp. ${totalPositif.toLocaleString()} - Negatif Rp. ${Math.abs(totalNegatif).toLocaleString()} = <strong>Rp. ${totalIncome.toLocaleString()}</strong>`;
+  }
+}
+// Buat grafik pendapatan bulanan
+if (period === 'year') {
+  let now = new Date();
+  let currentYear = now.getFullYear();
+  let currentMonth = now.getMonth() + 1; // Bulan sekarang (1-12)
+  let currentDate = now.getDate(); // Tanggal hari ini
+
+  console.log("Current Year:", currentYear);
+
+  // ✅ Buat array dari Januari hingga bulan saat ini (YYYY-MM)
+  let fullMonthArray = Array.from({ length: currentMonth }, (_, i) => 
+      `${currentYear}-${("0" + (i + 1)).slice(-2)}`
+  );
+
+  console.log("Full Month Array:", fullMonthArray);
+
+  // ✅ Hitung total pendapatan bulanan tanpa validasi negatif
+  let monthlyTotalMap = new Map();
+
+  monthArrayJS.forEach((month, index) => {
+      let year = month.slice(0, 4); // Ambil tahun
+      let income = Number(totalBulananArrayJS[index]);
+
+      if (isNaN(income) || !/\d{4}-\d{2}/.test(month)) return;
+
+      if (year === String(currentYear)) {
+          if (monthlyTotalMap.has(month)) {
+              monthlyTotalMap.set(month, monthlyTotalMap.get(month) + income);
+          } else {
+              monthlyTotalMap.set(month, income);
+          }
+      }
+  });
+
+  console.log("Monthly Total Map:", monthlyTotalMap);
+
+  let totalBulananArray = fullMonthArray.map(month => {
+      return monthlyTotalMap.has(month) ? monthlyTotalMap.get(month) : 0;
+  });
+
+  console.log("Total Bulanan Array:", totalBulananArray);
+
+  // ✅ Hitung total negatif di setiap bulan dari dateArrayJS (hanya sampai hari ini)
+  let totalNegatifPerBulan = Array.from({ length: currentMonth }, (_, month) => {
+      let daysInMonth = month + 1 === currentMonth ? currentDate : new Date(currentYear, month + 1, 0).getDate();
+      let totalNegatif = 0;
+
+      for (let day = 1; day <= daysInMonth; day++) {
+          let formattedDate = `${currentYear}-${("0" + (month + 1)).slice(-2)}-${("0" + day).slice(-2)}`;
+
+          if (!dateArrayJS.includes(formattedDate)) {
+              totalNegatif += -500000;
+          }
+      }
+
+      console.log(`Total Negatif di Bulan ${month + 1}:`, totalNegatif);
+      return totalNegatif;
+  });
+
+  console.log("Total Negatif Per Bulan:", totalNegatifPerBulan);
+
+  let totalIncomeBulanIni = totalBulananArray[currentMonth - 1] || 0;
+  let totalNegatifBulanIni = totalNegatifPerBulan[currentMonth - 1];
+
+  let totalIncomeBulanan = totalIncomeBulanIni + totalNegatifBulanIni;
+
+  console.log("Total Income Bulanan (Setelah Koreksi Negatif Bulan Ini):", totalIncomeBulanan);
+
+  chart.updateOptions({
+    series: [
+        {
+            name: "Monthly Income (With formula)",
+            data: totalBulananArray.map((value, index) => value + totalNegatifPerBulan[index]),
+            color: '#FFC107', // Warna merah untuk seri dengan koreksi
+        },
+        {
+            name: "Monthly Income (Original)",
+            data: totalBulananArray,
+            color: '#28A745', // Warna hijau untuk seri original
+        }
+    ],
+    xaxis: {
+        type: 'category',
+        categories: fullMonthArray,
+        labels: {
+            formatter: function (value) {
+                return new Date(value + "-01").toLocaleString('en-US', { month: 'short' });
+            }
+        }
+    },
+    yaxis: {
+        // min: Math.min(...totalBulananArray.map((value, index) => value + totalNegatifPerBulan[index]), 0),
+        // max: Math.max(...totalBulananArray.map((value, index) => value + totalNegatifPerBulan[index])) + 1000000,
+        tickAmount: 6,
+        forceNiceScale: true,
+        labels: {
+            formatter: function (val) {
+                return "Rp " + val.toLocaleString();
+            }
+        }
+    },
+    plotOptions: {
+      bar: {
+          borderRadius: 2,
+          columnWidth: "50%",
+          endingShape: "rounded",
+          
+          colors: {
+              ranges: [
+                  { from: -Infinity, to: -1, color: '#DC3545' }, // Merah jika negatif
+                 
+              ]
+          }
+      }
+  },
+    dataLabels: { enabled: false }
+  });
+
+  if (elementHarga) {
+      elementHarga.innerHTML = `Total Income Rp. ${totalIncomeBulanIni.toLocaleString()} - Negatif Bulan Ini Rp. ${totalNegatifBulanIni.toLocaleString()} = Rp. ${totalIncomeBulanan.toLocaleString()}`;
+  }
+}
+else if (period === 'lastYear') {
+
+  console.log(" Month Array:", monthArrayLastYearJS);
+  console.log(" Month Array:", totalBulananArrayLastYearJS);
+
+
+  
+  let now = new Date();
+  let lastYear = now.getFullYear() - 1;
+
+  // ✅ Buat array Januari - Desember tahun lalu
+  let fullMonthArrayLastYear = Array.from({ length: 12 }, (_, i) =>
+    `${lastYear}-${("0" + (i + 1)).slice(-2)}`
+  );
+
+  // ✅ Petakan month & income tahun lalu ke Map
+  let monthlyTotalMapLastYear = new Map();
+  monthArrayLastYearJS.forEach((month, index) => {
+    if (month.startsWith(`${lastYear}-`)) {
+      monthlyTotalMapLastYear.set(month, Number(totalBulananArrayLastYearJS[index]));
+    }
+  });
+
+  // ✅ Susun array total bulanan (isi 0 kalau kosong)
+  let totalBulananArrayLastYear = fullMonthArrayLastYear.map(month => {
+    return monthlyTotalMapLastYear.get(month) || 0;
+  });
+
+  // ✅ Hitung negatif per bulan (berdasarkan jumlah tanggal yang gak ada)
+  let totalNegatifPerBulanLastYear = Array.from({ length: 12 }, (_, month) => {
+    let daysInMonth = new Date(lastYear, month + 1, 0).getDate();
+    let totalNegatif = 0;
+
+    for (let day = 1; day <= daysInMonth; day++) {
+      let formattedDate = `${lastYear}-${("0" + (month + 1)).slice(-2)}-${("0" + day).slice(-2)}`;
+      if (!dateArrayLastYearJS.includes(formattedDate)) {
+        totalNegatif += -500000;
+      }
+    }
+
+    return totalNegatif;
+  });
+
+  // ✅ Total income Desember (bulan ke-12)
+  let totalIncomeBulanDes = totalBulananArrayLastYear[11] || 0;
+  let totalNegatifDes = totalNegatifPerBulanLastYear[11];
+  let totalIncomeFixDes = totalIncomeBulanDes + totalNegatifDes;
+
+  chart.updateOptions({
+    series: [
+      {
+        name: "Monthly Income Last Year (With Formula)",
+        data: totalBulananArrayLastYear.map((v, i) => v + totalNegatifPerBulanLastYear[i]),
+        color: '#FFC107',
+      },
+      {
+        name: "Monthly Income Last Year (Original)",
+        data: totalBulananArrayLastYear,
+        color: '#28A745',
+      }
+    ],
+    xaxis: {
+      categories: fullMonthArrayLastYear,
+      labels: {
+        formatter: value => new Date(value + "-01").toLocaleString('en-US', { month: 'short' })
+      }
+    },
+    yaxis: {
+      min: Math.min(...totalBulananArrayLastYear.map((v, i) => v + totalNegatifPerBulanLastYear[i]), 0),
+      max: Math.max(...totalBulananArrayLastYear.map((v, i) => v + totalNegatifPerBulanLastYear[i])) + 1000000,
+      tickAmount: 6,
+      forceNiceScale: true,
+      labels: {
+        formatter: val => "Rp " + val.toLocaleString()
+      }
+    },
+    plotOptions: {
+      bar: {
+        borderRadius: 2,
+        columnWidth: "50%",
+        endingShape: "rounded",
+        colors: {
+          ranges: [{ from: -Infinity, to: -1, color: '#DC3545' }]
+        }
+      }
+    },
+    dataLabels: { enabled: false }
+  });
+
+  if (elementHarga) {
+    elementHarga.innerHTML = `Total Income Desember Tahun lalu Rp. ${totalIncomeBulanDes.toLocaleString()} - Negatif Rp. ${totalNegatifDes.toLocaleString()} = Rp. ${totalIncomeFixDes.toLocaleString()}`;
+  }
+}
+}
+
+function timeRange(period) {
+  const periodeElement = document.getElementById('periode');
+  const terbayarElement = document.getElementById('terbayar');
+  const belumTerbayarElement = document.getElementById('belumTerbayar');
+  const batalElement = document.getElementById('batal');
+  const persenTerbayarElement = document.getElementById('persenTerbayar');
+  const persenBlmTerbayarElement = document.getElementById('persenBlmTerbayar');
+  const persenBatalElement = document.getElementById('persenBatal');
+
+  switch (period) {
+    case 'year':
+      charts.updateOptions({
+        series: [datasYearJS[0], datasYearJS[1]],
+      });
+      periodeElement.innerText = 'Yearly';
+      terbayarElement.innerText = 'Rp.' + datasYearJS[0].toLocaleString();
+      belumTerbayarElement.innerText = ' Rp.' + datasYearJS[1].toLocaleString();
+      batalElement.innerText = 'Rp.' + datasYearJS[2].toLocaleString();
+      persenTerbayarElement.innerText = formatPersentaseTerbayar(percentInYearJS) + '%';
+      persenBlmTerbayarElement.innerText = formatPersentase(percentNotPaidYearJS) + '%';
+      persenBatalElement.innerText = formatPersentaseBatal(percentCanceledYearJS) + '%';
+      break;
+    case 'month':
+      charts.updateOptions({
+        series: [datasMonthJS[0], datasMonthJS[1]],
+      });
+      periodeElement.innerText = 'Monthly';
+      terbayarElement.innerText = 'Rp.' + datasMonthJS[0].toLocaleString();
+      belumTerbayarElement.innerText = ' Rp.' + datasMonthJS[1].toLocaleString();
+      batalElement.innerText = 'Rp.' + datasMonthJS[2].toLocaleString();
+      persenTerbayarElement.innerText = formatPersentaseTerbayar(percentInMonthJS) + '%';
+      persenBlmTerbayarElement.innerText = formatPersentase(percentNotPaidMonthJS) + '%';
+      persenBatalElement.innerText = formatPersentaseBatal(percentCanceledMonthJS) + '%';
+      break;
+    default:
+      charts.updateOptions({
+        series: [datasWeekJS[0], datasWeekJS[1]],
+      });
+      periodeElement.innerText = 'Weekly';
+      terbayarElement.innerText = 'Rp.' + datasWeekJS[0].toLocaleString();
+      belumTerbayarElement.innerText = ' Rp.' + datasWeekJS[1].toLocaleString();
+      batalElement.innerText = 'Rp.' + datasWeekJS[2].toLocaleString();
+      persenTerbayarElement.innerText = formatPersentaseTerbayar(percentInWeekJS) + '%';
+      persenBlmTerbayarElement.innerText = formatPersentase(percentNotPaidWeekJS) + '%';
+      persenBatalElement.innerText = formatPersentaseBatal(percentCanceledWeekJS) + '%';
+      break;
+  }
+  // if (period == 'year') {
+
+
+  // } else if (period == 'month') {
+
+  // } else if (period == 'week') {
+
+  // }
+}
+
+function formatPersentaseTerbayar(persen) {
+  const persenTerbayarElement = document.getElementById('persenTerbayar');
+  if (persen < 0) {
+    persenTerbayarElement.classList.remove('badge', 'bg-primary');
+    persenTerbayarElement.classList.add('badge', 'bg-danger');
+    return persen;
+  } else {
+    persenTerbayarElement.classList.remove('badge', 'bg-danger');
+    persenTerbayarElement.classList.add('badge', 'bg-primary');
+    return '+' + persen;
+  }
+}
+
+function formatPersentase(persen) {
+  const persenBlmTerbayarElement = document.getElementById('persenBlmTerbayar');
+
+  if (persen > 0) {
+    persenBlmTerbayarElement.classList.remove('badge', 'bg-primary');
+    persenBlmTerbayarElement.classList.add('badge', 'bg-danger');
+    return '+' + persen;
+  } else {
+    persenBlmTerbayarElement.classList.remove('badge', 'bg-danger');
+    persenBlmTerbayarElement.classList.add('badge', 'bg-primary');
+    return persen;
+  }
+}
+
+function formatPersentaseBatal(persen) {
+  const persenBatalElement = document.getElementById('persenBatal');
+  if (persen > 0) {
+    persenBatalElement.classList.remove('badge', 'bg-primary');
+    persenBatalElement.classList.add('badge', 'bg-danger');
+    return '+' + persen;
+  }
+  persenBatalElement.classList.remove('badge', 'bg-danger');
+  persenBatalElement.classList.add('badge', 'bg-primary');
+
+  return persen
+}
+
+// CHART PO
+
+var options,
+  chartPO,
+  linechartBasicColorsPO = getChartColorsArray("stacked_column_chart_po"),
+  barchartColors =
+    (linechartBasicColorsPO &&
+      ((options = {
+        chart: {
+          height: 362,
+          type: "bar",
+          toolbar: { show: !1 },
+          zoom: { enabled: !0 },
+        },
+        plotOptions: {
+          bar: {
+            horizontal: !1,
+            columnWidth: "35%",
+            endingShape: "rounded",
+          },
+        },
+        dataLabels: { enabled: !1 },
+        labels: hourArrayJSPO,
+        series: [
+          {
+            name: "Income",
+            data: totalJamArrayJSPO,
+          },
+
+        ],
+        xaxis: {
+
+        },
+        grid: {
+          xaxis: { lines: { show: !1 } },
+          yaxis: { lines: { show: !1 } },
+        },
+        colors: linechartBasicColorsPO,
+        legend: { show: !1 },
+        fill: { opacity: 1 },
+      }),
+        (chartPO = new ApexCharts(
+          document.querySelector("#stacked_column_chart_po"),
+          options
+        )).render())
+    );
+
+var options, chartsPO,
+  donutchartColorsPO = getChartColorsArray("structure_widget_po"),
+  chartColors =
+    (donutchartColorsPO &&
+      ((options = {
+        chart: { height: 300, type: "donut" },
+        series: datasMonthJSPO,
+        labels: ["Terbayar", "Belum Bayar", "Batal"],
+        colors: donutchartColorsPO,
+        plotOptions: { pie: { startAngle: 25, donut: { size: "78%" } } },
+        legend: { show: !1 },
+        dataLabels: {
+          style: {
+            fontSize: "11px",
+            fontFamily: "DM Sans,sans-serif",
+            colors: void 0,
+          },
+          background: {
+            enabled: !0,
+            foreColor: "#fff",
+            padding: 4,
+            borderRadius: 2,
+            borderWidth: 1,
+            borderColor: "#fff",
+            opacity: 1,
+          },
+        },
+        responsive: [
+          {
+            breakpoint: 600,
+            options: { chart: { height: 240 }, legend: { show: !1 } },
+          },
+        ],
+      }),
+        (chartsPO = new ApexCharts(
+          document.querySelector("#structure_widget_po"),
+          options
+        )).render())
+    );
+
+function timeFramePO(period) {
+  const buttons = document.getElementsByClassName('tombolPO');
+  for (let i = 0; i < buttons.length; i++) {
+    buttons[i].classList.remove('btn-info');
+    buttons[i].classList.add('btn-soft-info');
+  }
+  const elementHarga = document.getElementById('jumlahPO');
+  const selectedButton = document.getElementById('btn_' + period);
+  selectedButton.classList.remove('btn-soft-info');
+  selectedButton.classList.add('btn-info');
+
+  const now = new Date();
+  const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 15, 0); //start pukul 8 karena indonesia gmt+7 maka 8+7
+  const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 24, 0); //end pukul 17 karena Indonesia gmt+7 maka 17+7
+  const startOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  startOfWeek.setDate(now.getDate() - now.getDay() + 1);
+  const endOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  endOfWeek.setDate(now.getDate() - now.getDay() + 6);
+  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1, 0, 1, 0, 0);
+  const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
+  const startOfYear = new Date(now.getFullYear(), 0, 1);
+  const endOfYear = new Date(now.getFullYear(), 10, 31, 23, 59, 59);
+  
+  switch (period) {
+    case 'day':
+
+      chartPO.updateOptions({
+        dataLabels: { enabled: !1 },
+        labels: hourArrayJSPO,
+        series: [
+          {
+            name: "Income",
+            data: totalJamArrayJSPO,
+          },
+
+        ],
+        xaxis: {
+          type: 'datetime',
+          min: startOfDay.getTime(),
+          max: endOfDay.getTime(),
+          labels: {
+            format: 'HH:mm',
+          },
+        },
+      });
+      elementHarga.innerHTML = `Rp. ${totalPerHariPO}<span class="text-muted d-inline-block fs-17 align-middle ms-0 ms-sm-2">PO</span>`;
+      break;
+    case 'week':
+      // const formattedWeek = totalMingguanArrayJSPO.map(val => parse(val).toLocaleString());
+      // console.log(formattedWeek)
+      chartPO.updateOptions({
+        dataLabels: { enabled: !1 },
+        labels: weekArrayJSPO,
+        // {
+        //   show: true,
+        //   formatter: function (val) {
+        //     return "Rp " + val.toLocaleString();
+        //   }
+        // },
+        series: [
+          {
+            name: "Income",
+            data: totalMingguanArrayJSPO,
+          },
+
+        ],
+        xaxis: {
+          type: 'datetime',
+          min: startOfWeek.getTime(),
+          max: endOfWeek.getTime(),
+          labels: {
+            format: 'dd MMM',
+          },
+        },
+      });
+      elementHarga.innerHTML = `Rp. ${totalPerMingguPO}<span class="text-muted d-inline-block fs-17 align-middle ms-0 ms-sm-2">PO</span>`;
+      break;
+    case 'month':
+      chartPO.updateOptions({
+        dataLabels: { enabled: !1 },
+        labels: dateArrayJSPO,
+        series: [
+          {
+            name: "Income",
+            data: totalHarianArrayJSPO,
+          },
+
+        ],
+        xaxis: {
+          type: 'datetime',
+          min: startOfMonth.getTime(),
+          max: endOfMonth.getTime(),
+          labels: {
+            format: 'dd',
+          },
+        },
+      });
+      if (elementHarga) {
+        elementHarga.innerHTML = `Rp. ${totalPerBulanPO}<span class="text-muted d-inline-block fs-17 align-middle ms-0 ms-sm-2">PO</span>`;
+      }
+      break;
+    case 'year':
+      chartPO.updateOptions({
+        dataLabels: { enabled: !1 },
+        labels: monthArrayJSPO,
+        series: [
+          {
+            name: "Income",
+            data: totalBulananArrayJSPO,
+          },
+
+        ],
+        xaxis: {
+          type: 'datetime',
+          min: startOfYear.getTime(),
+          max: endOfYear.getTime(),
+          labels: {
+            format: 'MMM',
+          },
+        },
+      });
+      elementHarga.innerHTML = `Rp. ${totalPerTahunPO}<span class="text-muted d-inline-block fs-17 align-middle ms-0 ms-sm-2">PO</span>`;
+      break;
+    default:
+      Alert('error')
+      break;
+  }
+
+
+}
+
+// Chart Outstanding Barang
+
+var options = {
+  series: [{
+    name: 'Jumlah Sisa',
+    data: totalSisa
+  }],
+  chart: {
+    height: 350,
+    type: 'bar',
+    toolbar: { show: !1 },
+  },
+  plotOptions: {
+    bar: {
+      horizontal: !1,
+      borderRadius: 0,
+      columnWidth: "35%",
+      endingShape: "rounded",
+      dataLabels: {
+        position: 'top', // top, center, bottom
+      },
+    }
+  },
+  dataLabels: { enabled: !1 },
+
+  // dataLabels: {
+  //   enabled: true,
+  //   formatter: function (val) {
+  //     return "Rp " + val.toLocaleString();
+  //   },
+  //   offsetY: -20,
+  //   style: {
+  //     fontSize: '12px',
+  //     colors: ["#304758"]
+  //   }
+  // },
+
+  xaxis: {
+    categories: namaVendor,
+    position: 'bottom',
+    axisBorder: {
+      show: true
+    },
+    axisTicks: {
+      show: false
+    },
+    crosshairs: {
+      fill: {
+        type: 'gradient',
+        gradient: {
+          colorFrom: '#D8E3F0',
+          colorTo: '#BED1E6',
+          stops: [0, 100],
+          opacityFrom: 0.4,
+          opacityTo: 0.5,
+        }
+      }
+    },
+    tooltip: {
+      enabled: false,
+    }
+  },
+  yaxis: {
+    axisBorder: {
+      show: false
+    },
+    axisTicks: {
+      show: false,
+    },
+    labels: {
+      show: true,
+      formatter: function (val) {
+        return "Rp " + val.toLocaleString();
+      }
+    }
+
+  },
+  // title: {
+  //   text: 'Nama Vendor',
+  //   floating: true,
+  //   offsetY: 330,
+  //   align: 'center',
+  //   style: {
+  //     color: '#444'
+  //   }
+  // },
+  colors: ['#438a7a'],
+};
+var chartOut = new ApexCharts(document.querySelector("#vendorChart"), options);
+chartOut.render();
+
+
+
+// function timeRangePO(period) {
+//   const periodeElement = document.getElementById('periodePO');
+//   const terbayarElement = document.getElementById('terbayarPO');
+//   const belumTerbayarElement = document.getElementById('belumTerbayarPO');
+//   const batalElement = document.getElementById('batalPO');
+//   const persenTerbayarElement = document.getElementById('persenTerbayarPO');
+//   const persenBlmTerbayarElement = document.getElementById('persenBlmTerbayarPO');
+//   const persenBatalElement = document.getElementById('persenBatalPO');
+
+//   switch (period) {
+//     case 'year':
+//       chartsPO.updateOptions({
+//         series: datasYearJSPO,
+//       });
+//       periodeElement.innerText = 'Yearly';
+//       terbayarElement.innerText = 'Rp.' + datasYearJSPO[0].toLocaleString();
+//       belumTerbayarElement.innerText = ' Rp.' + datasYearJSPO[1].toLocaleString();
+//       batalElement.innerText = 'Rp.' + datasYearJSPO[2].toLocaleString();
+//       persenTerbayarElement.innerText = formatPersentaseTerbayarPO(percentInYearJSPO) + '%';
+//       persenBlmTerbayarElement.innerText = formatPersentasePO(percentNotPaidYearJSPO) + '%';
+//       persenBatalElement.innerText = formatPersentaseBatalPO(percentCanceledYearJSPO) + '%';
+//       break;
+//     case 'month':
+//       chartsPO.updateOptions({
+//         series: datasMonthJSPO,
+//       });
+//       periodeElement.innerText = 'Monthly';
+//       terbayarElement.innerText = 'Rp.' + datasMonthJSPO[0].toLocaleString();
+//       belumTerbayarElement.innerText = ' Rp.' + datasMonthJSPO[1].toLocaleString();
+//       batalElement.innerText = 'Rp.' + datasMonthJSPO[2].toLocaleString();
+//       persenTerbayarElement.innerText = formatPersentaseTerbayarPO(percentInMonthJSPO) + '%';
+//       persenBlmTerbayarElement.innerText = formatPersentasePO(percentNotPaidMonthJSPO) + '%';
+//       persenBatalElement.innerText = formatPersentaseBatalPO(percentCanceledMonthJSPO) + '%';
+//       break;
+//     default:
+//       chartsPO.updateOptions({
+//         series: datasWeekJS,
+//       });
+//       periodeElement.innerText = 'Weekly';
+//       terbayarElement.innerText = 'Rp.' + datasWeekJSPO[0].toLocaleString();
+//       belumTerbayarElement.innerText = ' Rp.' + datasWeekJSPO[1].toLocaleString();
+//       batalElement.innerText = 'Rp.' + datasWeekJSPO[2].toLocaleString();
+//       persenTerbayarElement.innerText = formatPersentaseTerbayarPO(percentInWeekJSPO) + '%';
+//       persenBlmTerbayarElement.innerText = formatPersentasePO(percentNotPaidWeekJSPO) + '%';
+//       persenBatalElement.innerText = formatPersentaseBatalPO(percentCanceledWeekJSPO) + '%';
+//       break;
+//   }
+
+// }
+
+// function formatPersentaseTerbayarPO(persen) {
+//   const persenTerbayarElement = document.getElementById('persenTerbayarPO');
+//   if (persen < 0) {
+//     persenTerbayarElement.classList.remove('badge', 'bg-primary');
+//     persenTerbayarElement.classList.add('badge', 'bg-danger');
+//     return persen;
+//   } else {
+//     persenTerbayarElement.classList.remove('badge', 'bg-danger');
+//     persenTerbayarElement.classList.add('badge', 'bg-primary');
+//     return '+' + persen;
+//   }
+// }
+
+// function formatPersentasePO(persen) {
+//   const persenBlmTerbayarElement = document.getElementById('persenBlmTerbayarPO');
+
+//   if (persen > 0) {
+//     persenBlmTerbayarElement.classList.remove('badge', 'bg-primary');
+//     persenBlmTerbayarElement.classList.add('badge', 'bg-danger');
+//     return '+' + persen;
+//   } else {
+//     persenBlmTerbayarElement.classList.remove('badge', 'bg-danger');
+//     persenBlmTerbayarElement.classList.add('badge', 'bg-primary');
+//     return persen;
+//   }
+// }
+
+// function formatPersentaseBatalPO(persen) {
+//   const persenBatalElement = document.getElementById('persenBatalPO');
+//   if (persen > 0) {
+//     persenBatalElement.classList.remove('badge', 'bg-primary');
+//     persenBatalElement.classList.add('badge', 'bg-danger');
+//     return '+' + persen;
+//   }
+//   persenBatalElement.classList.remove('badge', 'bg-danger');
+//   persenBatalElement.classList.add('badge', 'bg-primary');
+
+//   return persen
+// }

@@ -1,0 +1,89 @@
+[19-Jun-2023 07:33:10 UTC] PHP Fatal error:  Call to a member function bind() on null in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/public/index.php on line 22
+[19-Jun-2023 07:33:30 UTC] PHP Fatal error:  Call to a member function bind() on null in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/public/index.php on line 22
+[19-Jun-2023 07:35:35 UTC] PHP Fatal error:  Call to a member function bind() on null in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/public/index.php on line 22
+[19-Jun-2023 07:35:35 UTC] PHP Fatal error:  Call to a member function bind() on null in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/public/index.php on line 22
+[19-Jun-2023 07:35:36 UTC] PHP Fatal error:  Call to a member function bind() on null in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/public/index.php on line 22
+[19-Jun-2023 07:35:36 UTC] PHP Fatal error:  Call to a member function bind() on null in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/public/index.php on line 22
+[19-Jun-2023 07:35:36 UTC] PHP Fatal error:  Call to a member function bind() on null in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/public/index.php on line 22
+[19-Jun-2023 07:35:36 UTC] PHP Fatal error:  Call to a member function bind() on null in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/public/index.php on line 22
+[19-Jun-2023 07:35:37 UTC] PHP Fatal error:  Call to a member function bind() on null in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/public/index.php on line 22
+[19-Jun-2023 07:35:40 UTC] PHP Fatal error:  Call to a member function bind() on null in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/public/index.php on line 22
+[19-Jun-2023 07:41:36 UTC] PHP Fatal error:  Call to a member function bind() on null in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/public/index.php on line 22
+[19-Jun-2023 07:46:51 UTC] PHP Fatal error:  Call to a member function bind() on null in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/public/index.php on line 22
+[19-Jun-2023 07:46:53 UTC] PHP Fatal error:  Call to a member function bind() on null in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/public/index.php on line 22
+[19-Jun-2023 07:46:58 UTC] PHP Fatal error:  Call to a member function bind() on null in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/public/index.php on line 22
+[19-Jun-2023 07:46:58 UTC] PHP Fatal error:  Call to a member function bind() on null in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/public/index.php on line 22
+[19-Jun-2023 07:46:58 UTC] PHP Fatal error:  Call to a member function bind() on null in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/public/index.php on line 22
+[19-Jun-2023 07:46:59 UTC] PHP Fatal error:  Call to a member function bind() on null in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/public/index.php on line 22
+[19-Jun-2023 07:47:23 UTC] PHP Fatal error:  Call to a member function bind() on null in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/public/index.php on line 22
+[19-Jun-2023 07:47:24 UTC] PHP Fatal error:  Call to a member function bind() on null in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/public/index.php on line 22
+[19-Jun-2023 07:47:24 UTC] PHP Fatal error:  Call to a member function bind() on null in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/public/index.php on line 22
+[19-Jun-2023 07:47:24 UTC] PHP Fatal error:  Call to a member function bind() on null in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/public/index.php on line 22
+[19-Jun-2023 07:47:24 UTC] PHP Fatal error:  Call to a member function bind() on null in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/public/index.php on line 22
+[19-Jun-2023 07:47:46 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/public/../ikhtiarberkah.com/invoiceib/vendor/autoload.php): failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/public/index.php on line 34
+[19-Jun-2023 07:47:46 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/public/../ikhtiarberkah.com/invoiceib/vendor/autoload.php): failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/public/index.php on line 34
+[19-Jun-2023 07:47:46 UTC] PHP Fatal error:  require(): Failed opening required '/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/public/../ikhtiarberkah.com/invoiceib/vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php56/root/usr/share/pear') in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/public/index.php on line 34
+[19-Jun-2023 07:49:30 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/public/../ikhtiarberkah.com/invoiceib/vendor/autoload.php): failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/public/index.php on line 34
+[19-Jun-2023 07:49:30 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/public/../ikhtiarberkah.com/invoiceib/vendor/autoload.php): failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/public/index.php on line 34
+[19-Jun-2023 07:49:30 UTC] PHP Fatal error:  require(): Failed opening required '/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/public/../ikhtiarberkah.com/invoiceib/vendor/autoload.php' (include_path='.:/opt/alt/php74/usr/share/pear') in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/public/index.php on line 34
+[19-Jun-2023 07:49:31 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/public/../ikhtiarberkah.com/invoiceib/vendor/autoload.php): failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/public/index.php on line 34
+[19-Jun-2023 07:49:31 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/public/../ikhtiarberkah.com/invoiceib/vendor/autoload.php): failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/public/index.php on line 34
+[19-Jun-2023 07:49:31 UTC] PHP Fatal error:  require(): Failed opening required '/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/public/../ikhtiarberkah.com/invoiceib/vendor/autoload.php' (include_path='.:/opt/alt/php74/usr/share/pear') in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/public/index.php on line 34
+[19-Jun-2023 07:50:23 UTC] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.1.0". You are running 7.4.33. in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/vendor/composer/platform_check.php on line 24
+[19-Jun-2023 07:50:55 UTC] PHP Warning:  require_once(/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/public/../ikhtiarberkah.com/invoiceib/bootstrap/app.php): Failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/public/index.php on line 47
+[19-Jun-2023 07:50:55 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/intigraf/public_html/ikhtiarberkah.com/invoiceib/public/../ikhtiarberkah.com/invoiceib/bootstrap/app.php' (include_path='.:/opt/cpanel/ea-php81/root/usr/share/pear') in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/public/index.php:47
+Stack trace:
+#0 {main}
+  thrown in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/public/index.php on line 47
+[19-Jun-2023 08:53:13 UTC] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.1.0". You are running 5.6.40. in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/vendor/composer/platform_check.php on line 25
+[20-Jun-2023 01:41:32 UTC] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.1.0". You are running 5.6.40. in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/vendor/composer/platform_check.php on line 25
+[20-Jun-2023 01:41:32 UTC] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.1.0". You are running 5.6.40. in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/vendor/composer/platform_check.php on line 25
+[20-Jun-2023 01:43:43 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoice/public/../invoiceib/vendor/autoload.php): failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoice/public/index.php on line 34
+[20-Jun-2023 01:43:43 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoice/public/../invoiceib/vendor/autoload.php): failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoice/public/index.php on line 34
+[20-Jun-2023 01:43:43 UTC] PHP Fatal error:  require(): Failed opening required '/home/intigraf/public_html/ikhtiarberkah.com/invoice/public/../invoiceib/vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php56/root/usr/share/pear') in /home/intigraf/public_html/ikhtiarberkah.com/invoice/public/index.php on line 34
+[20-Jun-2023 01:43:43 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoice/public/../invoiceib/vendor/autoload.php): failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoice/public/index.php on line 34
+[20-Jun-2023 01:43:43 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoice/public/../invoiceib/vendor/autoload.php): failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoice/public/index.php on line 34
+[20-Jun-2023 01:43:43 UTC] PHP Fatal error:  require(): Failed opening required '/home/intigraf/public_html/ikhtiarberkah.com/invoice/public/../invoiceib/vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php56/root/usr/share/pear') in /home/intigraf/public_html/ikhtiarberkah.com/invoice/public/index.php on line 34
+[20-Jun-2023 01:45:24 UTC] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.1.0". You are running 5.6.40. in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/vendor/composer/platform_check.php on line 25
+[20-Jun-2023 01:45:24 UTC] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.1.0". You are running 5.6.40. in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/vendor/composer/platform_check.php on line 25
+[20-Jun-2023 01:55:09 UTC] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.1.0". You are running 5.6.40. in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/vendor/composer/platform_check.php on line 25
+[20-Jun-2023 01:55:09 UTC] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.1.0". You are running 5.6.40. in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/vendor/composer/platform_check.php on line 25
+[20-Jun-2023 02:14:22 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoice/../../invoiceib/vendor/autoload.php): Failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoice/index.php on line 34
+[20-Jun-2023 02:14:22 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoice/../../invoiceib/vendor/autoload.php): Failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoice/index.php on line 34
+[20-Jun-2023 02:14:22 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/intigraf/public_html/ikhtiarberkah.com/invoice/../../invoiceib/vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php81/root/usr/share/pear') in /home/intigraf/public_html/ikhtiarberkah.com/invoice/index.php:34
+Stack trace:
+#0 {main}
+  thrown in /home/intigraf/public_html/ikhtiarberkah.com/invoice/index.php on line 34
+[20-Jun-2023 02:14:22 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoice/../../invoiceib/vendor/autoload.php): Failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoice/index.php on line 34
+[20-Jun-2023 02:14:22 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoice/../../invoiceib/vendor/autoload.php): Failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoice/index.php on line 34
+[20-Jun-2023 02:14:22 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/intigraf/public_html/ikhtiarberkah.com/invoice/../../invoiceib/vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php81/root/usr/share/pear') in /home/intigraf/public_html/ikhtiarberkah.com/invoice/index.php:34
+Stack trace:
+#0 {main}
+  thrown in /home/intigraf/public_html/ikhtiarberkah.com/invoice/index.php on line 34
+[20-Jun-2023 02:24:37 UTC] PHP Warning:  Undefined variable $app in /home/intigraf/public_html/ikhtiarberkah.com/invoice/index.php on line 23
+[20-Jun-2023 02:24:37 UTC] PHP Fatal error:  Uncaught Error: Call to a member function bind() on null in /home/intigraf/public_html/ikhtiarberkah.com/invoice/index.php:23
+Stack trace:
+#0 {main}
+  thrown in /home/intigraf/public_html/ikhtiarberkah.com/invoice/index.php on line 23
+[20-Jun-2023 02:24:38 UTC] PHP Warning:  Undefined variable $app in /home/intigraf/public_html/ikhtiarberkah.com/invoice/index.php on line 23
+[20-Jun-2023 02:24:38 UTC] PHP Fatal error:  Uncaught Error: Call to a member function bind() on null in /home/intigraf/public_html/ikhtiarberkah.com/invoice/index.php:23
+Stack trace:
+#0 {main}
+  thrown in /home/intigraf/public_html/ikhtiarberkah.com/invoice/index.php on line 23
+[20-Jun-2023 03:03:38 UTC] PHP Warning:  require(/home/intigraf/ikhtiarberkah.com/invoiceib/vendor/autoload.php): Failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoice/index.php on line 35
+[20-Jun-2023 03:03:38 UTC] PHP Warning:  require(/home/intigraf/ikhtiarberkah.com/invoiceib/vendor/autoload.php): Failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoice/index.php on line 35
+[20-Jun-2023 03:03:38 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/intigraf/ikhtiarberkah.com/invoiceib/vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php81/root/usr/share/pear') in /home/intigraf/public_html/ikhtiarberkah.com/invoice/index.php:35
+Stack trace:
+#0 {main}
+  thrown in /home/intigraf/public_html/ikhtiarberkah.com/invoice/index.php on line 35
+[29-Jul-2023 02:12:25 UTC] PHP Fatal error:  Trait "App\Traits\UUIDAsPrimaryKey" not found in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/app/Models/Pembelian.php on line 10
+[29-Jul-2023 02:12:36 UTC] PHP Fatal error:  Trait "App\Traits\UUIDAsPrimaryKey" not found in /home/intigraf/public_html/ikhtiarberkah.com/invoiceib/app/Models/Pembelian.php on line 10
+[08-Nov-2023 09:37:53 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoice/vendor/autoload.php): failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoice/artisan on line 18
+[08-Nov-2023 09:37:53 UTC] PHP Fatal error:  require(): Failed opening required '/home/intigraf/public_html/ikhtiarberkah.com/invoice/vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php56/root/usr/share/pear') in /home/intigraf/public_html/ikhtiarberkah.com/invoice/artisan on line 18
+[08-Nov-2023 09:37:58 UTC] PHP Warning:  require(/home/intigraf/public_html/ikhtiarberkah.com/invoice/vendor/autoload.php): failed to open stream: No such file or directory in /home/intigraf/public_html/ikhtiarberkah.com/invoice/artisan on line 18
+[08-Nov-2023 09:37:58 UTC] PHP Fatal error:  require(): Failed opening required '/home/intigraf/public_html/ikhtiarberkah.com/invoice/vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php56/root/usr/share/pear') in /home/intigraf/public_html/ikhtiarberkah.com/invoice/artisan on line 18
+[04-Oct-2025 03:46:26 UTC] PHP Warning:  require(/home/tokabeid/public_html/ibeka.id/invoice/../invoiceib/vendor/autoload.php): Failed to open stream: No such file or directory in /home/tokabeid/public_html/ibeka.id/invoice/index.php on line 35
+[04-Oct-2025 03:46:26 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/tokabeid/public_html/ibeka.id/invoice/../invoiceib/vendor/autoload.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/tokabeid/public_html/ibeka.id/invoice/index.php:35
+Stack trace:
+#0 {main}
+  thrown in /home/tokabeid/public_html/ibeka.id/invoice/index.php on line 35
