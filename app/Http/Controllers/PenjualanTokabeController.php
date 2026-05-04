@@ -16,6 +16,7 @@ use App\Models\Spk;
 use Carbon\Carbon;
 use DateTimezone;
 
+use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class PenjualanTokabeController extends Controller
@@ -23,6 +24,12 @@ class PenjualanTokabeController extends Controller
 
     public function listInvoiceTokabe()
     {
+        DB::table('penjualan_tokabe')
+            ->where('approval', 'Unlock')
+            ->whereNotNull('approved_at')
+            ->where('approved_at', '<', now()->subHours(6))
+            ->update(['approval' => 'Lock', 'approved_at' => null]);
+
         $perusahaan = Perusahaan::where('nama_perusahaan', 'Total Karya Berkah')->first();
         $invoices = Invoice::where('perusahaan_id', $perusahaan->id)->get();
 
@@ -598,6 +605,10 @@ class PenjualanTokabeController extends Controller
             }
         }
         
+        $penjualan->approval = 'Lock';
+        $penjualan->approved_at = null;
+        $penjualan->save();
+        
         Alert::success('Data Invoice Berhasil diUpdate');
         return redirect('list-invoice/tokabe');
     }
@@ -653,6 +664,82 @@ class PenjualanTokabeController extends Controller
         }
     }
     
+    public function unlock($id)
+    {
+        $inv = PenjualanTokabe::find($id);
+        if (!$inv) {
+            Alert::error('Data tidak ditemukan');
+            return redirect()->back();
+        }
+        $inv->approval = 'Unlock';
+        $inv->approved_at = now();
+        $inv->save();
+        Alert::success('Invoice Tokabe berhasil di-Unlock');
+        return redirect()->route('list_invoice_tokabe');
+    }
+
+    public function lock($id)
+    {
+        $inv = PenjualanTokabe::find($id);
+        if (!$inv) {
+            Alert::error('Data tidak ditemukan');
+            return redirect()->back();
+        }
+        $inv->approval = 'Lock';
+        $inv->approved_at = null;
+        $inv->save();
+        Alert::success('Invoice Tokabe berhasil di-Lock');
+        return redirect()->back();
+    }
+
+    public function approvalPage($id)
+    {
+        $invoice = PenjualanTokabe::findOrFail($id);
+        $penjualan_barang = PenjualanJasaTokabe::where('penjualan_id', $id)->get();
+        $invoice->formatted_total_pembayaran = number_format($invoice->total_pembayaran, 0, ',', '.');
+        $barang = [];
+        foreach ($penjualan_barang as $item) {
+            $barang[] = Barang::where('id', $item->barang_id)->get();
+        }
+        return view('pages.invoices.tokabe.approval', compact('invoice', 'penjualan_barang', 'barang'));
+    }
+
+    public function pelunasanPage($id)
+    {
+        $invoice = PenjualanTokabe::findOrFail($id);
+        $penjualan_barang = PenjualanJasaTokabe::where('penjualan_id', $id)->get();
+        $invoice->formatted_total_pembayaran = number_format($invoice->total_pembayaran, 0, ',', '.');
+        $invoice->formatted_sisa_pembayaran = number_format($invoice->sisa_pembayaran, 0, ',', '.');
+        $barang = [];
+        foreach ($penjualan_barang as $item) {
+            $barang[] = Barang::where('id', $item->barang_id)->get();
+        }
+        return view('pages.invoices.tokabe.pelunasan', compact('invoice', 'penjualan_barang', 'barang'));
+    }
+
+    public function statusLunas($id)
+    {
+        $inv = PenjualanTokabe::find($id);
+        if (!$inv) {
+            Alert::error('Data tidak ditemukan');
+            return redirect()->back();
+        }
+        $inv->status = 'Lunas';
+        $inv->sisa_pembayaran = 0;
+        $inv->save();
+        Alert::success('Invoice Tokabe Sudah Lunas');
+        return redirect()->route('list_invoice_tokabe');
+    }
+
+    public function storeStatusBatal(Request $request, $id)
+    {
+        $invoice = PenjualanTokabe::findOrFail($id);
+        $invoice->status = 'Batal';
+        $invoice->alasan_batal = $request->alasan_batal;
+        $invoice->save();
+        return redirect()->back()->with('batal', 'Invoice Tokabe berhasil dibatalkan.');
+    }
+
     public function cetakInvoiceTKB($id)
     {
         $penjualan = PenjualanTokabe::where('id', $id)->first();

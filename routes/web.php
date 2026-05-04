@@ -128,10 +128,18 @@ Route::group(['middleware' => ['auth']], function () {
             Route::get('/view/download/invoiceTKB/{id}', [PenjualanTokabeController::class, 'viewDownloadInvoiceTKB'])->name('download.inv.tkb');
             Route::get('/get-invoice-number', [PenjualanTokabeController::class, 'getUpdatedInvoiceNumber']);
 
+            // TOKABE APPROVAL & PELUNASAN
+            Route::post('/ubah-status-unlock-tokabe/{id}', [PenjualanTokabeController::class, 'unlock'])->name('tokabe.unlock');
+            Route::get('/ubah-status-lock-tokabe/{id}', [PenjualanTokabeController::class, 'lock'])->name('tokabe.lock');
+            Route::get('/tokabe-approval/{id}', [PenjualanTokabeController::class, 'approvalPage'])->middleware('role:Pemilik')->name('tokabe.approval.page');
+            Route::get('/tokabe-pelunasan/{id}', [PenjualanTokabeController::class, 'pelunasanPage'])->middleware('role:Pemilik')->name('tokabe.pelunasan.page');
+            Route::post('/ubah-status-batal-tokabe/{id}', [PenjualanTokabeController::class, 'storeStatusBatal'])->name('tokabe.status.batal');
+            Route::post('/ubah-status-lunas-tokabe/{id}', [PenjualanTokabeController::class, 'statusLunas'])->name('tokabe.status.lunas');
+
             Route::get('/getInvoices/{id}', [CustomerController::class, 'getInvoices']);
 
             // ROUTE SPB
-            Route::get('/daftar-spb', [SpbController::class, 'indexSPB']);
+            Route::get('/daftar-spb', [SpbController::class, 'indexSPB'])->name('daftar-spb');
             Route::get('/cetak-spb/{id}', [SpbController::class, 'cetakSPB']);
             Route::get('/tambah-spb', [SpbController::class, 'tambahSPB']);
             Route::post('/store-spb', [SpbController::class, 'storeSPB']);
@@ -141,11 +149,11 @@ Route::group(['middleware' => ['auth']], function () {
             Route::get('/ubah-status/{id}', [SpbController::class, 'ubahStatus'])->name('spb.ubah-status');
 
             // ROUTE SPK
+            Route::get('/daftar-spk', [SpkController::class, 'indexSPK'])->name('daftar-spk');
             Route::get('/tambah-spk', [SpkController::class, 'addSPK']);
             Route::post('/store-spk', [SpkController::class, 'storeSPK']);
             Route::post('/store-spk-dari-invoice', [SpkController::class, 'storeDariInvoice'])->name('spk.store_dari_invoice');
-            Route::post('/store-spk-tokabe', [PenjualanTokabeController::class, 'storeDariInvoiceTokabe'])->name('storeSpk.Tokabe');
-            
+            Route::post('/store-spk-tokabe', [PenjualanTokabeController::class, 'storeDariInvoiceTokabe'])->name('storeSpk.Tokabe');            
             Route::get('/edit-spk/{id}', [SpkController::class, 'editSPK']);
             Route::put('/update-spk/{id}', [SpkController::class, 'updateSPK']);
             Route::delete('/delete-spk/{id}', [SpkController::class, 'destroySPK']);
@@ -166,7 +174,7 @@ Route::group(['middleware' => ['auth']], function () {
             Route::get('/edit-spj/{id}', [SpjController::class, 'edit']);
 
             // ROUTE BARANG
-            Route::get('listBarang', [BarangController::class, 'index']);
+            Route::get('listBarang', [BarangController::class, 'index'])->name('listBarang');
             Route::get('addBarang', [BarangController::class, 'create']);
             Route::post('barang', [BarangController::class, 'store'])->name('barang.store');
             Route::delete('deleteBarang/{id}', [BarangController::class, 'destroy']);
@@ -174,7 +182,7 @@ Route::group(['middleware' => ['auth']], function () {
             Route::put('/update-stok/{id}', [BarangController::class, 'update']);
             
             // ROUTE MATERIAL
-            Route::get('listMaterial', [MaterialController::class, 'index']);
+            Route::get('listMaterial', [MaterialController::class, 'index'])->name('listMaterial');
             Route::get('addMaterial', [MaterialController::class, 'create']);
             Route::post('material', [MaterialController::class, 'store'])->name('material.store');
             Route::delete('deleteMaterial/{id}', [MaterialController::class, 'destroy']);
@@ -182,7 +190,7 @@ Route::group(['middleware' => ['auth']], function () {
             Route::put('/update-stokMaterial/{id}', [MaterialController::class, 'update']);
 
              // ROUTE INVENTARIS
-            Route::get('listInventaris', [InventarisController::class, 'index']);
+            Route::get('listInventaris', [InventarisController::class, 'index'])->name('listInventaris');
             Route::get('addInventaris', [InventarisController::class, 'create']);
             Route::post('inventaris', [InventarisController::class, 'store'])->name('inventaris.store');
             Route::delete('deleteInventaris/{id}', [InventarisController::class, 'destroy']);
@@ -227,7 +235,7 @@ Route::group(['middleware' => ['auth']], function () {
         });
 
         // ====================================================================
-        // ROUTE PRODUKSI
+        // ROUTE PRODUKSI (route eksklusif tinta untuk role Produksi)
         // ====================================================================
         Route::group(['middleware' => ['produksi']], function () {
             Route::get('/stok-tinta', [BarangController::class, 'daftarTinta'])->name('stokTinta');
@@ -236,90 +244,6 @@ Route::group(['middleware' => ['auth']], function () {
             Route::get('/stok-tinta/edit/{id}', [BarangController::class, 'editStokTinta'])->name('edit.tinta');
             Route::delete('/tinta/delete/{id}', [BarangController::class, 'destroyTinta'])->name('delete.tinta');
             Route::put('/tinta/update/{id}', [BarangController::class, 'updateTinta'])->name('update.tinta');
-        });
-        
-        // ====================================================================
-        // ROUTE STOCKIST
-        // ====================================================================
-        Route::group(['middleware' => ['stockist']], function () {
-            Route::get('listBarang', [BarangController::class, 'index']);
-            Route::get('addBarang', [BarangController::class, 'create']);
-            Route::post('barang', [BarangController::class, 'store'])->name('barang.store');
-            Route::delete('deleteBarang/{id}', [BarangController::class, 'destroy']);
-            Route::get('/edit-stok/{id}', [BarangController::class, 'edit']);
-            Route::put('/update-stok/{id}', [BarangController::class, 'update']);
-            Route::get('/stok-tinta', [BarangController::class, 'daftarTinta'])->name('stokTinta');
-            Route::get('/tambah-tinta', [BarangController::class, 'addTinta'])->name('tambahTinta');
-            Route::post('/stok-tinta/store', [BarangController::class, 'storeTinta'])->name('store.tinta');
-            Route::get('/stok-tinta/edit/{id}', [BarangController::class, 'editStokTinta'])->name('edit.tinta');
-            Route::delete('/tinta/delete/{id}', [BarangController::class, 'destroyTinta'])->name('delete.tinta');
-            Route::put('/tinta/update/{id}', [BarangController::class, 'updateTinta'])->name('update.tinta');
-        });
-
-        // ====================================================================
-        // ROUTE MAGANG (DITAMBAHKAN AGAR ROLE MAGANG BISA AKSES)
-        // ====================================================================
-        Route::group(['middleware' => ['Magang']], function () {
-            // Rute Barang, Material, Inventaris, Pembelian, Surat-surat (Sesuai Sidebar)
-           Route::get('listBarang', [BarangController::class, 'index']);
-            Route::get('addBarang', [BarangController::class, 'create']);
-            Route::post('barang', [BarangController::class, 'store'])->name('barang.store');
-            Route::delete('deleteBarang/{id}', [BarangController::class, 'destroy']);
-            Route::get('/edit-stok/{id}', [BarangController::class, 'edit']);
-            Route::put('/update-stok/{id}', [BarangController::class, 'update']);
-            
-            // ROUTE MATERIAL
-            Route::get('listMaterial', [MaterialController::class, 'index']);
-            Route::get('addMaterial', [MaterialController::class, 'create']);
-            Route::post('material', [MaterialController::class, 'store'])->name('material.store');
-            Route::delete('deleteMaterial/{id}', [MaterialController::class, 'destroy']);
-            Route::get('/edit-stokMaterial/{id}', [MaterialController::class, 'edit']);
-            Route::put('/update-stokMaterial/{id}', [MaterialController::class, 'update']);
-            
-            // ROUTE INVENTARIS
-            Route::get('listInventaris', [InventarisController::class, 'index']);
-            Route::get('addInventaris', [InventarisController::class, 'create']);
-            Route::post('inventaris', [InventarisController::class, 'store'])->name('inventaris.store');
-            Route::delete('deleteInventaris/{id}', [InventarisController::class, 'destroy']);
-            Route::get('/edit-stokInventaris/{id}', [InventarisController::class, 'edit']);
-            Route::put('/update-stokInventaris/{id}', [InventarisController::class, 'update']);
-            
-            Route::get('/daftar-vendor', [VendorController::class, 'index'])->name('vendor.list');
-            
-            // ROUTE SURAT SPB
-            Route::get('/daftar-spb', [SpbController::class, 'indexSPB']);
-            Route::get('/cetak-spb/{id}', [SpbController::class, 'cetakSPB']);
-            Route::get('/tambah-spb', [SpbController::class, 'tambahSPB']);
-            Route::post('/store-spb', [SpbController::class, 'storeSPB']);
-            Route::get('/edit-spb/{id}', [SpbController::class, 'editSPB']);
-            Route::put('/update-spb/{id}', [SpbController::class, 'updateSPB']);
-            Route::delete('/delete-spb/{id}', [SpbController::class, 'destroySPB']);
-            Route::get('/ubah-status/{id}', [SpbController::class, 'ubahStatus'])->name('spb.ubah-status');
-
-            // ROUTE SURAT SPK
-            Route::get('/daftar-spk', [SpkController::class, 'indexSPK']);
-            Route::get('/tambah-spk', [SpkController::class, 'addSPK']);
-            Route::post('/store-spk', [SpkController::class, 'storeSPK']);
-            Route::post('/store-spk-dari-invoice', [SpkController::class, 'storeDariInvoice'])->name('spk.store_dari_invoice');
-            Route::post('/store-spk-tokabe', [PenjualanTokabeController::class, 'storeDariInvoiceTokabe'])->name('storeSpk.Tokabe');
-            Route::get('/edit-spk/{id}', [SpkController::class, 'editSPK']);
-            Route::put('/update-spk/{id}', [SpkController::class, 'updateSPK']);
-            Route::delete('/delete-spk/{id}', [SpkController::class, 'destroySPK']);
-            Route::get('/cetak-spk/{id}', [SpkController::class, 'cetakSPK']);
-            Route::get('/ubah-status-spk/{id}', [SpkController::class, 'statusSPK']);
-            Route::get('/lihat-spk/{id}', [SpkController::class, 'lihatSPK']);
-            Route::get('/ubah-proses-spk/{id}', [SpkController::class, 'prosesSPK']);
-
-            // ROUTE SURAT SPJ
-            Route::get('/daftar-spj', [SpjController::class, 'index'])->name('spj.index');
-            Route::get('/tambah-spj', [SpjController::class, 'create']);
-            Route::get('/generate-spj-number', [SpjController::class, 'generateNumber']);
-            Route::post('/store-spj', [SpjController::class, 'store']);
-            Route::get('/cetak-spj/{id}', [SpjController::class, 'cetak']);
-            Route::get('/lihat-spj/{id}', [SpjController::class, 'lihat']);
-            Route::delete('/delete-spj/{id}', [SpjController::class, 'destroy']);
-            Route::put('/update-spj/{id}', [SpjController::class, 'update']);
-            Route::get('/edit-spj/{id}', [SpjController::class, 'edit']);
         });
         
         // ====================================================================

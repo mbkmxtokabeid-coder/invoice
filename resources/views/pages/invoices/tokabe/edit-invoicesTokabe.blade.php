@@ -14,6 +14,15 @@
 @endsection
 @extends('layout.template')
 @section('content')
+@if($inv->approval == 'Lock')
+<div class="alert alert-warning d-flex align-items-center" role="alert">
+    <i class="las la-lock me-2 fs-18"></i>
+    <div>
+        Invoice ini sedang terkunci. Silakan minta Pemilik untuk memberikan izin unlock terlebih dahulu.
+        <a href="{{ route('tokabe.approval.page', $inv->id) }}" class="alert-link ms-1">Minta Unlock</a>
+    </div>
+</div>
+@endif
 
 <div class="page-content">
                 <div class="container-fluid">

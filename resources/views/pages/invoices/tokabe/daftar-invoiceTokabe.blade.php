@@ -234,6 +234,7 @@
                                       <th scope="col" style="width: 13%;">No. Telepon</th>
                                       <th scope="col">Tanggal Penjualan</th>
                                       <th scope="col" style="width: 10%;">Status</th>
+                                      <th scope="col">Approval</th>
                                        <th scope="col">Deskripsi</th>
                                       <th scope="col" style="width: 15%;">Bahan Material</th>
                                       <th scope="col">Panjar</th>
@@ -261,6 +262,13 @@
                                       <span class="badge badge-soft-danger p-2">{{$inv->status}}</span>
                                       @else
                                       <span class="badge badge-soft-success p-2">{{$inv->status}}</span>
+                                          @endif
+                                      </td>
+                                      <td>
+                                          @if($inv->approval == 'Unlock')
+                                              <span class="badge badge-soft-success p-2">Unlock</span>
+                                          @else
+                                              <span class="badge badge-soft-warning p-2">Lock</span>
                                           @endif
                                       </td>
                                        <td>
@@ -309,105 +317,160 @@
                                       <td>{{ $inv->user ? $inv->user->nama : 'Tidak Diketahui' }}</td> <!-- Menampilkan nama user -->
                                       <td>
                                           
+                                          @php
+                                              $roleTkb    = Auth::user()->role;
+                                              $isOwnerTkb = $roleTkb === 'Pemilik';
+                                              $isAdminTkb = $roleTkb === 'AdminTKB' || $roleTkb === 'Admin';
+
+                                              // Nomor WA Owner Tokabe
+                                              $waOwner1Tkb = '628116029999';
+                                              $waOwner2Tkb = '628116179999';
+
+                                              // Pesan Request Unlock
+                                              $msgUnlockTkb = urlencode("Halo, saya ingin meminta approval untuk membuka akses invoice *#{$inv->nomor_invoice}* atas nama *{$inv->customer}*. Mohon untuk segera ditinjau 🙏 \n\nKlik link berikut untuk membuka halaman approval:\n" . url("/tokabe-approval/{$inv->id}"));
+
+                                              // Pesan Request Pelunasan
+                                              $msgLunasTkb = urlencode("Halo, saya ingin Request perubahan status pelunasan untuk invoice *#{$inv->nomor_invoice}* atas nama *{$inv->customer}*. Mohon untuk segera ditinjau 🙏 \n\nKlik link berikut untuk membuka halaman ubah status pelunasan:\n" . url("/tokabe-pelunasan/{$inv->id}"));
+
+                                              // Format Nomor HP Customer
+                                              $no_hp_cust = $inv->no_telepon ?? '';
+                                              $no_hp_cust = preg_replace('/[^0-9]/', '', $no_hp_cust);
+                                              if(substr($no_hp_cust, 0, 1) == '0'){
+                                                  $no_hp_cust = '62' . substr($no_hp_cust, 1);
+                                              }
+
+                                              // Pesan WA Customer
+                                              $link_khusus_customer = url('/view/download/invoiceTKB/' . $inv->id);
+                                              $pesan_cust = "Invoice : " . $inv->nomor_invoice . "\n";
+                                              $pesan_cust .= "Link Download Invoice:\n";
+                                              $pesan_cust .= $link_khusus_customer . "\n\n";
+                                              $pesan_cust .= "Total Rp " . number_format($inv->total_harga, 0, ',', '.') . "\n\n";
+                                              if($inv->sisa_pembayaran > 0) {
+                                                  $pesan_cust .= "Mohon transfer ke:\n";
+                                                  if($inv->no_rek == "BNI") {
+                                                      $pesan_cust .= "BNI | A/N : Yusni Kurniasih | No. Rek : 8331119999\n";
+                                                  } elseif($inv->no_rek == "TKBBNI") {
+                                                      $pesan_cust .= "BNI | A/N : PT. Total Karya Berkah | No. Rek : 3528289999\n";
+                                                  } else {
+                                                      $pesan_cust .= "Mandiri | A/N : PT. Total Karya Berkah | No. Rek : 1050009589999\n";
+                                                  }
+                                                  $pesan_cust .= "**\n\nApabila sudah melakukan transaksi pembayaran mohon dikirim bukti transfernya";
+                                              } else {
+                                                  $pesan_cust .= "Status : Lunas\n**\n\nTerima kasih,\ntokabe.id";
+                                              }
+
+                                              $canManageTkb = !$isAdminTkb || $inv->approval === 'Unlock';
+                                          @endphp
+
                                           <div class="dropdown d-inline-block">
-                                              <!-- PENAMBAHAN data-bs-boundary="window" DAN data-bs-popper-config AGAR DROPDOWN MUNCUL MELAYANG DI LUAR TABEL -->
                                               <button class="btn btn-soft-secondary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="window" data-bs-popper-config='{"strategy":"fixed"}'>
                                                   <i class="las la-ellipsis-h align-middle fs-18"></i>
                                               </button>
                                               <ul class="dropdown-menu dropdown-menu-end shadow-lg">
+                                                  {{-- CETAK --}}
                                                   <li>
-                                                      <a class="dropdown-item" href="{{route('cetak.inv.tkb',['id' => $inv->id])}}" target ="_blank"><i class="las la-print  fs-18 align-middle me-2 text-muted"></i>
-                                                          Cetak Invoice</a>
-                                                  </li>
-                                                  <li>
-                                                      <a class="dropdown-item" href="{{route('edit.inv.tkb',['id'=>$inv->id])}}"><i class="las la-pen fs-18 align-middle me-2 text-muted"></i>
-                                                          Edit</a>
-                                                  </li>
-                                                  {{-- DOWNLOAD BUTTON --}}
-                                                  <li>
-                                                      <a class="dropdown-item" href="{{route('download.inv.tkb',['id' => $inv->id])}}" target="_blank"><i class="las la-file-download fs-18 align-middle me-2 text-muted"></i>
-                                                          Download</a>
+                                                      <a class="dropdown-item" href="{{route('cetak.inv.tkb',['id' => $inv->id])}}" target="_blank">
+                                                          <i class="las la-print fs-18 align-middle me-2 text-muted"></i>Cetak Invoice
+                                                      </a>
                                                   </li>
 
-                                                  {{-- === BUTTON KIRIM WA CUSTOMER === --}}
-                                                  @php
-                                                      // 1. Format Nomor HP
-                                                      $no_hp_cust = $inv->no_telepon ?? ''; 
-                                                      $no_hp_cust = preg_replace('/[^0-9]/', '', $no_hp_cust);
-                                                      if(substr($no_hp_cust, 0, 1) == '0'){
-                                                          $no_hp_cust = '62' . substr($no_hp_cust, 1);
-                                                      }
+                                                  {{-- DOWNLOAD --}}
+                                                  <li>
+                                                      <a class="dropdown-item" href="{{route('download.inv.tkb',['id' => $inv->id])}}" target="_blank">
+                                                          <i class="las la-file-download fs-18 align-middle me-2 text-muted"></i>Download
+                                                      </a>
+                                                  </li>
 
-                                                      // 2. Link Download Tokabe
-                                                      // Saat ini kita arahkan ke view download langsung
-                                                      $link_khusus_customer = url('/view/download/invoiceTKB/' . $inv->id);
-
-                                                      // 3. Susun Pesan Lengkap sesuai format Tokabe
-                                                      $pesan_cust = "Invoice : " . $inv->nomor_invoice . "\n";
-                                                      $pesan_cust .= "Link Download Invoice:\n";
-                                                      $pesan_cust .= $link_khusus_customer . "\n\n";
-                                                      $pesan_cust .= "Total Rp " . number_format($inv->total_harga, 0, ',', '.') . "\n\n";
-
-                                                      // Cek Sisa Pembayaran (Jika > 0 berarti Belum Lunas)
-                                                      if($inv->sisa_pembayaran > 0) {
-                                                           $pesan_cust .= "Mohon transfer ke:\n";
-                                                           if($inv->no_rek == "BNI") {
-                                                               $pesan_cust .= "BNI | A/N : Yusni Kurniasih | No. Rek : 8331119999\n";
-                                                           } elseif($inv->no_rek == "TKBBNI") {
-                                                               $pesan_cust .= "BNI | A/N : PT. Total Karya Berkah | No. Rek : 3528289999\n";
-                                                           } else {
-                                                               $pesan_cust .= "Mandiri | A/N : PT. Total Karya Berkah | No. Rek : 1050009589999\n";
-                                                           }
-                                                           $pesan_cust .= "**\n\n";
-                                                           $pesan_cust .= "Apabila sudah melakukan transaksi pembayaran mohon dikirim bukti transfernya";
-                                                      } else {
-                                                           $pesan_cust .= "Status : Lunas\n";
-                                                           $pesan_cust .= "**\n\n";
-                                                           $pesan_cust .= "Terima kasih,\n";
-                                                           $pesan_cust .= "tokabe.id";
-                                                      }
-                                                  @endphp
+                                                  {{-- KIRIM WA CUSTOMER --}}
                                                   <li>
                                                       <a class="dropdown-item" href="https://wa.me/{{ $no_hp_cust }}?text={{ urlencode($pesan_cust) }}" target="_blank">
                                                           <i class="lab la-whatsapp fs-18 align-middle me-2 text-success"></i>Kirim Invoice (WA)
                                                       </a>
                                                   </li>
-                                                  
-                                                   
-                                                {{-- === BUTTON BUAT SPK === --}}
-                                                    <li>
-                                                        <a class="dropdown-item btn-buat-spk" href="#" data-id="{{ $inv->id }}" data-bs-toggle="modal" data-bs-target="#buatSpkModal">
-                                                            <i class="las la-clipboard-list fs-18 align-middle me-2 text-primary"></i>Buat SPK
-                                                        </a>
-                                                    </li>
-                                                    
-                                                  {{-- LUNAS BUTTON --}}
-                                                   @if ($inv->status != 'Lunas' && $inv != 'Batal')
 
+                                                  {{-- === OWNER: Lock langsung jika sudah Unlock === --}}
+                                                  @if($isOwnerTkb && $inv->approval === 'Unlock')
                                                   <li>
-                                                      <a class="dropdown-item" href="{{ route('ubahStatus.tkb',['status'=>'Lunas','id'=>$inv->id]) }}"><i class="las la-check-square  fs-18 align-middle me-2 text-muted"></i>
-                                                          Lunas</a>
+                                                      <a class="dropdown-item" href="{{ route('tokabe.lock', $inv->id) }}">
+                                                          <i class="las la-lock fs-18 align-middle me-2 text-warning"></i>Lock
+                                                      </a>
                                                   </li>
                                                   @endif
-                                                  @if ($inv->status != 'Batal')
 
-                                                  {{-- BATAL BUTTON --}}
+                                                  {{-- === ADMIN: Request Unlock via WA jika masih Lock === --}}
+                                                  @if($isAdminTkb && $inv->approval !== 'Unlock')
                                                   <li>
-                                                      <a class="dropdown-item" href="{{ route('ubahStatus.tkb',['status'=>'batal','id'=>$inv->id]) }}"><i class="las la-folder-minus fs-18 align-middle me-2 text-muted"></i>
-                                                          Invoice Batal</a>
+                                                      <a class="dropdown-item text-warning fw-semibold" href="https://wa.me/{{ $waOwner1Tkb }}?text={{ $msgUnlockTkb }}" target="_blank">
+                                                          <i class="lab la-whatsapp fs-18 align-middle me-2 text-success"></i>Request Unlock (Owner 1)
+                                                      </a>
+                                                  </li>
+                                                  <li>
+                                                      <a class="dropdown-item text-warning fw-semibold" href="https://wa.me/{{ $waOwner2Tkb }}?text={{ $msgUnlockTkb }}" target="_blank">
+                                                          <i class="lab la-whatsapp fs-18 align-middle me-2 text-success"></i>Request Unlock (Owner 2)
+                                                      </a>
                                                   </li>
                                                   @endif
-                                                  {{-- DELETE BUTTON --}}
+
+                                                  {{-- BUAT SPK --}}
+                                                  <li>
+                                                      <a class="dropdown-item btn-buat-spk" href="#" data-id="{{ $inv->id }}" data-bs-toggle="modal" data-bs-target="#buatSpkModal">
+                                                          <i class="las la-clipboard-list fs-18 align-middle me-2 text-primary"></i>Buat SPK
+                                                      </a>
+                                                  </li>
+
+                                                  {{-- === ADMIN: Request Pelunasan via WA === --}}
+                                                  @if($isAdminTkb && $inv->status !== 'Lunas')
+                                                  <li>
+                                                      <a class="dropdown-item text-warning fw-semibold" href="https://wa.me/{{ $waOwner1Tkb }}?text={{ $msgLunasTkb }}" target="_blank">
+                                                          <i class="lab la-whatsapp fs-18 align-middle me-2 text-success"></i>Request Pelunasan (Owner 1)
+                                                      </a>
+                                                  </li>
+                                                  <li>
+                                                      <a class="dropdown-item text-warning fw-semibold" href="https://wa.me/{{ $waOwner2Tkb }}?text={{ $msgLunasTkb }}" target="_blank">
+                                                          <i class="lab la-whatsapp fs-18 align-middle me-2 text-success"></i>Request Pelunasan (Owner 2)
+                                                      </a>
+                                                  </li>
+                                                  @endif
+
+                                                  {{-- === OWNER: Pelunasan langsung === --}}
+                                                  @if($isOwnerTkb && $inv->status == 'Belum Lunas')
+                                                  <li>
+                                                      <a class="dropdown-item" href="{{ route('tokabe.pelunasan.page', $inv->id) }}">
+                                                          <i class="las la-money-bill fs-18 align-middle me-2 text-success"></i>Pelunasan
+                                                      </a>
+                                                  </li>
+                                                  @endif
+
+                                                  {{-- === EDIT & BATAL: hanya jika Pemilik, atau Admin dengan approval Unlock === --}}
+                                                  @if($canManageTkb)
+                                                  <li>
+                                                      <a class="dropdown-item" href="{{ route('edit.inv.tkb', $inv->id) }}">
+                                                          <i class="las la-pen fs-18 align-middle me-2 text-muted"></i>Edit
+                                                      </a>
+                                                  </li>
+                                                  @if($inv->status !== 'Batal')
+                                                  <li>
+                                                      <button type="button" class="dropdown-item" onclick="confirmBatalTkb('{{ $inv->id }}', '{{ $inv->nomor_invoice }}')">
+                                                          <i class="las la-folder-minus fs-18 align-middle me-2 text-muted"></i>Invoice Batal
+                                                      </button>
+                                                      <form id="form-batal-tkb-{{ $inv->id }}" action="{{ route('tokabe.status.batal', $inv->id) }}" method="POST" style="display:none;">
+                                                          @csrf
+                                                          <input type="hidden" name="alasan_batal" id="input-alasan-tkb-{{ $inv->id }}">
+                                                      </form>
+                                                  </li>
+                                                  @endif
+                                                  @endif
+
+                                                  {{-- DELETE --}}
                                                   <li class="dropdown-divider"></li>
                                                   <li>
-                                                    <form action="{{ route('delete.invoiceTokabe',['id'=> $inv->id]) }}" method="POST" id="deleteInv{{ $inv->id }}">
-                                                        @csrf
-                                                        @method('delete')
-                                                        <button class="dropdown-item" type="button" onclick="showConfirmation('{{ $inv->nomor_invoice }}', '{{ $inv->id }}')">
-                                                            <i class="las la-trash-alt fs-18 align-middle me-2 text-muted"></i>
-                                                            Delete
-                                                        </button>
-                                                    </form>
+                                                      <form action="{{ route('delete.invoiceTokabe',['id'=> $inv->id]) }}" method="POST" id="deleteInv{{ $inv->id }}">
+                                                          @csrf
+                                                          @method('delete')
+                                                          <button class="dropdown-item" type="button" onclick="showConfirmation('{{ $inv->nomor_invoice }}', '{{ $inv->id }}')">
+                                                              <i class="las la-trash-alt fs-18 align-middle me-2 text-muted"></i>Delete
+                                                          </button>
+                                                      </form>
                                                   </li>
                                               </ul>
                                           </div>
@@ -505,6 +568,28 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 document.getElementById('deleteInv' + invId).submit();
+            }
+        });
+    }
+
+    function confirmBatalTkb(id, nomorInvoice) {
+        Swal.fire({
+            title: 'Pembatalan Invoice',
+            text: "Masukkan alasan pembatalan untuk invoice " + nomorInvoice,
+            input: 'textarea',
+            inputPlaceholder: 'Tulis alasan batal di sini...',
+            showCancelButton: true,
+            confirmButtonText: 'Proses Batal',
+            cancelButtonText: 'Kembali',
+            confirmButtonColor: '#d33',
+            inputValidator: (value) => {
+                if (!value) return 'Alasan batal harus diisi!';
+            },
+            customClass: { popup: 'swal2-popup' }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('input-alasan-tkb-' + id).value = result.value;
+                document.getElementById('form-batal-tkb-' + id).submit();
             }
         });
     }

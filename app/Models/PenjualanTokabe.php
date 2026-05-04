@@ -36,7 +36,9 @@ class PenjualanTokabe extends Model
         'ppn',
         'total_pembayaran',
         'sisa_pembayaran',
-
+        'approval',
+        'approved_at',
+        'alasan_batal',
     ];
 
     public function invoice()
