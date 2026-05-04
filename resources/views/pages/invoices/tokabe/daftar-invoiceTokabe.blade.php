@@ -344,7 +344,15 @@
                                               $pesan_cust = "Invoice : " . $inv->nomor_invoice . "\n";
                                               $pesan_cust .= "Link Download Invoice:\n";
                                               $pesan_cust .= $link_khusus_customer . "\n\n";
-                                              $pesan_cust .= "Total Rp " . number_format($inv->total_harga, 0, ',', '.') . "\n\n";
+                                              $pesan_cust .= "Total Rp " . number_format($inv->total_harga, 0, ',', '.') . "\n";
+                                              if($inv->ppn > 0) {
+                                                  $nominal_ppn = $inv->total_harga * $inv->ppn / 100;
+                                                  $pesan_cust .= "PPN (" . $inv->ppn . "%) Rp " . number_format($nominal_ppn, 0, ',', '.') . "\n";
+                                                  $pesan_cust .= "-------------------------------------------\n";
+                                                  $pesan_cust .= "*Total Pembayaran Rp " . number_format($inv->total_pembayaran, 0, ',', '.') . "*\n\n";
+                                              } else {
+                                                  $pesan_cust .= "\n";
+                                              }
                                               if($inv->sisa_pembayaran > 0) {
                                                   $pesan_cust .= "Mohon transfer ke:\n";
                                                   if($inv->no_rek == "BNI") {
