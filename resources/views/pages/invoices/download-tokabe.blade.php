@@ -45,11 +45,11 @@
                                    <div class="card-body">
                                     <div class="row ">
                                         <div class="col-lg-12">
-                                            <h3 class="fw-bold mb-3">Invoice: Total Karya Berkah </h3>
+                                            <p class="fw-bold fs-17 mb-3">Invoice: Total Karya Berkah</p>
                                             <div class="row g-3">
                                                 <div class="col-lg-4 col-4">
-                                                    <p class="text-muted mb-1 text-uppercase fw-medium fs-14">Invoice No</p>
-                                                    <h5 class="fs-16 mb-0"><span id="invoice-no">{{$penjualan->nomor_invoice}}</span></h5>
+                                                    <p class="text-dark mb-1 text-uppercase fs-16">Invoice No</p>
+                                                    <p class="fw-bold fs-16 mb-0"><span id="invoice-no">{{$penjualan->nomor_invoice}}</span></p>
                                                 </div>
                                                 <div class="col-lg-6 col-6"></div>
                                                 <!--end col-->
@@ -61,28 +61,27 @@
                                                 <div class="col-4">
                                                     <div class="mb-3">
                                                         {{-- sini --}}
-                                                        <p class="text-muted mb-1 text-uppercase fw-medium fs-14">Tanggal</p>
-                                                        <h5 class="fs-16 mb-0"><span id="invoice-date">{{$formatTanggal}}</span></h5>
+                                                        <p class="text-dark mb-1 text-uppercase fs-16">Tanggal</p>
+                                                        <p class="fw-bold fs-16 mb-0"><span id="invoice-date">{{$formatTanggal}}</span></p>
                                                     </div>
-                                                    <h6 class="text-muted text-uppercase fw-semibold mb-1">Penerima</h6>
-                                                    <h5 class="fw-bold mb-2" id="billing-name">{{$penjualan->customer}}</h5>
-                                                    <p class="text-muted mb-1"><span>Perusahaan: </span><span id="billing-address-line-1" class="fw-bold">{{$penjualan->perusahaan}}</span></p>
-                                                    <p class="text-muted mb-1"><span>Telepon: </span><span id="billing-phone-no" class="fw-bold">{{$penjualan->no_telepon}}</span></p>
+                                                    <p class="text-dark text-uppercase fs-16 mb-1">Penerima</p>
+                                                    <p class="fw-bold fs-16 mb-2" id="billing-name">{{$penjualan->customer}}</p>
+                                                    <p class="text-dark fs-16 mb-1"><span>Perusahaan: </span><span id="billing-address-line-1">{{$penjualan->perusahaan}}</span></p>
+                                                    <p class="text-dark fs-16 mb-1"><span>Telepon: </span><span id="billing-phone-no">{{$penjualan->no_telepon}}</span></p>
 
                                                 </div>
                                                 <div class="col-lg-5 col-5" style="margin-left: 100px"></div>
                                                 <div class="col-lg-2 col-2">
-                                                    <p class="text-muted mb-1 text-uppercase fw-medium fs-14">Payment Status</p>
+                                                    <p class="text-muted mb-1 text-uppercase fw-medium fs-16">Payment Status</p>
                                                     @if ($penjualan->status == 'Lunas')
                                                         <span class="badge badge-soft-primary fs-13 mb-3" id="payment-status">{{$penjualan->status}}</span>
                                                     @else
                                                         <span class="badge badge-soft-danger fs-13 mb-3" id="payment-status">{{$penjualan->status}}</span>
                                                     @endif
-                                                    <h6 class="text-muted text-uppercase fw-semibold">Alamat</h6>
-                                                <p class="text-muted mb-1" id="address-details">JL Setia Budi Komplek Setia Budi Point NO D-10 KEL TANJUNG SARI, MEDAN</p>
-                                                <h6><span class="text-muted fw-normal"></span> <a href="https://tokabe.id/" class="link-primary" target="_blank" id="website">www.tokabe.id</a></h6>
-                                                <h6><span class="text-muted fw-normal">Admin 1 : </span> <a href="https://bit.ly/orderIB" class="link-primary" target="_blank" id="website">08112272727</a></h6>
-                                                <h6><span class="text-muted fw-normal">Admin 2:</span> <a href="https://bit.ly/admin9IB" class="link-primary" target="_blank" id="website">08170769999</a></h6>
+                                                    <p class="text-dark text-uppercase fs-16 mb-1">Alamat</p>
+                                                <p class="text-dark fs-16 mb-1" id="address-details">JL Setia Budi Komplek Setia Budi Point NO D-10 KEL TANJUNG SARI, MEDAN</p>
+                                                <p class="mb-0 fs-16"><a href="https://tokabe.id/" class="link-primary text-decoration-none" target="_blank" id="website">www.tokabe.id</a></p>
+
                                                 {{-- <h6 class="mb-0"><span class="text-muted fw-normal">Admin 1 : </span><span id="contact-no" class="text-muted"> 08112272727</span></h6>
                                                 <h6 class="mb-0"><span class="text-muted fw-normal">Admin 2: </span><span id="contact-no" class="text-muted"> 08170769999</span></h6> --}}
                                                 </div>
@@ -151,17 +150,17 @@
                                                 <div class="border-top border-top-dashed mt-0">
                                                     @if (strpos($penjualan->jenis_pembayaran, 'Cash') === false && $penjualan->no_rek === 'BNI')
                                                      <div class="col-lg-6 mt-1">
-                                                         <p style="color:rgb(227, 25, 25);">Mohon Transfer Ke :<br>
+                                                         <p style="color:rgb(227, 25, 25);" class="fs-16">Mohon Transfer Ke :<br>
                                                              BNI | A/N : Yusni Kurniasih | No. Rek : 8331119999</p>
                                                      </div>
                                                      @elseif (strpos($penjualan->jenis_pembayaran, 'Cash') === false && $penjualan->no_rek === 'TKB')
                                                      <div class="col-lg-6 mt-1">
-                                                         <p style="color:rgb(227, 25, 25);">Mohon Transfer Ke :<br>
-                                                            Mandiri | A/N : PT. Total Karya Berkah | No. Rek : 1050009589999</p>
+                                                         <p style="color:rgb(227, 25, 25);" class="fs-16">Mohon Transfer Ke :<br>
+                                                            BSI | A/N : PT. Total Karya Berkah | No. Rek : 3557999999</p>
                                                      </div>
                                                     @endif
 
-                                                    <table class="table table-borderless table-nowrap align-middle mb-0 ms-auto" style="width:250px">
+                                                    <table class="table table-borderless table-nowrap align-middle fs-16 mb-0 ms-auto" style="width:350px">
                                                         <tbody>
                                                            
                                                             <tr>
@@ -191,14 +190,14 @@
                                                                 <td class="text-end">-Rp.{{$dp}}</td>
                                                                 @endif
                                                             </tr>
-                                                            <tr class="border-top border-top-dashed fw-bold fs-15"
+                                                            <tr class="border-top border-top-dashed fw-bold fs-17"
                                                             @if ($penjualan->status === 'Belum Lunas')
                                                             style="color:rgb(227, 25, 25);"
                                                             @else
                                                             style="color: rgb(67,138,122);"
                                                             @endif>
-                                                                <th scope="row" class="fw-bold fs-15">Sisa Pembayaran</th>
-                                                                <th class="text-end fw-bold fs-15">Rp.{{$sisaBayarMod}}</th>
+                                                                <th scope="row" class="fw-bold fs-17">Sisa Pembayaran</th>
+                                                                <th class="text-end fw-bold fs-17">Rp.{{$sisaBayarMod}}</th>
 
                                                             </tr>
                                                         </tbody>

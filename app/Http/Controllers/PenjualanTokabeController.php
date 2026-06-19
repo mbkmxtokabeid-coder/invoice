@@ -770,7 +770,7 @@ class PenjualanTokabeController extends Controller
         }elseif ($penjualan->no_rek == "TKBBNI"){
             $norek = "BNI | A/N : PT. Total Karya Berkah | No. Rek : 3528289999";
         }else{
-            $norek="BSI | A/N : PT. Total Karya Berkah | No. Rek :  3557999999";
+            $norek="BSI | A/N : PT. Total Karya Berkah | No. Rek : 3557999999";
         }
         
         if ($penjualan->dp == null) {
@@ -837,7 +837,7 @@ class PenjualanTokabeController extends Controller
         }elseif ($penjualan->no_rek == "TKBBNI"){
             $norek = "BNI | A/N : PT. Total Karya Berkah | No. Rek : 3528289999";
         }else{
-            $norek="BSI | A/N : PT. Total Karya Berkah | No. Rek :  3557999999";
+            $norek="BSI | A/N : PT. Total Karya Berkah | No. Rek : 3557999999";
         }
         
         if ($penjualan->dp == null) {

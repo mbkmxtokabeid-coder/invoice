@@ -360,7 +360,7 @@
                                                   } elseif($inv->no_rek == "TKBBNI") {
                                                       $pesan_cust .= "BNI | A/N : PT. Total Karya Berkah | No. Rek : 3528289999\n";
                                                   } else {
-                                                      $pesan_cust .= "Mandiri | A/N : PT. Total Karya Berkah | No. Rek : 1050009589999\n";
+                                                      $pesan_cust .= "BSI | A/N : PT. Total Karya Berkah | No. Rek : 3557999999\n";
                                                   }
                                                   $pesan_cust .= "**\n\nApabila sudah melakukan transaksi pembayaran mohon dikirim bukti transfernya";
                                               } else {

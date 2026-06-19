@@ -199,11 +199,11 @@
                                                      @elseif (strpos($penjualan->jenis_pembayaran, 'Cash') === false && $penjualan->no_rek === 'TKB')
                                                      <div class="col-lg-6 mt-1">
                                                          <p style="color:rgb(227, 25, 25); font-size:15px;">Mohon Transfer Ke :<br>
-                                                            Mandiri | A/N : PT. Total Karya Berkah | No. Rek : 1050009589999</p>
+                                                            BSI | A/N : PT. Total Karya Berkah | No. Rek : 3557999999</p>
                                                      </div>
                                                     @endif
 
-                                                    <table class="table table-borderless table-nowrap align-middle mb-0 ms-auto" style="width:250px">
+                                                    <table class="table table-borderless table-nowrap align-middle mb-0 ms-auto" style="width:350px">
                                                         <tbody>
                                                             <tr>
                                                                 <td>Total Harga</td>
@@ -270,15 +270,15 @@
                                                     </div>
                                                   </div>
                                             
-                                                  <div class="column" style="text-align: center; font-size: 10px">
+                                                    <div class="column" style="text-align: center; font-size: 10px">
                                                     <div style="position: absolute; right:340px;bottom: 10px;">
                                             
-                                                      <h6>Medan,{{$formatTanggal}}</h6>
+                                                      <h6 class="fw-normal">Medan,{{$formatTanggal}}</h6>
                                                       <p><br><br><br><br><br><br></p>
                                                       @if($toko == 'Total Karya Berkah')
-                                                      <h6>Oky Irawan</h6>
+                                                      <h6 class="fw-normal">Oky Irawan</h6>
                                                       @else
-                                                      <h6>{{$admin}}</h6>
+                                                      <h6 class="fw-normal">{{$admin}}</h6>
                                                       @endif
                                                     </div>
                                                   </div>

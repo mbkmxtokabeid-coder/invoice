@@ -92,7 +92,6 @@ Route::group(['middleware' => ['auth']], function () {
             Route::get('/addInvoice', [PenjualanController::class, 'loadInvoice']);
             Route::post('/storeInvoice', [PenjualanController::class, 'tambahPenjualan'])->name('store.invoice');
             Route::get('/cetak/{id}', [InvoiceController::class, 'cetakInvoice']);
-            Route::get('/view/download/{id}', [InvoiceController::class, 'viewDownloadInvoice']);
             Route::get('invoices/{selectedOption}', [InvoiceController::class, 'getInvoiceByOption']);
             Route::get('editInvoice/{id}/edit', [InvoiceController::class, 'editInvoice']);
             Route::put('updateInvoice/{id}', [InvoiceController::class, 'updateInvoice'])->name('update-invoice');
@@ -125,7 +124,6 @@ Route::group(['middleware' => ['auth']], function () {
             Route::put('update-InvoiceTokabe/{id}', [PenjualanTokabeController::class, 'updateInvoice'])->name('update-invoiceTokabe');
             Route::get('/ubah-status/{status}/{id}', [PenjualanTokabeController::class, 'ubahStatus'])->name('ubahStatus.tkb');
             Route::get('/cetakTKB/{id}', [PenjualanTokabeController::class, 'cetakInvoiceTKB'])->name('cetak.inv.tkb');
-            Route::get('/view/download/invoiceTKB/{id}', [PenjualanTokabeController::class, 'viewDownloadInvoiceTKB'])->name('download.inv.tkb');
             Route::get('/get-invoice-number', [PenjualanTokabeController::class, 'getUpdatedInvoiceNumber']);
 
             // TOKABE APPROVAL & PELUNASAN
@@ -289,6 +287,10 @@ Route::get('/kategori-barang', function () {
 Route::get('/login', function () {
     return view('auth.login');
 })->name('login');
+
+// ROUTE PUBLIC DOWNLOAD (tanpa login)
+Route::get('/view/download/{id}', [InvoiceController::class, 'viewDownloadInvoice'])->name('download.inv');
+Route::get('/view/download/invoiceTKB/{id}', [PenjualanTokabeController::class, 'viewDownloadInvoiceTKB'])->name('download.inv.tkb');
 
 Route::get('/invoice/public-download/{id}', [InvoiceController::class, 'publicDownload'])
     ->name('invoice.public_download')
