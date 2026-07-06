@@ -248,7 +248,7 @@ Route::group(['middleware' => ['auth']], function () {
         // ROUTE KARYAWAN
         // ====================================================================
         Route::group(['middleware' => ['karyawan']], function () {
-            Route::get('/daftar-spk', [SpkController::class, 'indexSPK']);
+            Route::get('/daftar-spk', [SpkController::class, 'indexSPK'])->name('daftar-spk');
             Route::get('/lihat-spk/{id}', [SpkController::class, 'lihatSPK']);
             Route::get('/ubah-proses-spk/{id}', [SpkController::class, 'prosesSPK']);
         });

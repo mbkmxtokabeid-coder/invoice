@@ -261,13 +261,13 @@
                         <div class="collapse menu-dropdown" id="sidebarSurat">
                           <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                             <a class="nav-link menu-link" href="/invoice/daftar-spb">
+                             <a class="nav-link menu-link" href="{{ route('daftar-spb') }}">
                               <i class="ri-truck-line"></i> <span data-key="t-invoices">SPB</span>
                              </a>
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link menu-link" href="/invoice/daftar-spk">
+                                <a class="nav-link menu-link" href="{{ route('daftar-spk') }}">
                                 <i class="ri-mail-settings-line"></i> <span data-key="t-invoices">SPK</span>
                             </a>
                             </li>
@@ -410,13 +410,13 @@
                         <div class="collapse menu-dropdown" id="sidebarSurat">
                           <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                             <a class="nav-link menu-link" href="/invoice/daftar-spb">
+                             <a class="nav-link menu-link" href="{{ route('daftar-spb') }}">
                               <i class="ri-truck-line"></i> <span data-key="t-invoices">SPB</span>
                              </a>
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link menu-link" href="/invoice/daftar-spk">
+                                <a class="nav-link menu-link" href="{{ route('daftar-spk') }}">
                                 <i class="ri-mail-settings-line"></i> <span data-key="t-invoices">SPK</span>
                             </a>
                             </li>

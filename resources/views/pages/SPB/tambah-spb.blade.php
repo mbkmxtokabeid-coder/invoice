@@ -49,7 +49,7 @@
             {{-- Start Card --}}
             <div class="card">
               {{-- Start Form --}}
-              <form method="POST" action="/invoice/store-spb" class="needs-validation" id="spb_form">
+              <form method="POST" action="{{ url('store-spb') }}" class="needs-validation" id="spb_form">
                 @csrf
                 <div class="card-body p-4">
                   {{-- Start Row 1 --}}

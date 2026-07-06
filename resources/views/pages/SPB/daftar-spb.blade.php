@@ -25,7 +25,7 @@
               <h4 class="mb-3">Apakah ingin menghapus data?</h4>
               <div class="hstack gap-2 justify-content-center">
                   <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                  <form id="deleteForm" action="/delete-spb" method="POST">
+                  <form id="deleteForm" action="{{ url('delete-spb') }}" method="POST">
                     @csrf
                     @method('delete')
 
@@ -68,7 +68,7 @@
        <div class="row pb-4">
         {{-- Start Tombol Tambah --}}
         <div class="col-sm-4">
-          <a href="tambah-spb" class="btn btn-primary addMembers-modal"><i class="las la-plus me-1"></i>Tambah SPB</a>
+          <a href="{{ url('tambah-spb') }}" class="btn btn-primary addMembers-modal"><i class="las la-plus me-1"></i>Tambah SPB</a>
         </div>
         <div class="col-sm-auto ms-auto">
           <div class="d-flex gap-3">
@@ -155,7 +155,7 @@
             </div>
             <div class="card-body">
               {{-- Start div Untuk Table --}}
-              {{-- <div class="table-responsive table-card"> --}}
+              <div class="table-responsive table-card">
                 <table class="table table-hover dt-responsive table-nowrap align-middle table-bordered mb-0" id="alternative-pagination">
                   <thead>
                     <tr class="text-muted text-uppercase">
@@ -212,17 +212,17 @@
                                   <a class="dropdown-item" href="{{route('spb.ubah-status',$value->id)}}"><i class="las la-check-square fs-18 align-middle me-2 text-muted"></i>Sudah Diantar</a>
                               </li>
                               <li>
-                                  <a class="dropdown-item" target = "_blank" href="/invoice/cetak-spb/{{$value->id}}"><i class="las la-print fs-18 align-middle me-2 text-muted"></i>
+                                  <a class="dropdown-item" target = "_blank" href="{{ url('cetak-spb/'.$value->id) }}"><i class="las la-print fs-18 align-middle me-2 text-muted"></i>
                                       Cetak</a>
                               </li>
                               <li>
-                                  <a class="dropdown-item" href="/invoice/edit-spb/{{$value->id}}"><i class="las la-pen fs-18 align-middle me-2 text-muted"></i>
+                                  <a class="dropdown-item" href="{{ url('edit-spb/'.$value->id) }}"><i class="las la-pen fs-18 align-middle me-2 text-muted"></i>
                                       Update</a>
                               </li>
                               <li class="dropdown-divider"></li>
 
                               <li>
-                                <button data-bs-toggle="modal" data-bs-target=".bs-example-modal-center" id="spb-id" value="{{$value->id}}" class="dropdown-item hapus-btn">
+                                <button data-bs-toggle="modal" data-bs-target=".bs-example-modal-center" id="spb-id" value="{{$value->id}}" data-url="{{ url('delete-spb/'.$value->id) }}" class="dropdown-item hapus-btn">
                                   <i class="las la-trash-alt fs-18 align-middle me-2 text-muted"></i>
                                   Delete
                               </button>
@@ -238,7 +238,7 @@
                     {{-- Start Row --}}
                     {{-- End Row --}}
                 </table>
-              {{-- </div> --}}
+              </div>
               {{-- End div Untuk Table --}}
             </div>
           </div>
@@ -249,8 +249,6 @@
 
       </div>
     </div>
-    @extends('layout.footer')
-
 @endsection
 @section('plugins')
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>

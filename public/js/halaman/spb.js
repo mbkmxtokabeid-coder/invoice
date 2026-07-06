@@ -16,7 +16,7 @@ function new_link() {
     count +
     '" name="barang_id[]"><option selected disabled>Pilih Item</option>';
 
-  fetch('/invoice/kategori-barang')
+  fetch('/kategori-barang')
     .then(function (response) {
       return response.json();
     })
@@ -80,12 +80,17 @@ function removeItem(e) {
 
 
 $(document).ready(function () {
-  $('.hapus-btn').click(function (e) {
+  $('.hapus-btn').on('click', function(e) {
     e.preventDefault();
-
     var spb_id = $(this).attr('value');
+    var delete_url = $(this).attr('data-url');
     $('#spb_id').val(spb_id);
-    $('#deleteForm').attr('action', '/invoice/delete-spb/' + spb_id); // Update the form action URL dynamically
+    
+    if (delete_url) {
+      $('#deleteForm').attr('action', delete_url);
+    } else {
+      $('#deleteForm').attr('action', '/delete-spb/' + spb_id); // Update the form action URL dynamically
+    }
 
     $('#deleteModal').modal('show');
   });

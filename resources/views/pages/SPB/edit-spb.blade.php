@@ -32,7 +32,7 @@
             {{-- Start Card --}}
             <div class="card">
               {{-- Start Form --}}
-              <form method="POST" action="/invoice/update-spb/{{$spb->id}}" class="needs-validation" id="spb_form" enctype="multipart/form-data">
+              <form method="POST" action="{{ url('update-spb/'.$spb->id) }}" class="needs-validation" id="spb_form" enctype="multipart/form-data">
                 @csrf
                 @method('put')
                 <div class="card-body p-4">

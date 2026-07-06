@@ -63,7 +63,7 @@ body{
   font-weight: 900;
   color: #000000;">
     @if($spb->nama_spb == 1)
-    Ikhtiar Berkah
+    IBEKAMI
     @else
     Total Karya Berkah (Tokabe.id)
     @endif
@@ -71,7 +71,7 @@ body{
   <!--color: #000000;">Total Karya Berkah</b><br>-->
    <div style="text-align:left; font-size: 12px;">
     JL SETIA BUDI KOMPLEK SETIA BUDI POINT NO D-10 <br> MEDAN 20132<br>
-   Wa:0811 5239 999</div><br><br>
+   Wa:0817-0769-999</div><br><br>
 <b>Tanda Terima Barang</b>
   </div>
   <div class="column" style="text-align:right; font-size: 12px;">
