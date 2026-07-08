@@ -8,7 +8,7 @@ $(document).ready(function () {
 
     var spk_id = $(this).attr('value');
     $('#spb_id').val(spk_id);
-    $('#deleteForm').attr('action', '/invoice/delete-spk/' + spk_id); // Update the form action URL dynamically
+    $('#deleteForm').attr('action', '/delete-spk/' + spk_id); // Update the form action URL dynamically
 
     $('#deleteModal').modal('show');
   });

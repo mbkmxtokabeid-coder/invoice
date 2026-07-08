@@ -104,7 +104,7 @@
               <h4 class="mb-3">Apakah ingin menghapus data?</h4>
               <div class="hstack gap-2 justify-content-center">
                   <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                  <form id="deleteForm" action="/invoice/delete-spk" method="POST">
+                  <form id="deleteForm" action="/delete-spk" method="POST">
                     @csrf
                     @method('delete')
 
@@ -256,7 +256,7 @@
                           <ul class="dropdown-menu dropdown-menu-end">
                             @if ($surat->status_spk === 'Belum Selesai')
                               <li>
-                                <a class="dropdown-item" href="/invoice/ubah-status-spk/{{ $surat->id }}">
+                                <a class="dropdown-item" href="/ubah-status-spk/{{ $surat->id }}">
                                   <i class="las la-clipboard-check fs-18 align-middle me-2 text-muted"></i> Tandai Selesai
                                 </a>
                               </li>
@@ -273,7 +273,7 @@
                         )
                             @php
                                 $adminWa = '628115239999'; // ganti dengan nomor WA Admin
-                                $linkApprove = url('/invoice/ubah-status-spk/' . $surat->id);
+                                $linkApprove = url('/ubah-status-spk/' . $surat->id);
                                 $pesan = urlencode("Halo Admin, mohon approve status SPK untuk surat Nomor Invoice: {$surat->nomor_invoice}. Link approve: {$linkApprove}");
                                 $waUrl = "https://wa.me/{$adminWa}?text={$pesan}";
                             @endphp
@@ -381,12 +381,12 @@
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li>
-                                    <a class="dropdown-item" href="/invoice/lihat-spk/{{$surat->id}}"><i class="las la-eye fs-18 align-middle me-2 text-muted"></i>
+                                    <a class="dropdown-item" href="/lihat-spk/{{$surat->id}}"><i class="las la-eye fs-18 align-middle me-2 text-muted"></i>
                                         Lihat</a>
                                 </li>
                                 @if (Auth::check() && (Auth::user()->role == 'Admin' || Auth::user()->role == 'Pemilik'))
                                 <li>
-                                  <a class="dropdown-item" href="/invoice/cetak-spk/{{$surat->id}}"><i class="las la-print fs-18 align-middle me-2 text-muted"></i>
+                                  <a class="dropdown-item" href="/cetak-spk/{{$surat->id}}"><i class="las la-print fs-18 align-middle me-2 text-muted"></i>
                                       Cetak</a>
                                 </li>
                                 <!--<li>-->

@@ -614,7 +614,7 @@
         <h5 class="modal-title" id="buatSpkModalLabel">Buat SPK Baru</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
       </div>
-      <form action="/invoice/store-spk-dari-invoice" method="POST">
+      <form action="{{ route('spk.store_dari_invoice') }}" method="POST">
         @csrf
         <div class="modal-body">
           <input type="hidden" name="invoice_id" id="spk_invoice_id">

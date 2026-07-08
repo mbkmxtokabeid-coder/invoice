@@ -239,11 +239,15 @@ class SpkController extends Controller
         $produksi = User::where('role', 'Produksi')->get();
         Notification::send($produksi, new NewSPK($spk));
         
-        $firebaseAuthToken = $this->getFirebaseAuthToken();
-        foreach ($produksi as $prod) {
-            if ($prod->device_token) {
-                $this->pushNotif($prod->device_token, 'SPK Baru Dibuat', 'SPK dengan nomor invoice ' . $request->invoice . ' telah dibuat.', Storage::url('images/ikhtiarberkah.png'), 'https://ikhtiarberkah.com/invoice/lihat-spk/' . $spk->id, $firebaseAuthToken);
+        try {
+            $firebaseAuthToken = $this->getFirebaseAuthToken();
+            foreach ($produksi as $prod) {
+                if ($prod->device_token) {
+                    $this->pushNotif($prod->device_token, 'SPK Baru Dibuat', 'SPK dengan nomor invoice ' . $request->invoice . ' telah dibuat.', Storage::url('images/ikhtiarberkah.png'), 'https://ikhtiarberkah.com/invoice/lihat-spk/' . $spk->id, $firebaseAuthToken);
+                }
             }
+        } catch (\Exception $e) {
+            \Log::error('Firebase Notification Error: ' . $e->getMessage());
         }
         
         Alert::success('Spk berhasil ditambahkan');
@@ -355,11 +359,16 @@ class SpkController extends Controller
     $produksi = User::where('role', 'Produksi')->get();
     Notification::send($produksi, new NewSPK($spk));
     
-    $firebaseAuthToken = $this->getFirebaseAuthToken();
-    foreach ($produksi as $prod) {
-        if ($prod->device_token) {
-            $this->pushNotif($prod->device_token, 'SPK Baru Dibuat', 'SPK nomor ' . $penjualan->nomor_invoice . ' telah dibuat dari Invoice.', Storage::url('images/ikhtiarberkah.png'), 'https://ikhtiarberkah.com/invoice/lihat-spk/' . $spk->id, $firebaseAuthToken);
+    try {
+        $firebaseAuthToken = $this->getFirebaseAuthToken();
+        foreach ($produksi as $prod) {
+            if ($prod->device_token) {
+                $this->pushNotif($prod->device_token, 'SPK Baru Dibuat', 'SPK nomor ' . $penjualan->nomor_invoice . ' telah dibuat dari Invoice.', Storage::url('images/ikhtiarberkah.png'), 'https://ikhtiarberkah.com/invoice/lihat-spk/' . $spk->id, $firebaseAuthToken);
+            }
         }
+    } catch (\Exception $e) {
+        // Log the error or simply ignore it so it doesn't break the process
+        \Log::error('Firebase Notification Error: ' . $e->getMessage());
     }
 
     Alert::success('Berhasil', 'SPK untuk Invoice ' . $penjualan->nomor_invoice . ' berhasil dibuat!');
