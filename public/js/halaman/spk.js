@@ -7,8 +7,8 @@ $(document).ready(function () {
     e.preventDefault();
 
     var spk_id = $(this).attr('value');
-    $('#spb_id').val(spk_id);
-    $('#deleteForm').attr('action', '/delete-spk/' + spk_id); // Update the form action URL dynamically
+    var deleteUrl = $(this).data('url');
+    $('#deleteForm').attr('action', deleteUrl); // Update the form action URL dynamically
 
     $('#deleteModal').modal('show');
   });
