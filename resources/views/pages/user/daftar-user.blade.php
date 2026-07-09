@@ -68,7 +68,7 @@
        <div class="row pb-4">
         {{-- Start Tombol Tambah --}}
         <div class="col-sm-4">
-          <a href="/invoice/add-user" class="btn btn-primary addMembers-modal"><i class="las la-plus me-1"></i>Tambah Karyawan</a>
+          <a href="/add-user" class="btn btn-primary addMembers-modal"><i class="las la-plus me-1"></i>Tambah Karyawan</a>
         </div>
         {{-- End Tombol Tambah --}}
        </div>

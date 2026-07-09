@@ -162,7 +162,7 @@
           <!--  @if (Auth::check() && (Auth::user()->role == 'Admin' || Auth::user()->role == 'Pemilik'))-->
 
           <!--  <div class="col-sm-3" style="margin-right: -150px; margin-bottom: -15px; margin-top:10px;">-->
-          <!--    <a href="/invoice/tambah-spk" class="btn btn-md btn-primary mt-2">-->
+          <!--    <a href="/tambah-spk" class="btn btn-md btn-primary mt-2">-->
           <!--      <i class="las la-plus"></i>Tambah SPK</a>-->
           <!--    </div>-->
             @endif
@@ -341,21 +341,21 @@
                               <ul class="dropdown-menu dropdown-menu-end">
                                 @if ($surat->status_kerja == 'Belum Diproses')
                                   <li>
-                                    <a class="dropdown-item" href="/invoice/ubah-proses-spk/{{$surat->id}}">
+                                    <a class="dropdown-item" href="/ubah-proses-spk/{{$surat->id}}">
                                             <i class="las la-tools fs-18 align-middle me-2 text-muted"></i>
                                             Proses Design
                                         </a>
                                     </li>
                                 @elseif ($surat->status_kerja == 'Proses Design')
                                     <li>
-                                        <a class="dropdown-item" href="/invoice/ubah-proses-spk/{{$surat->id}}">
+                                        <a class="dropdown-item" href="/ubah-proses-spk/{{$surat->id}}">
                                             <i class="las la-clipboard-check fs-18 align-middle me-2 text-muted"></i>
                                             Proses Produksi
                                         </a>
                                     </li>
                                 @elseif ($surat->status_kerja == 'Proses Produksi')
                                     <li>
-                                        <a class="dropdown-item" href="/invoice/ubah-proses-spk/{{$surat->id}}">
+                                        <a class="dropdown-item" href="/ubah-proses-spk/{{$surat->id}}">
                                             <i class="las la-clipboard-check fs-18 align-middle me-2 text-muted"></i>
                                             Selesai
                                         </a>
@@ -390,7 +390,7 @@
                                         Cetak</a>
                                   </li>
                                   <!--<li>-->
-                                  <!--  <a class="dropdown-item" href="/invoice/edit-spk/{{$surat->id}}"><i class="las la-pen fs-18 align-middle me-2 text-muted"></i>-->
+                                  <!--  <a class="dropdown-item" href="/edit-spk/{{$surat->id}}"><i class="las la-pen fs-18 align-middle me-2 text-muted"></i>-->
                                   <!--      Edit</a>-->
                                   <!--</li>-->
                                   <li class="dropdown-divider"></li>

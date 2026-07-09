@@ -31,7 +31,7 @@
     <!-- Tombol Tambah -->
     <div class="row pb-2 align-items-end" style="margin-top:-10px;">
       <div class="col-sm-3" style="margin-right: -150px;">
-        <a href="/invoice/tambah-spj" class="btn btn-md btn-primary mt-2">
+        <a href="/tambah-spj" class="btn btn-md btn-primary mt-2">
           <i class="las la-plus"></i> Tambah SPJ
         </a>
       </div>
@@ -129,16 +129,16 @@
                       </button>
                       <ul class="dropdown-menu dropdown-menu-end">
                          <li>
-                                    <a class="dropdown-item" href="/invoice/lihat-spj/{{$item->id}}"><i class="las la-eye fs-18 align-middle me-2 text-muted"></i>
+                                    <a class="dropdown-item" href="/lihat-spj/{{$item->id}}"><i class="las la-eye fs-18 align-middle me-2 text-muted"></i>
                                         Lihat</a>
                                 </li>
                                 
                                 <li>
-                                  <a class="dropdown-item" href="/invoice/cetak-spj/{{$item->id}}"><i class="las la-print fs-18 align-middle me-2 text-muted"></i>
+                                  <a class="dropdown-item" href="/cetak-spj/{{$item->id}}"><i class="las la-print fs-18 align-middle me-2 text-muted"></i>
                                       Cetak</a>
                                 </li>
                         <li>
-                          <a class="dropdown-item" href="/invoice/edit-spj/{{$item->id}}">
+                          <a class="dropdown-item" href="/edit-spj/{{$item->id}}">
                             <i class="las la-pen fs-18 align-middle me-2 text-muted"></i> Edit
                           </a>
                         </li>

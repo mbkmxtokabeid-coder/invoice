@@ -51,7 +51,7 @@
 
        <div class="row pb-4 gy-3">
           <div class="col-sm-4">
-              <a href="/invoice/addInvoice" class="btn btn-primary addMembers-modal"><i class="las la-plus me-1"></i>Tambah Invoices</a>
+              <a href="/addInvoice" class="btn btn-primary addMembers-modal"><i class="las la-plus me-1"></i>Tambah Invoices</a>
           </div>
 
       </div>
@@ -405,12 +405,12 @@
                                               </button>
                                               <ul class="dropdown-menu dropdown-menu-end shadow-lg">
                                                   <li>
-                                                      <a class="dropdown-item" href="/invoice/cetak/{{ $inv->id }}">
+                                                      <a class="dropdown-item" href="/cetak/{{ $inv->id }}">
                                                           <i class="las la-print  fs-18 align-middle me-2 text-muted"></i>Cetak Invoice
                                                       </a>
                                                   </li>
                                                   <li>
-                                                      <a class="dropdown-item" href="/invoice/view/download/{{ $inv->id }}" target="_blank">
+                                                      <a class="dropdown-item" href="/view/download/{{ $inv->id }}" target="_blank">
                                                           <i class="las la-file-download fs-18 align-middle me-2 text-muted"></i>Download
                                                       </a>
                                                   </li>
@@ -480,7 +480,7 @@
     @if($isOwner)
         @if($inv->approval === 'Unlock')
             <li>
-                <a class="dropdown-item" href="/invoice/ubah-status-lock/{{ $inv->id }}">
+                <a class="dropdown-item" href="/ubah-status-lock/{{ $inv->id }}">
                     <i class="las la-check-square fs-18 align-middle me-2 text-muted"></i>Lock
                 </a>
             </li>
@@ -531,7 +531,7 @@
 
     @if($canManage)
         <li>
-            <a class="dropdown-item" href="/invoice/editInvoice/{{ $inv->id }}/edit">
+            <a class="dropdown-item" href="/editInvoice/{{ $inv->id }}/edit">
                 <i class="las la-pen fs-18 align-middle me-2 text-muted"></i>Edit
             </a>
         </li>

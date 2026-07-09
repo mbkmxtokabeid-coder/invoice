@@ -194,7 +194,7 @@
                                         <i class="las la-database"></i> <span data-key="t-invoices">Dashboard Ibekami</span>
                                     </a>
                                     @if (Auth::check() && (Auth::user()->role == 'Admin' || Auth::user()->role == 'Pemilik'))
-                                    <a class="nav-link menu-link" href="/invoice/welcomeTKB">
+                                    <a class="nav-link menu-link" href="/welcomeTKB">
                                         <i class="las la-database"></i> <span data-key="t-invoices">Dashboard Tokabe</span>
                                     </a>
                                     @endif
@@ -232,17 +232,17 @@
                           <ul class="nav nav-sm flex-column">
 
                               <li class="nav-item">
-                                <a class="nav-link menu-link" href="/invoice/listBarang">
+                                <a class="nav-link menu-link" href="/listBarang">
                                   <i class="las la-box-open "></i> <span data-key="t-invoices">Daftar Barang</span>
                               </a>
                               </li>
                               <li class="nav-item">
-                                <a class="nav-link menu-link" href="/invoice/listMaterial">
+                                <a class="nav-link menu-link" href="/listMaterial">
                                   <i class="las la-tools "></i> <span data-key="t-invoices">Daftar Material</span>
                               </a>
                               </li>
                               <li class="nav-item">
-                                <a class="nav-link menu-link" href="/invoice/listInventaris">
+                                <a class="nav-link menu-link" href="/listInventaris">
                                   <i class="las la-dolly-flatbed "></i> <span data-key="t-invoices">Daftar Inventaris</span>
                               </a>
                               </li>
@@ -273,7 +273,7 @@
                             </li>
                             
                              <li class="nav-item">
-                                <a class="nav-link menu-link" href="/invoice/daftar-spj">
+                                <a class="nav-link menu-link" href="/daftar-spj">
                                 <i class="ri-mail-send-line"></i> <span data-key="t-invoices">SPJ</span>
                             </a>
                             </li>
@@ -289,19 +289,19 @@
                             <ul class="nav nav-sm flex-column">
 
                             <li class="nav-item">
-                                <a class="nav-link menu-link" href="/invoice/daftar-laporan">
+                                <a class="nav-link menu-link" href="/daftar-laporan">
                                 <i class="ri-file-chart-line"></i> <span data-key="t-invoices">Laporan Penjualan</span>
                             </a>
                             </li>
                             
                             <li class="nav-item">
-                                <a class="nav-link menu-link" href="/invoice/daftar-laporanPembelian">
+                                <a class="nav-link menu-link" href="/daftar-laporanPembelian">
                                   <i class="ri-calculator-line"></i><span data-key="t-invoices">Laporan Pembelian</span>
                             </a>
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link menu-link" href="/invoice/daftar-pelanggan">
+                                <a class="nav-link menu-link" href="/daftar-pelanggan">
                                 <i class="ri-file-user-line"></i> <span data-key="t-invoices">Daftar Customer</span>
                             </a>
                             </li>
@@ -346,13 +346,13 @@
                         <ul class="nav nav-sm flex-column">
 
                             <li class="nav-item">
-                            <a class="nav-link menu-link" href="/invoice/daftar-user">
+                            <a class="nav-link menu-link" href="/daftar-user">
                                 <i class="las la-address-book"></i> <span data-key="t-invoices">Daftar Karyawan</span>
                             </a>
                             </li>
 
                             <li class="nav-item">
-                            <a class="nav-link menu-link" href="/invoice/add-user">
+                            <a class="nav-link menu-link" href="/add-user">
                                 <i class="las la-user-plus"></i> <span data-key="t-invoices">Tambah Karyawan</span>
                             </a>
                             </li>
@@ -381,17 +381,17 @@
                       <div class="collapse menu-dropdown" id="sidebarProduct">
                           <ul class="nav nav-sm flex-column">
                               <li class="nav-item">
-                                <a class="nav-link menu-link" href="/invoice/listBarang">
+                                <a class="nav-link menu-link" href="/listBarang">
                                   <i class="las la-box-open "></i> <span data-key="t-invoices">Daftar Barang</span>
                               </a>
                               </li>
                               <li class="nav-item">
-                                <a class="nav-link menu-link" href="/invoice/listMaterial">
+                                <a class="nav-link menu-link" href="/listMaterial">
                                   <i class="las la-tools "></i> <span data-key="t-invoices">Daftar Material</span>
                               </a>
                               </li>
                               <li class="nav-item">
-                                <a class="nav-link menu-link" href="/invoice/listInventaris">
+                                <a class="nav-link menu-link" href="/listInventaris">
                                   <i class="las la-dolly-flatbed "></i> <span data-key="t-invoices">Daftar Inventaris</span>
                               </a>
                               </li>
@@ -422,7 +422,7 @@
                             </li>
                             
                              <li class="nav-item">
-                                <a class="nav-link menu-link" href="/invoice/daftar-spj">
+                                <a class="nav-link menu-link" href="/daftar-spj">
                                 <i class="ri-mail-send-line"></i> <span data-key="t-invoices">SPJ</span>
                             </a>
                             </li>
@@ -434,7 +434,7 @@
                     @else
                     <li class="menu-title mt-3"><i class="ri-more-fill"></i> <span data-key="t-pages">Surat</span></li>
                      <li class="nav-item">
-                       <a class="nav-link menu-link" href="/invoice/daftar-spk">
+                       <a class="nav-link menu-link" href="/daftar-spk">
                         <i class="ri-mail-settings-line"></i> <span data-key="t-invoices">SPK</span>
                        </a>
                      </li>
@@ -449,7 +449,7 @@
                     @endif
                     @if (Auth::user()->role === 'Stockist')
                     <li class="nav-item mt-2">
-                        <a class="nav-link menu-link" href="/invoice/listBarang">
+                        <a class="nav-link menu-link" href="/listBarang">
                           <i class="las la-box-open "></i> <span data-key="t-invoices">Daftar Barang</span>
                       </a>
                       </li>

@@ -193,7 +193,7 @@
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end">
                                         <li>
-                                            <a class="dropdown-item" href="/invoice/edit-stok/{{$brg->id}}"><i class="las la-pen fs-18 align-middle me-2 text-muted"></i>
+                                            <a class="dropdown-item" href="/edit-stok/{{$brg->id}}"><i class="las la-pen fs-18 align-middle me-2 text-muted"></i>
                                                 Update Stock</a>
                                         </li>
                                         <li class="dropdown-divider"></li>

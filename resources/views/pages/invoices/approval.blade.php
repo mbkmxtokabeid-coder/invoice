@@ -77,7 +77,7 @@
         </form>
 
         <div class="mt-4 text-center">
-            <a href="/invoice/list-invoice" class="text-sm text-gray-600 underline hover:text-blue-500">Kembali ke Daftar Invoice</a>
+            <a href="/list-invoice" class="text-sm text-gray-600 underline hover:text-blue-500">Kembali ke Daftar Invoice</a>
         </div>
     </div>
 </div>
