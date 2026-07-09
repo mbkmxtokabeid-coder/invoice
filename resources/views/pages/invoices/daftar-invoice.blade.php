@@ -440,7 +440,7 @@
         // Cek Sisa Pembayaran (Jika > 0 berarti Belum Lunas)
         if($inv->sisa_pembayaran > 0) {
              $pesan_cust .= "Mohon transfer ke:\n";
-             $pesan_cust .= "Mandiri | A/N : Yusni Kurniasih | No. Rek : 1050000329999\n";
+             $pesan_cust .= "BSI | A/N : Yusni Kurniasih | No. Rek : 2845999999\n";
              $pesan_cust .= "**\n\n";
              $pesan_cust .= "Apabila sudah melakukan transaksi pembayaran mohon dikirim bukti transfernya";
         } else {
