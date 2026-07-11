@@ -8,6 +8,28 @@
 @endsection
 @extends('layout.template')
 @section('content')
+@if(Session::has('error'))
+<script>
+    $(document).ready(function() {
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal',
+            text: 'SPB Gagal ditambahkan',
+        });
+    });
+</script>
+@endif
+@if($errors->any())
+<script>
+    $(document).ready(function() {
+        Swal.fire({
+            icon: 'error',
+            title: 'Validasi Gagal',
+            text: 'Terdapat input yang kosong atau tidak valid (Contoh: SPB Perusahaan belum dipilih). Silakan lengkapi form.',
+        });
+    });
+</script>
+@endif
     <div class="page-content">
       <div class="container-fluid">
         {{-- Start Page Title --}}
@@ -45,11 +67,15 @@
                           {{-- Start Input SPB --}}
                           <label  class="col-lg-5 col-form-label">SPB</label>
                           <div class="col-lg-7 input-light mb-2">
-                            <select class="form-select bg-light" name="namaSpb" data-choices data-choices-search-false value="{{$spb->perusahaan_spb->nama_perusahaan}}" required>
+                            <select class="form-select bg-light @error('namaSpb') is-invalid @enderror" name="namaSpb" data-choices data-choices-search-false required>
+                              <option value="" disabled selected>Pilih Perusahaan</option>
                               @foreach($namaPerusahaan as $usaha)
-                              <option value="{{$usaha->id}}">{{$usaha->nama_perusahaan}}</option>
+                              <option value="{{$usaha->id}}" {{ (old('namaSpb') ?? $spb->nama_spb) == $usaha->id ? 'selected' : '' }}>{{$usaha->nama_perusahaan}}</option>
                               @endforeach
                             </select>
+                            @error('namaSpb')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
                            </div>
                           </div>
                           {{-- End Input SPB --}}

@@ -24,6 +24,17 @@
     });
 </script>
 @endif
+@if($errors->any())
+<script>
+    $(document).ready(function() {
+        Swal.fire({
+            icon: 'error',
+            title: 'Validasi Gagal',
+            text: 'Terdapat input yang kosong atau tidak valid (Contoh: SPB Perusahaan belum dipilih). Silakan lengkapi form.',
+        });
+    });
+</script>
+@endif
 
     <div class="page-content">
       <div class="container-fluid">
@@ -63,12 +74,15 @@
                           <div class="col-lg-7 input-light mb-2">
                             <!--<input class="form-control bg-light" value="Total Karya Berkah" name="namaSpb" readonly  required>-->
                             <!--<input class="form-control bg-light" value="Ikhtiar Berkah" name="namaSpb" readonly  required>-->
-                            <select class="form-select bg-light" name="namaSpb" data-choices data-choices-search-false required>
+                            <select class="form-select bg-light @error('namaSpb') is-invalid @enderror" name="namaSpb" data-choices data-choices-search-false required>
                               <option value="" disabled selected>Pilih Perusahaan</option>
                               @foreach($namaPerusahaan as $usaha)
-                              <option value="{{$usaha->id}}">{{$usaha->nama_perusahaan}}</option>
+                              <option value="{{$usaha->id}}" {{ old('namaSpb') == $usaha->id ? 'selected' : '' }}>{{$usaha->nama_perusahaan}}</option>
                               @endforeach
                             </select>
+                            @error('namaSpb')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
                            </div>
                           </div>
                           {{-- End Input SPB --}}
