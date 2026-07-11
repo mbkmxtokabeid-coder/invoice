@@ -1,3 +1,4 @@
+@extends('layout.template')
 @section('head')
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <style>
@@ -6,7 +7,6 @@
   }
 </style>
 @endsection
-@extends('layout.template')
 @section('content')
 @if(Session::has('error'))
 <script>
@@ -240,7 +240,7 @@
 @section('plugins')
 <script src="{{asset('libs/choices.js/public/assets/scripts/choices.min.js')}}"></script>
 <script src="{{asset('vendor/jsvalidation/js/jsvalidation.js')}}"></script>
-{!! \JsValidator::formRequest('App\Http\Requests\SPBRequest', '#spb_form') !!}
+{!! app('jsvalidator')->formRequest('App\Http\Requests\SPBRequest', '#spb_form') !!}
 <script src="{{asset('libs/cleave.js/cleave.min.js')}}"></script>
 <script src="{{asset('js/halaman/spb.js')}}"></script>
 @endsection
