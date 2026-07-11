@@ -283,11 +283,12 @@
 
       </div>
     </div>
-    {!! JsValidator::formRequest('App\Http\Requests\SPBRequest') !!}
 @endsection
 @section('plugins')
 <script src="{{asset('libs/choices.js/public/assets/scripts/choices.min.js')}}"></script>
 <script src="{{asset('vendor/jsvalidation/js/jsvalidation.js')}}"></script>
+{!! \JsValidator::formRequest('App\Http\Requests\SPBRequest', '#spb_form') !!}
+
 <script src="{{asset('libs/cleave.js/cleave.min.js')}}"></script>
 <script src="{{asset('js/halaman/spb.js')}}"></script>
 @endsection

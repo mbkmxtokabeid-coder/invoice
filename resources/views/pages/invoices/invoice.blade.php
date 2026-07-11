@@ -180,7 +180,7 @@
             title: "Berhasil",
             text: response.message,
           }).then(function () {
-            window.location.href = "/invoice/list-invoice";
+            window.location.href = "{{ route('daftar_invoice') }}";
           });
         } else {
              Swal.fire({
