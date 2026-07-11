@@ -4,15 +4,13 @@ document.querySelector("#phone-number") && (cleaveNumeral = new Cleave("#phone-n
 
 var count = 1;
 function new_link() {
-  count++;
+  var count = Date.now(); // Gunakan timestamp agar ID selalu unik
   var e = document.createElement("tr");
   e.id = count;
   e.className = "product";
 
   var t =
-    '<th scope="row" class="product-id">' +
-    count +
-    '</th><td class="text-start"><div class="mb-2"><label class="visually-hidden" for="productName" >Item</label><select class="form-select " data-choices data-choices-sorting="true" id="productName-' +
+    '<th scope="row" class="product-id"></th><td class="text-start"><div class="mb-2"><label class="visually-hidden" for="productName" >Item</label><select class="form-select " data-choices data-choices-sorting="true" id="productName-' +
     count +
     '" name="barang_id[]"><option selected disabled>Pilih Item</option>';
 
@@ -32,29 +30,25 @@ function new_link() {
         count +
         '" name="qty[]" value="0"></div></td><td class="text-end"><div><textarea id="productKeterangan-'
         + count +
-        '"class="form-control bg-light border-0" name="keterangan[]" cols="2" placeholder="Keterangan"></textarea></div></td><td class="product-removal"><a class="btn btn-success">Delete</a></td>';
+        '"class="form-control bg-light border-0" name="keterangan[]" cols="2" placeholder="Keterangan"></textarea></div></td><td class="product-removal"><a href="javascript:void(0)" class="btn btn-success">Delete</a></td>';
 
       e.innerHTML = t;
       document.getElementById("newlink").appendChild(e);
 
-      // var choicesElement = document.getElementById("satuan-" + count);
-      // new Choices(choicesElement, {
-      //   placeholderValue: "This is a placeholder set in the config",
-      //   searchPlaceholderValue: "This is a search placeholder",
-      //   searchEnabled: false
-      // });
-
-      var choicesElements = document.querySelectorAll("[data-choices]");
-      Array.from(choicesElements).forEach(function (element) {
-        new Choices(element, {
+      // Inisialisasi Choices HANYA pada select yang baru dibuat untuk mencegah error "already initialized"
+      var newSelect = document.getElementById('productName-' + count);
+      if (newSelect) {
+        new Choices(newSelect, {
           placeholderValue: "This is a placeholder set in the config",
           searchPlaceholderValue: "This is a search placeholder",
         });
-      });
+      }
 
-      // isData();
       remove();
       resetRow();
+    })
+    .catch(function (error) {
+      console.error('Error fetching kategori barang:', error);
     });
 }
 
