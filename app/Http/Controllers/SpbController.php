@@ -46,6 +46,14 @@ class SpbController extends Controller
 
     public function storeSPB(Request $request)
     {
+        $request->validate([
+            'namaSpb' => 'required',
+            'customer' => 'required',
+            'perusahaan' => 'required',
+            'no_telp' => 'required',
+            'barang_id' => 'required|array',
+            'barang_id.*' => 'required',
+        ]);
 
         $item = (!empty($request->barang_id)) ? count($request->barang_id) : 0;
         $spb = Spb::create([
@@ -55,11 +63,6 @@ class SpbController extends Controller
             'nomor_telepon' => $request->no_telp,
             'jumlah_item' => $item,
             'status' => 'Belum diantar',
-        ]);
-
-        $request->validate([
-            'barang_id' => 'required|array',
-            'barang_id.*' => 'required',
         ]);
 
         if (empty($request->barang_id)) {
@@ -135,8 +138,22 @@ class SpbController extends Controller
 
     public function updateSPB(Request $request, $id)
     {
+        $request->validate([
+            'namaSpb' => 'required',
+            'customer' => 'required',
+            'perusahaan' => 'required',
+            'no_telp' => 'required',
+            'barang_id' => 'required|array',
+            'barang_id.*' => 'required',
+        ]);
+
+        if (empty($request->barang_id)) {
+            Alert::error('error', 'SPB gagal diupdate');
+            return redirect('edit-spb');
+        }
+
         $spb = Spb::find($id);
-        $item = (!empty($request->barang_id)) ? count($request->barang_id) : 0;
+        $item = count($request->barang_id);
 
         $spb->nama_spb = $request->namaSpb;
         $spb->customer = $request->customer;
@@ -145,18 +162,6 @@ class SpbController extends Controller
         $spb->jumlah_item = $item;
         $spb->save();
         BarangSpb::where('spb', $id)->delete();
-
-
-        $request->validate([
-            'barang_id' => 'required|array',
-            'barang_id.*' => 'required',
-        ]);
-
-        if (empty($request->barang_id)) {
-            Alert::error('error', 'SPB gagal diupdate');
-            return redirect('edit-spb');
-            // return redirect('tambah-spb')->with('error', 'SPB gagal ditambahkan');
-        }
 
         foreach ($request->barang_id as $key => $value) {
             $barangs = new BarangSpb();
