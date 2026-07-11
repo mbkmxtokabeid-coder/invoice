@@ -14,8 +14,15 @@ function new_link() {
     count +
     '" name="barang_id[]"><option selected disabled>Pilih Item</option>';
 
-  fetch('/invoice/kategori-barang')
+  fetch('/kategori-barang')
     .then(function (response) {
+      if (!response.ok) {
+        // Fallback for hosting if it's in a subdirectory
+        return fetch('/invoice/kategori-barang').then(function(res) {
+          if (!res.ok) throw new Error('Network response was not ok');
+          return res.json();
+        });
+      }
       return response.json();
     })
     .then(function (kategori) {
