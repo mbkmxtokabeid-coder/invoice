@@ -14,14 +14,21 @@ function new_link() {
     count +
     '" name="barang_id[]"><option selected disabled>Pilih Item</option>';
 
-  fetch('/kategori-barang')
+  // Resolve base path dynamically to support subdirectory hosting
+  var pathname = window.location.pathname;
+  var basePath = '/';
+  if (pathname.includes('/tambah-spb')) {
+      basePath = pathname.split('/tambah-spb')[0] + '/';
+  } else if (pathname.includes('/edit-spb')) {
+      basePath = pathname.split('/edit-spb')[0] + '/';
+  }
+  
+  var urlKategori = basePath + 'kategori-barang';
+  
+  fetch(urlKategori)
     .then(function (response) {
       if (!response.ok) {
-        // Fallback for hosting if it's in a subdirectory
-        return fetch('/invoice/kategori-barang').then(function(res) {
-          if (!res.ok) throw new Error('Network response was not ok');
-          return res.json();
-        });
+          throw new Error('Network response was not ok');
       }
       return response.json();
     })
