@@ -16,7 +16,7 @@ function new_link() {
     count +
     '" name="barang_id[]"><option selected disabled>Pilih Item</option>';
 
-  fetch('/kategori-barang')
+  fetch('/invoice/kategori-barang')
     .then(function (response) {
       return response.json();
     })
