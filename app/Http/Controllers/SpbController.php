@@ -53,6 +53,12 @@ class SpbController extends Controller
             'no_telp' => 'required',
             'barang_id' => 'required|array',
             'barang_id.*' => 'required',
+            'deskripsi_item' => 'required|array',
+            'deskripsi_item.*' => 'required',
+            'satuan' => 'required|array',
+            'satuan.*' => 'required',
+            'qty' => 'required|array',
+            'qty.*' => 'required',
         ]);
 
         $item = (!empty($request->barang_id)) ? count($request->barang_id) : 0;
@@ -145,6 +151,12 @@ class SpbController extends Controller
             'no_telp' => 'required',
             'barang_id' => 'required|array',
             'barang_id.*' => 'required',
+            'deskripsi_item' => 'required|array',
+            'deskripsi_item.*' => 'required',
+            'satuan' => 'required|array',
+            'satuan.*' => 'required',
+            'qty' => 'required|array',
+            'qty.*' => 'required',
         ]);
 
         if (empty($request->barang_id)) {
