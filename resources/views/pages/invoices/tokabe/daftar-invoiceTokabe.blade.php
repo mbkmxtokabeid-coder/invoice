@@ -353,19 +353,19 @@
                                               } else {
                                                   $pesan_cust .= "\n";
                                               }
-                                              if($inv->sisa_pembayaran > 0) {
-                                                  $pesan_cust .= "Mohon transfer ke:\n";
-                                                  if($inv->no_rek == "BNI") {
-                                                      $pesan_cust .= "BNI | A/N : Yusni Kurniasih | No. Rek : 8331119999\n";
-                                                  } elseif($inv->no_rek == "TKBBNI") {
-                                                      $pesan_cust .= "BNI | A/N : PT. Total Karya Berkah | No. Rek : 3528289999\n";
-                                                  } else {
-                                                      $pesan_cust .= "BSI | A/N : PT. Total Karya Berkah | No. Rek : 3557999999\n";
-                                                  }
-                                                  $pesan_cust .= "**\n\nApabila sudah melakukan transaksi pembayaran mohon dikirim bukti transfernya";
-                                              } else {
-                                                  $pesan_cust .= "Status : Lunas\n**\n\nTerima kasih,\ntokabe.id";
-                                              }
+                                              if($inv->status !== 'Lunas' && $inv->sisa_pembayaran > 0) {
+                                                   $pesan_cust .= "Mohon transfer ke:\n";
+                                                   if($inv->no_rek == "BNI") {
+                                                       $pesan_cust .= "BNI | A/N : Yusni Kurniasih | No. Rek : 8331119999\n";
+                                                   } elseif($inv->no_rek == "TKBBNI") {
+                                                       $pesan_cust .= "BNI | A/N : PT. Total Karya Berkah | No. Rek : 3528289999\n";
+                                                   } else {
+                                                       $pesan_cust .= "BSI | A/N : PT. Total Karya Berkah | No. Rek : 3557999999\n";
+                                                   }
+                                                   $pesan_cust .= "**\n\nApabila sudah melakukan transaksi pembayaran mohon dikirim bukti transfernya";
+                                               } else {
+                                                   $pesan_cust .= "Status : Lunas\n**\n\nTerima kasih,\ntokabe.id";
+                                               }
 
                                               $canManageTkb = !$isAdminTkb || $inv->approval === 'Unlock';
                                           @endphp

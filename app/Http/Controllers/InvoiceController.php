@@ -350,7 +350,7 @@ class InvoiceController extends Controller
         $hargaMod = [];
         $jumlahHarga = [];
         $totHargaMod = number_format($penjualan->total_harga, 0, ',', '.');
-        $sisaBayarMod = number_format($penjualan->sisa_pembayaran, 0, ',', '.');
+        $sisaBayarMod = $penjualan->status === 'Lunas' ? '0' : number_format($penjualan->sisa_pembayaran, 0, ',', '.');
         $admin = $admin_now->nama;
         $tanggal =  $penjualan->tgl_penjualan;
         Carbon::setLocale('id');
@@ -422,7 +422,7 @@ class InvoiceController extends Controller
         $jumlahHarga = [];
         $totHargaMod = number_format($penjualan->total_pembayaran, 0, ',', '.');
         $totalHarga = number_format($penjualan->total_harga, 0, ',', '.');
-        $sisaBayarMod = number_format($penjualan->sisa_pembayaran, 0, ',', '.');
+        $sisaBayarMod = $penjualan->status === 'Lunas' ? '0' : number_format($penjualan->sisa_pembayaran, 0, ',', '.');
         
         $admin = $admin_now->nama;
         $tanggal =  $penjualan->tgl_penjualan;
@@ -510,7 +510,7 @@ class InvoiceController extends Controller
         $jumlahHarga = [];
         $totHargaMod = number_format($penjualan->total_pembayaran, 0, ',', '.');
         $totalHarga = number_format($penjualan->total_harga, 0, ',', '.');
-        $sisaBayarMod = number_format($penjualan->sisa_pembayaran, 0, ',', '.');
+        $sisaBayarMod = $penjualan->status === 'Lunas' ? '0' : number_format($penjualan->sisa_pembayaran, 0, ',', '.');
         
         $admin = $admin_now ? $admin_now->nama : 'Admin'; // Antisipasi jika user admin terhapus
         $tanggal =  $penjualan->tgl_penjualan;
@@ -586,7 +586,7 @@ class InvoiceController extends Controller
         $jumlahHarga = [];
         $totHargaMod = number_format($penjualan->total_pembayaran, 0, ',', '.');
         $totalHarga = number_format($penjualan->total_harga, 0, ',', '.');
-        $sisaBayarMod = number_format($penjualan->sisa_pembayaran, 0, ',', '.');
+        $sisaBayarMod = $penjualan->status === 'Lunas' ? '0' : number_format($penjualan->sisa_pembayaran, 0, ',', '.');
         
         $admin = $admin_now->nama;
         $tanggal =  $penjualan->tgl_penjualan;

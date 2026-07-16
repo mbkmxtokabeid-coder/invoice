@@ -438,7 +438,7 @@
         $pesan_cust .= "Total Rp " . number_format($inv->total_harga, 0, ',', '.') . "\n\n";
 
         // Cek Sisa Pembayaran (Jika > 0 berarti Belum Lunas)
-        if($inv->sisa_pembayaran > 0) {
+        if($inv->status !== 'Lunas' && $inv->sisa_pembayaran > 0) {
              $pesan_cust .= "Mohon transfer ke:\n";
              $pesan_cust .= "BSI | A/N : Yusni Kurniasih | No. Rek : 2845999999\n";
              $pesan_cust .= "**\n\n";
