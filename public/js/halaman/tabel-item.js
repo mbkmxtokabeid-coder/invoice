@@ -10,7 +10,7 @@ function autoCalc(v) {
   var qty = parseFloat(document.getElementById('product-qty-' + index).value);
 
   if (!isNaN(unformattedHarga) && !isNaN(qty)) {
-    var jumlah = unformattedHarga * qty;
+    var jumlah = Math.round(unformattedHarga * qty);
     // formattedJumlah = jumlah.toLocaleString();
 
     document.getElementById('productPrice-' + index).value = jumlah.toLocaleString();
@@ -31,8 +31,9 @@ function getTotal() {
     }
   }
 
-  document.getElementById('total-harga').value = sum.toLocaleString();
-  document.getElementById('total-pembelian').value = sum.toLocaleString();
+  var roundedSum = Math.round(sum);
+  document.getElementById('total-harga').value = roundedSum.toLocaleString();
+  document.getElementById('total-pembelian').value = roundedSum.toLocaleString();
   dP();
   totalPembayaran()
   sisaPembayaran();
@@ -69,7 +70,7 @@ function totalPembayaran() {
     if (selectLain.value == "-") {
       document.getElementById('input-potongan').innerHTML = 0;
       if (totalHarga) {
-        total = totalHarga;
+        total = Math.round(totalHarga);
       } else {
         total = 0;
       }
@@ -78,18 +79,18 @@ function totalPembayaran() {
     } else if (selectLain.value == "Diskon") {
       var diskon = inputPotongan;
       var potongan = diskon * totalHarga / 100;
-      total = totalHarga - potongan;
+      total = Math.round(totalHarga - potongan);
       document.getElementById('total-pembelian').value = total.toLocaleString();
       // Lakukan sesuatu dengan nilai diskon yang telah dipilih
     } else if (selectLain.value == "Potongan") {
       var potongan = inputPotongan;
-      total = totalHarga - potongan;
+      total = Math.round(totalHarga - potongan);
       document.getElementById('total-pembelian').value = total.toLocaleString();
       // Lakukan sesuatu dengan nilai potongan yang telah dipilih
     } else if (selectLain.value == "PPN") {
       var ppn = inputPotongan;
       var tambahan = ppn * totalHarga / 100;
-      total = totalHarga + tambahan;
+      total = Math.round(totalHarga + tambahan);
       document.getElementById('total-pembelian').value = total.toLocaleString();
       // Lakukan sesuatu dengan nilai PPN yang telah dipilih
     }
@@ -106,12 +107,12 @@ function sisaPembayaran() {
   // var jenis_pem = document.getElementById('choices-payment-type').value;
 
   if (!isNaN(dp)) {
-    var sisaPem = totalPem - dp;
+    var sisaPem = Math.round(totalPem - dp);
     document.getElementById('sisa-pembayaran').value = sisaPem.toLocaleString();
   }
   else {
 
-    document.getElementById('sisa-pembayaran').value = totalPem.toLocaleString();
+    document.getElementById('sisa-pembayaran').value = Math.round(totalPem).toLocaleString();
   }
 
   // if (jenis_pem == 'Cash Lunas' || jenis_pem == 'Transfer Lunas') {

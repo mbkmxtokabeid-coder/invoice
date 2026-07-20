@@ -283,22 +283,53 @@
                                           @if($inv->penjualanBarang)
                                               <ul class="list-unstyled mb-0">
                                               @foreach($inv->penjualanBarang as $pb)
-                                                  @if($pb->material_id)
-                                                      @php 
-                                                          $hasMaterial = true; 
-                                                          // Mengambil data material berdasarkan ID yang tersimpan di PenjualanBarang
-                                                          $mat = \App\Models\Material::find($pb->material_id);
+                                                  @php
+                                                      $rawMatId = $pb->material_id;
+                                                      $matIds = [];
+                                                      if (!empty($rawMatId)) {
+                                                          $decoded = json_decode($rawMatId, true);
+                                                          $matIds = is_array($decoded) ? $decoded : [$rawMatId];
+                                                      }
+                                                      
+                                                      $rawMatQty = $pb->material_qty;
+                                                      $matQtys = [];
+                                                      if (!empty($rawMatQty)) {
+                                                          $decodedQty = json_decode($rawMatQty, true);
+                                                          $matQtys = is_array($decodedQty) ? $decodedQty : [$rawMatQty];
+                                                      }
+
+                                                      $rawMatPanjang = $pb->material_panjang;
+                                                      $matPanjangs = [];
+                                                      if (!empty($rawMatPanjang)) {
+                                                          $decodedPanjang = json_decode($rawMatPanjang, true);
+                                                          $matPanjangs = is_array($decodedPanjang) ? $decodedPanjang : [$rawMatPanjang];
+                                                      }
+
+                                                      $rawMatLebar = $pb->material_lebar;
+                                                      $matLebars = [];
+                                                      if (!empty($rawMatLebar)) {
+                                                          $decodedLebar = json_decode($rawMatLebar, true);
+                                                          $matLebars = is_array($decodedLebar) ? $decodedLebar : [$rawMatLebar];
+                                                      }
+                                                  @endphp
+                                                  @foreach($matIds as $mIdx => $mId)
+                                                      @php
+                                                          $mat = \App\Models\Material::find($mId);
+                                                          $mQty = $matQtys[$mIdx] ?? 0;
+                                                          $mPanjang = $matPanjangs[$mIdx] ?? null;
+                                                          $mLebar = $matLebars[$mIdx] ?? null;
                                                       @endphp
                                                       @if($mat)
+                                                          @php $hasMaterial = true; @endphp
                                                           <li class="mb-2" style="border-bottom: 1px dashed #e9ebec; padding-bottom: 4px;">
                                                               <span class="fw-semibold text-primary">{{ $mat->jenis_material }}</span><br>
-                                                              <span class="text-muted" style="font-size: 0.8rem;">Dipakai: <b>{{ $pb->material_qty }} {{ $mat->satuan }}</b></span>
-                                                              @if($pb->material_panjang && $pb->material_lebar)
-                                                                  <br><span class="text-muted" style="font-size: 0.75rem;">(Ukuran: {{ $pb->material_panjang }} &times; {{ $pb->material_lebar }})</span>
+                                                              <span class="text-muted" style="font-size: 0.8rem;">Dipakai: <b>{{ $mQty }} {{ $mat->satuan }}</b></span>
+                                                              @if($mPanjang && $mLebar)
+                                                                  <br><span class="text-muted" style="font-size: 0.75rem;">(Ukuran: {{ $mPanjang }} &times; {{ $mLebar }})</span>
                                                               @endif
                                                           </li>
                                                       @endif
-                                                  @endif
+                                                  @endforeach
                                               @endforeach
                                               </ul>
                                           @endif

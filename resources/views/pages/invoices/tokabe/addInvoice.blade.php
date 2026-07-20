@@ -227,7 +227,7 @@ $(document).ready(function () {
             text: response.message,
           }).then(function () {
             // Redirect ke /list-invoice/tokabe
-            window.location.href = "/invoice/list-invoice/tokabe";
+            window.location.href = "{{ route('list_invoice_tokabe') }}";
           });
         }
       },
