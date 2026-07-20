@@ -69,6 +69,19 @@ class PembelianController extends Controller
             return redirect(route('pembelian.list', ['uid' => $request->vendor]));
         }
 
+        // Validate items first to prevent database pollution
+        if (!is_array($request->deskripsi)) {
+            Alert::error('error', 'Barang Harus diisi');
+            return redirect(route('pembelian.add', ['uid' => $request->vendor]))->withInput();
+        }
+
+        foreach ($request->deskripsi as $key => $deskripsi) {
+            if (empty($deskripsi) || empty($request->qty[$key]) || empty($request->satuan[$key]) || empty($request->harga[$key])) {
+                Alert::error('error', 'Barang Harus diisi');
+                return redirect(route('pembelian.add', ['uid' => $request->vendor]))->withInput();
+            }
+        }
+
         $terbayar = intval(str_replace(',', '', $request->terbayar));
         $sisa = intval(str_replace(',', '', $request->sisa));
         $jumlahTot = intval(str_replace(',', '', $request->jumlahTotal));
@@ -99,34 +112,21 @@ class PembelianController extends Controller
             'pembelian_sisa' => $vendor->pembelian_sisa + $sisa,
             'total_pembelian' => $vendor->total_pembelian + $jumlahTot,
         ]);
-        $errors = [];
         foreach ($request->deskripsi as $key => $deskripsi) {
+            $harga_barang = intval(str_replace(',', '', $request->harga[$key]));
+            $qty = intval($request->qty[$key]);
+            $satuan = $request->satuan[$key];
+            $total = $harga_barang * $qty;
 
-            if (empty($deskripsi) || empty($request->qty[$key]) ||empty($request->satuan[$key]) || empty($request->harga[$key])) {
-                Alert::error('error', 'Barang Harus diisi');
-                return redirect(route('pembelian.add'))->withInput();
-            } else {
-                $harga_barang = intval(str_replace(',', '', $request->harga[$key]));
-                $qty = intval($request->qty[$key]);
-                $satuan = $request->satuan[$key];
-                $total = $harga_barang * $qty;
-
-                // $total = $request->jumlah[$key];
-                PembelianBarang::create([
-                    'id' => Uuid::uuid4()->toString(),
-                    'pembelian_id' => $pembelian->id,
-                    'deskripsi' => $deskripsi,
-                    'satuan' => $request->satuan[$key],
-                    'harga_barang' => $harga_barang,
-                    'qty' => $qty,
-                    'total' => $total,
-                ]);
-            }
-        }
-        if (count($errors) > 0) {
-            // Ada kesalahan, tampilkan pesan kesalahan dan kembali ke halaman pembelian.add
-            Alert::error('error', $errors);
-            return redirect(route('pembelian.add'))->withInput();
+            PembelianBarang::create([
+                'id' => Uuid::uuid4()->toString(),
+                'pembelian_id' => $pembelian->id,
+                'deskripsi' => $deskripsi,
+                'satuan' => $satuan,
+                'harga_barang' => $harga_barang,
+                'qty' => $qty,
+                'total' => $total,
+            ]);
         }
 
         // Jika tidak ada kesalahan, tampilkan pesan sukses dan arahkan ke halaman pembelian.list
