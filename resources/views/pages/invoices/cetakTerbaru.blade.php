@@ -194,7 +194,7 @@
                                                     @if (strpos($penjualan->jenis_pembayaran, 'Cash') === false && $penjualan->no_rek === 'BNI')
                                                      <div class="col-lg-6 mt-1">
                                                          <p style="color:rgb(227, 25, 25); font-size:15px;">Mohon Transfer Ke :<br>
-                                                             BSI | A/N : Yusni Kurniasih | No. Rek : 2845999999</p>
+                                                             BNI | A/N : Oky Irawan | No. Rek : 816029999</p>
                                                      </div>
                                                      @elseif (strpos($penjualan->jenis_pembayaran, 'Cash') === false && $penjualan->no_rek === 'TKB')
                                                      <div class="col-lg-6 mt-1">

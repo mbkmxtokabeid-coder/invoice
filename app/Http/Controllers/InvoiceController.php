@@ -363,10 +363,10 @@ class InvoiceController extends Controller
         $formatTanggal = Carbon::parse($tanggalString)->isoFormat('DD MMMM YYYY');
 
 
-        if ($penjualan->no_rek == "Mandiri")
-            $norek = "BSI | A/N : Yusni Kurniasih | No. Rek : 2845999999";
+        if ($penjualan->no_rek == "BNI")
+            $norek = "BNI | A/N : Oky Irawan | No. Rek : 816029999";
         else {
-            $norek = "BSI | A/N : Yusni Kurniasih | No. Rek : 2845999999";
+            $norek = "BNI | A/N : Oky Irawan | No. Rek : 816029999";
         }
 
         if ($penjualan->dp == null) {
@@ -438,7 +438,7 @@ class InvoiceController extends Controller
 
 
         if ($penjualan->no_rek == "BNI")
-            $norek = "BNI | A/N : Yusni Kurniasih | No. Rek : 8331119999";
+            $norek = "BNI | A/N : Oky Irawan | No. Rek : 816029999";
         else {
             $norek = '';
         }
@@ -526,7 +526,7 @@ class InvoiceController extends Controller
 
 
         if ($penjualan->no_rek == "BNI")
-            $norek = "BNI | A/N : Yusni Kurniasih | No. Rek : 8331119999";
+            $norek = "BNI | A/N : Oky Irawan | No. Rek : 816029999";
         else {
             $norek = '';
         }
@@ -602,7 +602,7 @@ class InvoiceController extends Controller
 
 
         if ($penjualan->no_rek == "BNI")
-            $norek = "BNI | A/N : Yusni Kurniasih | No. Rek : 8331119999";
+            $norek = "BNI | A/N : Oky Irawan | No. Rek : 816029999";
         else {
             $norek = '';
         }

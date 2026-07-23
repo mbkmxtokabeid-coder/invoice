@@ -292,11 +292,11 @@
                         <div class="payment-info">
                             <strong>MOHON TRANSFER KE:</strong><br>
                             @if($penjualan->no_rek === 'BNI')
-                                BSI | A/N: Yusni Kurniasih<br>
-                                No. Rek: 2845999999
+                                BNI | A/N: Oky Irawan<br>
+                                No. Rek: 816029999
                             @elseif($penjualan->no_rek === 'Mandiri')
-                                BSI | A/N: Yusni Kurniasih<br>
-                                No. Rek: 2845999999
+                                BNI | A/N: Oky Irawan<br>
+                                No. Rek: 816029999
                             @endif
                         </div>
                     @endif
