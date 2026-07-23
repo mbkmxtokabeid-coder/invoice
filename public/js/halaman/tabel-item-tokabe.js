@@ -5,7 +5,7 @@ function autoCalc(v) {
 
   var harga = document.getElementById('productRate-' + index).value;
 
-  var unformattedHarga = parseFloat(harga.replace(/,/g, ''));
+  var unformattedHarga = parseFloat(harga.replace(/[.,]/g, ''));
   var qty = parseFloat(document.getElementById('product-qty-' + index).value);
 
   if (!isNaN(unformattedHarga) && !isNaN(qty)) {
@@ -23,7 +23,7 @@ function getTotal() {
   var semuaHarga = document.querySelectorAll('[id^="productPrice-"]');
 
   for (let i = 0; i < semuaHarga.length; i++) {
-    const harga = parseFloat(semuaHarga[i].value.replace(/,/g, ''));
+    const harga = parseFloat(semuaHarga[i].value.replace(/[.,]/g, ''));
 
     if (!isNaN(harga)) {
       sum += harga;
@@ -41,7 +41,7 @@ function getTotal() {
 function dP() {
   var divLabel = document.getElementById("div-label");
   var divElement = document.getElementById("dp");
-  var totalHarga = parseFloat(document.getElementById('total-harga').value.replace(/,/g, ''));
+  var totalHarga = parseFloat(document.getElementById('total-harga').value.replace(/[.,]/g, ''));
   var jnsPem = document.getElementById('choices-payment-type').value;
 
   if (totalHarga >= 500000) {
@@ -62,8 +62,8 @@ function dP() {
 function totalPembayaran() {
   var total;
   var selectLain = document.getElementById('choices-potongan');
-  var inputPotongan = parseFloat(document.getElementById('input-potongan').value.replace(/,/g, ''));
-  var totalHarga = parseFloat(document.getElementById('total-harga').value.replace(/,/g, ''));
+  var inputPotongan = parseFloat(document.getElementById('input-potongan').value.replace(/[.,]/g, ''));
+  var totalHarga = parseFloat(document.getElementById('total-harga').value.replace(/[.,]/g, ''));
   // Menambahkan logika berdasarkan pilihan pengguna
   if (selectLain != null) {
     if (selectLain.value == "-") {
@@ -100,8 +100,8 @@ document.getElementById('total-pembelian').addEventListener('change', sisaPembay
 document.getElementById('input-dp').addEventListener('change', sisaPembayaran);
 
 function sisaPembayaran() {
-  var totalPem = parseFloat(document.getElementById('total-pembelian').value.replace(/,/g, ''));
-  var dp = parseFloat(document.getElementById('input-dp').value.replace(/,/g, ''));
+  var totalPem = parseFloat(document.getElementById('total-pembelian').value.replace(/[.,]/g, ''));
+  var dp = parseFloat(document.getElementById('input-dp').value.replace(/[.,]/g, ''));
 
   // var jenis_pem = document.getElementById('choices-payment-type').value;
 
