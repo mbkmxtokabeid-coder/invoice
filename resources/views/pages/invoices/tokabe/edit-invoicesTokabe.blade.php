@@ -48,7 +48,7 @@
                     <div class="row justify-content-center">
                        <div class="col-xxl-12">
                          <div class="card">
-                           <form action="{{ route('update-invoiceTokabe',['id'=> $inv->id]) }}" method ="POST" enctype="multipart/form-data">
+                           <form action="{{ route('update-invoiceTokabe',['id'=> $inv->id]) }}" method ="POST" enctype="multipart/form-data" id="invoice_form" data-invoice-id="{{ $inv->id }}">
                             @csrf
                             @method('put')
                              <div class="card-body border-bottom border-bottom-dashed p-4">
@@ -435,7 +435,7 @@
                                       <input type="text" class="form-control bg-light border-0 product-line-price" id="productPrice-{{$index+1}}" data-cleave='{ "numeral": true, "numeralThousandsGroupStyle": "thousand" }' name="jlh_hrg[{{$index}}]" placeholder="Rp.0.000" value="{{$jual->jumlah_harga}}" onchange="autoCalc(this)"readonly/>
                                      </div>
                                     </td>
-                                    <td class="product-removal"><a href="javascript:void(0)" class="btn btn-success">Delete</a>
+                                    <td class="product-removal"><a href="javascript:void(0)" class="btn btn-danger btn-sm"><i class="ri-delete-bin-5-line me-1"></i>Hapus</a>
                                     </td>
                                    </tr>
                                    @endforeach
@@ -558,8 +558,8 @@
                                </div>
                                <!--end row-->
                                <div class="hstack gap-2 justify-content-start d-print-none mt-4">
-                                <button type="submit" id="update" class="btn btn-info"><i class="ri-printer-line align-bottom me-1"></i>Update</button>
-                                <a href="{{route('daftar_invoice')}}" class="btn btn-warning"><i class=" ri-arrow-go-back-line align-bottom me-1"></i>Kembali</a>
+                                 <button type="submit" id="update" class="btn btn-info"><i class="ri-printer-line align-bottom me-1"></i>Update</button>
+                                 <a href="{{route('list_invoice_tokabe')}}" class="btn btn-secondary btn-cancel-tokabe"><i class="ri-close-line align-bottom me-1"></i>Batal</a>
                                </div>
                              </div>
                             </form>
@@ -596,7 +596,9 @@
 <script src="{{asset('libs/flatpickr/flatpickr.min.js')}}"></script>
 <script src="{{asset('vendor/jsvalidation/js/jsvalidation.js')}}"></script>
 <script src="{{asset('js/halaman/update-invoice.js')}}"></script>
+<script src="{{asset('js/halaman/tabel-item-tokabe.js')}}"></script>
 <script src="{{asset('js/halaman/invoice.js')}}"></script>
+<script src="{{asset('js/halaman/draft-invoice-tokabe.js')}}"></script>
 
 <script>
     // Logic untuk Material Dropdown (Auto-fill Satuan, Validasi Stok & Tampilkan Sisa Awal)
@@ -817,7 +819,7 @@
                 </div>
             </td>
             <td class="product-removal">
-                <a href="javascript:void(0)" class="btn btn-success">Delete</a>
+                <a href="javascript:void(0)" class="btn btn-danger btn-sm"><i class="ri-delete-bin-5-line me-1"></i>Hapus</a>
             </td>
         `;
 

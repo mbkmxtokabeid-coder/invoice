@@ -251,9 +251,9 @@ class PenjualanTokabeController extends Controller
                 $matLebars = isset($request->material_lebar[$key]) && is_array($request->material_lebar[$key]) ? array_filter($request->material_lebar[$key], 'strlen') : [];
 
                 $data_brg = [
-                    'deskripsi_item' => $request->deskripsi_item[$key] ?? null,
+                    'deskripsi_item' => $request->deskripsi_item[$key] ?? '',
                     'qty' => $request->qty[$key] ?? 0,
-                    'satuan' => $request->satuan[$key] ?? null,
+                    'satuan' => !empty($request->satuan[$key]) ? $request->satuan[$key] : 'Pcs',
                     'harga' => intval(preg_replace('/[^0-9]/', '', $request->hrg[$key] ?? '0')),
                     'jumlah_harga' => intval(preg_replace('/[^0-9]/', '', $request->jlh_hrg[$key] ?? '0')),
                     'material_id' => !empty($matIds) ? json_encode(array_values($matIds)) : null,
@@ -321,17 +321,21 @@ class PenjualanTokabeController extends Controller
             if ($barang != null) {
                 $matIds = isset($request->material_id[$key]) && is_array($request->material_id[$key]) ? array_filter($request->material_id[$key]) : [];
                 $matQtys = isset($request->material_qty[$key]) && is_array($request->material_qty[$key]) ? array_filter($request->material_qty[$key], 'strlen') : [];
+                $matPanjangs = isset($request->material_panjang[$key]) && is_array($request->material_panjang[$key]) ? array_filter($request->material_panjang[$key], 'strlen') : [];
+                $matLebars = isset($request->material_lebar[$key]) && is_array($request->material_lebar[$key]) ? array_filter($request->material_lebar[$key], 'strlen') : [];
                 
                 $penjualan_brg = [
                     'barang_id' => $barang->id,
                     'penjualan_id' => $penjualan->id,
-                    'deskripsi_item' => $request->deskripsi_item[$key] ?? null,
+                    'deskripsi_item' => $request->deskripsi_item[$key] ?? '',
                     'qty' => $request->qty[$key] ?? 0,
-                    'satuan' => $request->satuan[$key] ?? null,
+                    'satuan' => !empty($request->satuan[$key]) ? $request->satuan[$key] : 'Pcs',
                     'harga' => intval(preg_replace('/[^0-9]/', '', $request->hrg[$key] ?? '0')),
                     'jumlah_harga' => intval(preg_replace('/[^0-9]/', '', $request->jlh_hrg[$key] ?? '0')),
                     'material_id' => !empty($matIds) ? json_encode(array_values($matIds)) : null,
                     'material_qty' => !empty($matQtys) ? json_encode(array_values($matQtys)) : null,
+                    'material_panjang' => !empty($matPanjangs) ? json_encode(array_values($matPanjangs)) : null,
+                    'material_lebar' => !empty($matLebars) ? json_encode(array_values($matLebars)) : null,
                 ];
                 PenjualanJasaTokabe::create($penjualan_brg);
                 $barang->decrement('stok', $request->qty[$key] ?? 0);

@@ -220,6 +220,7 @@ $(document).ready(function () {
         $('#loading-overlay').hide();
 
         if (response.status === "success") {
+          if (typeof clearInvoiceDraft === 'function') clearInvoiceDraft();
           // Data berhasil disimpan
           Swal.fire({
             icon: "success",
@@ -564,7 +565,7 @@ $(document).ready(function () {
                                       <!-- INDEX [0] DITAMBAHKAN SECARA EKSPLISIT -->
                                       <select class="form-select @error ('satuan.0') is-invalid @enderror" id="satuan-1" name="satuan[0]" required>
                                       <option value="">Pilih</option>
-                                      <option value="Pcs">Pcs</option>
+                                      <option value="Pcs" selected>Pcs</option>
                                       <option value="Set">Set</option>
                                       <option value="Und">Und</option>
                                       <option value="Blok">Blok</option>
@@ -600,8 +601,8 @@ $(document).ready(function () {
                                        <input type="text" class="form-control bg-light border-0 product-line-price" id="productPrice-1" name="jlh_hrg[0]" placeholder="Rp.0.000" onchange="autoCalc(this)" readonly/>
                                       </div>
                                      </td>
-                                     <td class="product-removal"><a href="javascript:void(0)" class="btn btn-success">Delete</a>
-                                     </td>
+                                      <td class="product-removal"><a href="javascript:void(0)" class="btn btn-danger btn-sm"><i class="ri-delete-bin-5-line me-1"></i>Hapus</a>
+                                      </td>
                                     </tr>
                                    </tbody>
                                    <tbody>
@@ -718,6 +719,7 @@ $(document).ready(function () {
                                       </span>
                                   </span>
                                 </button>
+                                <a href="{{ route('list_invoice_tokabe') }}" class="btn btn-secondary btn-cancel-tokabe"><i class="ri-close-line align-bottom me-1"></i>Batal</a>
                                </div>
                              </div>
                             </form>
@@ -788,6 +790,7 @@ $(document).ready(function () {
 <script src="{{asset('vendor/jsvalidation/js/jsvalidation.js')}}"></script>
 <script src="{{asset('js/halaman/tabel-item-tokabe.js')}}"></script>
 <script src="{{asset('js/halaman/invoice.js')}}"></script>
+<script src="{{asset('js/halaman/draft-invoice-tokabe.js')}}"></script>
 {{-- <script src="{{asset('js/halaman/form-masks.js')}}"></script> --}}
 
 <script>
@@ -860,7 +863,7 @@ $(document).ready(function () {
             <td>
                 <select class="form-select" name="satuan[${count}]" id="satuan-${count + 1}" required>
                     <option value="">Pilih</option>
-                    <option value="Pcs">Pcs</option>
+                    <option value="Pcs" selected>Pcs</option>
                     <option value="Set">Set</option>
                     <option value="Und">Und</option>
                     <option value="Blok">Blok</option>
@@ -887,7 +890,7 @@ $(document).ready(function () {
                 </div>
             </td>
             <td class="product-removal">
-                <a href="javascript:void(0)" class="btn btn-success">Delete</a>
+                <a href="javascript:void(0)" class="btn btn-danger btn-sm"><i class="ri-delete-bin-5-line me-1"></i>Hapus</a>
             </td>
         `;
 

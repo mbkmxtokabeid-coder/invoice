@@ -241,43 +241,98 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 totalPembayaran();
-remove();
+// Event delegation for item row removal
+$(document).on('click', '.product-removal a, .product-removal button', function (e) {
+  e.preventDefault();
+  var row = this.closest("tr.product");
+  if (!row) return;
 
-// Batas
-function remove() {
-  Array.from(document.querySelectorAll(".product-removal a")).forEach(function (e) {
-    e.addEventListener("click", function (e) {
-      removeItem(e);
-    });
-  });
-}
+  var totalRows = document.querySelectorAll("#newlink tr.product").length;
+  if (totalRows <= 1) {
+    if (typeof Swal !== 'undefined') {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Minimal 1 Item',
+        text: 'Invoice Tokabe harus memiliki minimal 1 item baris.',
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000
+      });
+    }
+    return;
+  }
 
-function resetRow() {
-  Array.from(document.getElementById("newlink").querySelectorAll("tr")).forEach(function (e, t) {
-    t += 1;
-    e.querySelector(".product-id").innerHTML = t;
-    e.id = t; // Menetapkan ulang ID elemen
-
-    // Mengubah ID semua elemen dalam row
-    e.querySelectorAll("[id^='productName-'], [id^='productDetails-'], [id^='satuan-'], [id^='productRate-'], [id^='product-qty-'],[id^='productPrice-']").forEach(function (elem) {
-      var oldId = elem.id;
-      var newId = oldId.replace(/-\d+$/, '-' + t);
-      elem.id = newId;
-    });
-  });
-}
-
-function removeItem(e) {
-  var row = e.target.closest("tr");
   var id = parseInt(row.id);
   row.remove();
   resetRow();
   updateValues();
 
-  // Menghapus ID dari daftar usedIds
-  var index = usedIds.indexOf(id);
-  if (index !== -1) {
-    usedIds.splice(index, 1);
+  if (typeof usedIds !== 'undefined') {
+    var index = usedIds.indexOf(id);
+    if (index !== -1) {
+      usedIds.splice(index, 1);
+    }
+  }
+
+  if (typeof $ !== 'undefined' && $('#invoice_form').length) {
+    $('#invoice_form').trigger('change');
+  }
+});
+
+function remove() {
+  // Legacy compatibility - delegation handles clicks
+}
+
+function resetRow() {
+  var rows = document.getElementById("newlink").querySelectorAll("tr.product");
+  Array.from(rows).forEach(function (e, t) {
+    var rowNum = t + 1; // 1-based for display
+    var rowIdx = t;     // 0-based for array names
+
+    var productIdElem = e.querySelector(".product-id");
+    if (productIdElem) productIdElem.innerHTML = rowNum;
+    e.id = rowNum;
+
+    // Mengubah ID semua elemen dalam row
+    e.querySelectorAll("[id^='productName-'], [id^='productDetails-'], [id^='satuan-'], [id^='productRate-'], [id^='product-qty-'],[id^='productPrice-']").forEach(function (elem) {
+      var oldId = elem.id;
+      var newId = oldId.replace(/-\d+$/, '-' + rowNum);
+      elem.id = newId;
+    });
+
+    // Re-index NAME attributes (e.g. barang_id[1] -> barang_id[0])
+    if (typeof $ !== 'undefined') {
+      $(e).find('select, input, textarea').each(function () {
+        var name = $(this).attr('name');
+        if (name) {
+          var newName = name.replace(/\[\d+\]/, '[' + rowIdx + ']');
+          $(this).attr('name', newName);
+        }
+      });
+
+      // Re-index material container class and tambah-material data-index attribute
+      $(e).find('[class*="material-container-"]').each(function () {
+        this.className = this.className.replace(/material-container-\d+/, 'material-container-' + rowIdx);
+      });
+      $(e).find('.btn-tambah-material').attr('data-index', rowIdx);
+    }
+  });
+}
+
+function removeItem(e) {
+  var row = e.target.closest("tr");
+  if (!row) return;
+  var id = parseInt(row.id);
+  row.remove();
+  resetRow();
+  updateValues();
+
+  if (typeof usedIds !== 'undefined') {
+    var index = usedIds.indexOf(id);
+    if (index !== -1) {
+      usedIds.splice(index, 1);
+    }
   }
 }
 
@@ -285,4 +340,5 @@ function updateValues() {
   getTotal();
   sisaPembayaran();
 }
+
 
