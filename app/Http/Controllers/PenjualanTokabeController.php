@@ -198,9 +198,8 @@ class PenjualanTokabeController extends Controller
 
     // Logika Pengambilan Potongan
     $jenisPotongan = $request->select_potongan ?? $request->input('select-potongan');
-    
-    // Pastikan nilai_potongan dibersihkan dari simbol % atau titik/koma
-    $nilai_potongan = intval(preg_replace('/[^0-9]/', '', $request->ptg ?? '0'));
+    $rawPotongan = $request->ptg ?? ($request->biaya_lain ?? $request->input('ptg'));
+    $nilai_potongan = intval(preg_replace('/[^0-9]/', '', $rawPotongan ?? '0'));
 
     if ($existingPenjualan) {
         // Update Data
@@ -512,7 +511,8 @@ class PenjualanTokabeController extends Controller
 
         // Mencegah error salah ketik nama select_potongan
         $jenisPotongan = $request->select_potongan ?? $request->input('select-potongan');
-        $nilai_potongan = $request->biaya_lain ?? $request->ptg;
+        $rawPotongan = $request->biaya_lain ?? ($request->ptg ?? $request->input('biaya_lain'));
+        $nilai_potongan = intval(preg_replace('/[^0-9]/', '', $rawPotongan ?? '0'));
 
         // 3. SIMPAN PENJUALAN BARU
         $penjualan->invoice = $request->inv;
@@ -753,7 +753,7 @@ class PenjualanTokabeController extends Controller
         $barang = [];
         $hargaMod = [];
         $jumlahHarga = [];
-        $totHargaMod = number_format($penjualan->total_harga, 0, ',', '.');
+        $totHargaMod = number_format($penjualan->total_pembayaran, 0, ',', '.');
         
         if ($penjualan->status == 'Lunas' && $penjualan->jenis_pembayaran != 'Cash Lunas' && $penjualan->jenis_pembayaran != 'Transfer Lunas') {
             $sisaBayarMod = 0 . '(Lunas)';
@@ -822,7 +822,7 @@ class PenjualanTokabeController extends Controller
         $barang = [];
         $hargaMod = [];
         $jumlahHarga = [];
-        $totHargaMod = number_format($penjualan->total_harga, 0, ',', '.');
+        $totHargaMod = number_format($penjualan->total_pembayaran, 0, ',', '.');
         if ($penjualan->status == 'Lunas' && $penjualan->jenis_pembayaran != 'Cash Lunas' && $penjualan->jenis_pembayaran != 'Transfer Lunas') {
             $sisaBayarMod = 0 . '(Lunas)';
         } else {

@@ -144,53 +144,78 @@
                                               <p class="fs-16 mb-0">{{$admin}}</p>
                                             </div>
 
-                                            <table class="table table-borderless table-nowrap align-middle fs-16 mb-0" style="width:350px">
-                                                <tbody>
-                                                    <tr>
-                                                    <td>Total</td>
-                                                    <td class="text-end">{{$totHargaMod}}</td>
-                                                </tr>
-                                                <tr>
-                                                    @if (!empty($dp) && $dp > 0)
-                                                    <td>DP</td>
-                                                    <td class="text-end">-Rp.{{$dp}}</td>
-                                                    @endif
-                                                </tr>
-                                                
-                                                {{-- LOGIKA PPN/DISKON/PPH YANG SUDAH KEBAl ERROR --}}
-                                                @if (isset($penjualan->diskon) && (float)$penjualan->diskon > 0)
-                                                <tr>
-                                                    <td>Diskon<small class="text-muted"> ({{$persen}}%)</small></td>
-                                                    <td class="text-end">- Rp.{{ ltrim($biayaLain, '-') }}</td>
-                                                </tr>
-                                                @elseif (isset($penjualan->potongan) && (float)$penjualan->potongan > 0)
-                                                <tr>
-                                                    <td>Spesial Diskon</td>
-                                                    <td class="text-end">- {{$biayaLain}}</td>
-                                                </tr>
-                                                @elseif (isset($penjualan->ppn) && (float)$penjualan->ppn > 0)
-                                                <tr>
-                                                    <td>PPN<small class="text-muted"> ({{$persen}})</small></td>
-                                                    <td class="text-end">{{$biayaLain}}</td>
-                                                </tr>
-                                                @elseif (isset($penjualan->pph) && (float)$penjualan->pph > 0)
-                                                <tr>
-                                                    <td>PPH<small class="text-muted"> ({{$persen}}%)</small></td>
-                                                    <td class="text-end">Rp.{{$biayaLain}}</td>
-                                                </tr>
-                                                @endif
+                                             <table class="table table-borderless table-nowrap align-middle fs-16 mb-0" style="width:350px">
+                                                 <tbody>
+                                                     <tr>
+                                                         <td>Total Harga</td>
+                                                         <td class="text-end">Rp.{{ number_format($penjualan->total_harga, 0, ',', '.') }}</td>
+                                                     </tr>
+                                                     
+                                                     {{-- LOGIKA PPN/DISKON/PPH/POTONGAN --}}
+                                                     @php
+                                                         $hasPpn = !empty($penjualan->ppn) && (float)$penjualan->ppn > 0;
+                                                         $hasDiskon = !empty($penjualan->diskon) && (float)$penjualan->diskon > 0;
+                                                         $hasPotongan = !empty($penjualan->potongan) && (float)$penjualan->potongan > 0;
+                                                         $hasPph = !empty($penjualan->pph) && (float)$penjualan->pph > 0;
+                                                         
+                                                         $autoPpnNominal = 0;
+                                                         $autoPpnPersen = 0;
+                                                         if (!$hasPpn && !$hasDiskon && !$hasPotongan && !$hasPph && $penjualan->total_pembayaran > $penjualan->total_harga && $penjualan->total_harga > 0) {
+                                                             $autoPpnNominal = $penjualan->total_pembayaran - $penjualan->total_harga;
+                                                             $autoPpnPersen = round(($autoPpnNominal / $penjualan->total_harga) * 100);
+                                                             $hasPpn = true;
+                                                         }
+                                                     @endphp
 
-                                                <tr class="border-top border-top-dashed fw-bold fs-17"
-                                                @if ($penjualan->status === 'Belum Lunas')
-                                                style="color:rgb(227, 25, 25);"
-                                                @else
-                                                style="color: rgb(67,138,122);"
-                                                @endif>
-                                                    <th scope="row" class="fw-bold fs-17">Sisa Pembayaran</th>
-                                                    <th class="text-end fw-bold fs-17">Rp.{{$sisaBayarMod}}</th>
-                                                </tr>
-                                            </tbody>
-                                            </table>
+                                                     @if ($hasDiskon)
+                                                     <tr>
+                                                         <td>Diskon<small class="text-muted"> ({{$penjualan->diskon}}%)</small></td>
+                                                         <td class="text-end">- Rp.{{ number_format(($penjualan->diskon / 100) * $penjualan->total_harga, 0, ',', '.') }}</td>
+                                                     </tr>
+                                                     @elseif ($hasPotongan)
+                                                     <tr>
+                                                         <td>Spesial Diskon</td>
+                                                         <td class="text-end">- Rp.{{ number_format($penjualan->potongan, 0, ',', '.') }}</td>
+                                                     </tr>
+                                                     @elseif ($hasPpn)
+                                                     @php
+                                                         $ppnVal = !empty($penjualan->ppn) ? $penjualan->ppn : $autoPpnPersen;
+                                                         $ppnAmount = !empty($penjualan->ppn) ? (($penjualan->ppn / 100) * $penjualan->total_harga) : $autoPpnNominal;
+                                                     @endphp
+                                                     <tr>
+                                                         <td>PPN<small class="text-muted"> ({{$ppnVal}}%)</small></td>
+                                                         <td class="text-end">+ Rp.{{ number_format($ppnAmount, 0, ',', '.') }}</td>
+                                                     </tr>
+                                                     @elseif ($hasPph)
+                                                     <tr>
+                                                         <td>PPH<small class="text-muted"> ({{$penjualan->pph}}%)</small></td>
+                                                         <td class="text-end">+ Rp.{{ number_format(($penjualan->pph / 100) * $penjualan->total_harga, 0, ',', '.') }}</td>
+                                                     </tr>
+                                                     @endif
+
+                                                     <tr class="border-top border-top-dashed">
+                                                         <td>Total Pembayaran</td>
+                                                         <td class="text-end">Rp.{{ number_format($penjualan->total_pembayaran, 0, ',', '.') }}</td>
+                                                     </tr>
+
+                                                     @if (!empty($penjualan->dp) && (float)$penjualan->dp > 0)
+                                                     <tr>
+                                                         <td>DP / Panjar</td>
+                                                         <td class="text-end">- Rp.{{ number_format($penjualan->dp, 0, ',', '.') }}</td>
+                                                     </tr>
+                                                     @endif
+
+                                                     <tr class="border-top border-top-dashed fw-bold fs-17"
+                                                     @if ($penjualan->status === 'Belum Lunas')
+                                                     style="color:rgb(227, 25, 25);"
+                                                     @else
+                                                     style="color: rgb(67,138,122);"
+                                                     @endif>
+                                                         <th scope="row" class="fw-bold fs-17">Sisa Pembayaran</th>
+                                                         <th class="text-end fw-bold fs-17">Rp.{{$sisaBayarMod}}</th>
+                                                     </tr>
+                                                 </tbody>
+                                             </table>
                                         </div>
                                         
                                     </div>

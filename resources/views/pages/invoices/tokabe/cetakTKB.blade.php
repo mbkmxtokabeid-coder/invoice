@@ -117,33 +117,67 @@
     </table>
     <div style="position: absolute; bottom: 220px; font-size: 10px">{{$norek}}</div>
 
-    <div class="column" style="text-align: left; font-size: 12px">
-    <div style="position: absolute; right: 180px; bottom: 65px;">
-        <b>Total</b><br>
-        <b>DP</b><br>
-        @if (!is_null($penjualan->diskon))
-            <b>Diskon({{$persen}}%)</b><br>
-        @endif
-        @if (!is_null($penjualan->potongan) && $penjualan->potongan != 0)
-            <b>Potongan</b><br>
-        @endif
-        @if (!is_null($penjualan->ppn))
-            <b>PPN({{$persen}}%)</b><br>
-        @endif
-        @if (is_null($penjualan->diskon) && is_null($penjualan->potongan) && is_null($penjualan->ppn))
-            <b></b><br>
-        @endif
-        <b>Sisa Bayar</b><br>
-    </div>
-</div>
+    <div style="position: absolute; right: 10px; bottom: 65px; min-width: 250px;">
+        <table style="width: 100%; text-align: right; font-size: 12px; border-collapse: collapse;">
+            <tr>
+                <td style="text-align: left; padding: 1px 5px;"><b>Total Harga</b></td>
+                <td style="text-align: right; padding: 1px 5px;"><b>Rp. {{ number_format($penjualan->total_harga, 0, ',', '.') }}</b></td>
+            </tr>
+            @php
+                $hasPpn = !empty($penjualan->ppn) && (float)$penjualan->ppn > 0;
+                $hasDiskon = !empty($penjualan->diskon) && (float)$penjualan->diskon > 0;
+                $hasPotongan = !empty($penjualan->potongan) && (float)$penjualan->potongan > 0;
+                $hasPph = !empty($penjualan->pph) && (float)$penjualan->pph > 0;
+                
+                $autoPpnNominal = 0;
+                $autoPpnPersen = 0;
+                if (!$hasPpn && !$hasDiskon && !$hasPotongan && !$hasPph && $penjualan->total_pembayaran > $penjualan->total_harga && $penjualan->total_harga > 0) {
+                    $autoPpnNominal = $penjualan->total_pembayaran - $penjualan->total_harga;
+                    $autoPpnPersen = round(($autoPpnNominal / $penjualan->total_harga) * 100);
+                    $hasPpn = true;
+                }
+            @endphp
 
-    <div class="column" style="text-align: left; font-size: 12px">
-      <div style="position: absolute; right: 10px;bottom: 65px;">
-        <b>Rp.{{$totHargaMod}}</b><br>
-        <b>Rp.{{$dp}}</b><br>
-        <b>({{$biayaLain}})</b><br>
-        <b>Rp.{{$sisaBayarMod}}</b><br>
-      </div>
+            @if ($hasDiskon)
+            <tr>
+                <td style="text-align: left; padding: 1px 5px;"><b>Diskon ({{$penjualan->diskon}}%)</b></td>
+                <td style="text-align: right; padding: 1px 5px;"><b>- Rp. {{ number_format(($penjualan->diskon / 100) * $penjualan->total_harga, 0, ',', '.') }}</b></td>
+            </tr>
+            @elseif ($hasPotongan)
+            <tr>
+                <td style="text-align: left; padding: 1px 5px;"><b>Spesial Diskon</b></td>
+                <td style="text-align: right; padding: 1px 5px;"><b>- Rp. {{ number_format($penjualan->potongan, 0, ',', '.') }}</b></td>
+            </tr>
+            @elseif ($hasPpn)
+            @php
+                $ppnVal = !empty($penjualan->ppn) ? $penjualan->ppn : $autoPpnPersen;
+                $ppnAmount = !empty($penjualan->ppn) ? (($penjualan->ppn / 100) * $penjualan->total_harga) : $autoPpnNominal;
+            @endphp
+            <tr>
+                <td style="text-align: left; padding: 1px 5px;"><b>PPN ({{$ppnVal}}%)</b></td>
+                <td style="text-align: right; padding: 1px 5px;"><b>+ Rp. {{ number_format($ppnAmount, 0, ',', '.') }}</b></td>
+            </tr>
+            @elseif ($hasPph)
+            <tr>
+                <td style="text-align: left; padding: 1px 5px;"><b>PPH ({{$penjualan->pph}}%)</b></td>
+                <td style="text-align: right; padding: 1px 5px;"><b>+ Rp. {{ number_format(($penjualan->pph / 100) * $penjualan->total_harga, 0, ',', '.') }}</b></td>
+            </tr>
+            @endif
+            <tr>
+                <td style="text-align: left; padding: 1px 5px; border-top: 1px dashed #000;"><b>Total Pembayaran</b></td>
+                <td style="text-align: right; padding: 1px 5px; border-top: 1px dashed #000;"><b>Rp. {{ number_format($penjualan->total_pembayaran, 0, ',', '.') }}</b></td>
+            </tr>
+            @if (!empty($penjualan->dp) && (float)$penjualan->dp > 0)
+            <tr>
+                <td style="text-align: left; padding: 1px 5px;"><b>DP / Panjar</b></td>
+                <td style="text-align: right; padding: 1px 5px;"><b>- Rp. {{ number_format($penjualan->dp, 0, ',', '.') }}</b></td>
+            </tr>
+            @endif
+            <tr>
+                <td style="text-align: left; padding: 1px 5px; border-top: 1px dashed #000;"><b>Sisa Bayar</b></td>
+                <td style="text-align: right; padding: 1px 5px; border-top: 1px dashed #000;"><b>Rp. {{$sisaBayarMod}}</b></td>
+            </tr>
+        </table>
     </div>
 
     <div style="position: absolute; width: 240mm; left: 0; right: 0; margin-left: auto; margin-right: auto; bottom:5px; font-size: 10px">

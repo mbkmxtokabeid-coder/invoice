@@ -305,24 +305,44 @@
                             <td class="value">Rp. {{ number_format($penjualan->total_harga, 0, ',', '.') }}</td>
                         </tr>
 
-                        @if (!empty($penjualan->diskon) && empty($penjualan->potongan))
-                        <tr>
-                            <td class="label">Diskon ({{$persen}}):</td>
-                            <td class="value">- {{$biayaLain}}</td>
-                        </tr>
-                        @endif
+                        @php
+                            $hasPpn = !empty($penjualan->ppn) && (float)$penjualan->ppn > 0;
+                            $hasDiskon = !empty($penjualan->diskon) && (float)$penjualan->diskon > 0;
+                            $hasPotongan = !empty($penjualan->potongan) && (float)$penjualan->potongan > 0;
+                            $hasPph = !empty($penjualan->pph) && (float)$penjualan->pph > 0;
+                            
+                            $autoPpnNominal = 0;
+                            $autoPpnPersen = 0;
+                            if (!$hasPpn && !$hasDiskon && !$hasPotongan && !$hasPph && $penjualan->total_pembayaran > $penjualan->total_harga && $penjualan->total_harga > 0) {
+                                $autoPpnNominal = $penjualan->total_pembayaran - $penjualan->total_harga;
+                                $autoPpnPersen = round(($autoPpnNominal / $penjualan->total_harga) * 100);
+                                $hasPpn = true;
+                            }
+                        @endphp
 
-                        @if (!empty($penjualan->potongan) && $penjualan->potongan > 0)
+                        @if ($hasDiskon)
+                        <tr>
+                            <td class="label">Diskon ({{$penjualan->diskon}}%):</td>
+                            <td class="value">- Rp. {{ number_format(($penjualan->diskon / 100) * $penjualan->total_harga, 0, ',', '.') }}</td>
+                        </tr>
+                        @elseif ($hasPotongan)
                         <tr>
                             <td class="label">Spesial Diskon:</td>
-                            <td class="value">- {{$biayaLain}}</td>
+                            <td class="value">- Rp. {{ number_format($penjualan->potongan, 0, ',', '.') }}</td>
                         </tr>
-                        @endif
-
-                        @if (empty($penjualan->potongan) && !empty($penjualan->ppn))
+                        @elseif ($hasPpn)
+                        @php
+                            $ppnVal = !empty($penjualan->ppn) ? $penjualan->ppn : $autoPpnPersen;
+                            $ppnAmount = !empty($penjualan->ppn) ? (($penjualan->ppn / 100) * $penjualan->total_harga) : $autoPpnNominal;
+                        @endphp
                         <tr>
-                            <td class="label">PPN ({{$persen}}):</td>
-                            <td class="value">{{$biayaLain}}</td>
+                            <td class="label">PPN ({{$ppnVal}}%):</td>
+                            <td class="value">+ Rp. {{ number_format($ppnAmount, 0, ',', '.') }}</td>
+                        </tr>
+                        @elseif ($hasPph)
+                        <tr>
+                            <td class="label">PPH ({{$penjualan->pph}}%):</td>
+                            <td class="value">+ Rp. {{ number_format(($penjualan->pph / 100) * $penjualan->total_harga, 0, ',', '.') }}</td>
                         </tr>
                         @endif
 
