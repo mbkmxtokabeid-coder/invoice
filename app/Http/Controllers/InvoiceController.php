@@ -363,11 +363,7 @@ class InvoiceController extends Controller
         $formatTanggal = Carbon::parse($tanggalString)->isoFormat('DD MMMM YYYY');
 
 
-        if ($penjualan->no_rek == "BNI")
-            $norek = "BNI | A/N : Oky Irawan | No. Rek : 816029999";
-        else {
-            $norek = "BNI | A/N : Oky Irawan | No. Rek : 816029999";
-        }
+        $norek = $penjualan->norek_text;
 
         if ($penjualan->dp == null) {
             $dp = 0;
@@ -437,11 +433,7 @@ class InvoiceController extends Controller
         $formatTanggal = Carbon::parse($tanggalString)->isoFormat('DD MMMM YYYY');
 
 
-        if ($penjualan->no_rek == "BNI")
-            $norek = "BNI | A/N : Oky Irawan | No. Rek : 816029999";
-        else {
-            $norek = '';
-        }
+        $norek = $penjualan->norek_text;
 
         if ($penjualan->dp != null) {
 
@@ -525,11 +517,7 @@ class InvoiceController extends Controller
         $formatTanggal = Carbon::parse($tanggalString)->isoFormat('DD MMMM YYYY');
 
 
-        if ($penjualan->no_rek == "BNI")
-            $norek = "BNI | A/N : Oky Irawan | No. Rek : 816029999";
-        else {
-            $norek = '';
-        }
+        $norek = $penjualan->norek_text;
 
         if ($penjualan->dp != null) {
             $dp = number_format($penjualan->dp, 0, ',', '.');
@@ -601,11 +589,7 @@ class InvoiceController extends Controller
         $formatTanggal = Carbon::parse($tanggalString)->isoFormat('DD MMMM YYYY');
 
 
-        if ($penjualan->no_rek == "BNI")
-            $norek = "BNI | A/N : Oky Irawan | No. Rek : 816029999";
-        else {
-            $norek = '';
-        }
+        $norek = $penjualan->norek_text;
 
         if ($penjualan->dp != null) {
 

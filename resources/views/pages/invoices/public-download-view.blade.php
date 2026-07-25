@@ -291,13 +291,7 @@
                     @if (strpos($penjualan->jenis_pembayaran, 'Cash') === false)
                         <div class="payment-info">
                             <strong>MOHON TRANSFER KE:</strong><br>
-                            @if($penjualan->no_rek === 'BNI')
-                                BNI | A/N: Oky Irawan<br>
-                                No. Rek: 816029999
-                            @elseif($penjualan->no_rek === 'Mandiri')
-                                BNI | A/N: Oky Irawan<br>
-                                No. Rek: 816029999
-                            @endif
+                            {!! nl2br(e($penjualan->norek_text)) !!}
                         </div>
                     @endif
                 </td>

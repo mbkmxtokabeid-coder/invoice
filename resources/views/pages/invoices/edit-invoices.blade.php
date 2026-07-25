@@ -475,17 +475,18 @@
                                       </div>
                                       {{-- End Input --}}
                                   <div class="row mb-1">
-                                    <div class="col-lg-4">
-                                    <label for="potongan" class="form-label col-form-label col-form-label-md">Diskon/Potongan/PPN</label>
-                                    </div>
-                                      <div class="col-lg-6">
-                                        <select class="form-control bg-light border-0" name="select_potongan" data-choices data-choices-search-false data-choices-removeItem id="choices-potongan">
-                                          <option value="-" {{ $inv->diskon || $inv->potongan != 0|| $inv->ppn ? '' : 'selected' }}>-</option>
-                                          <option value="Potongan" {{ $inv->potongan ? 'selected' : '' }}>Spesial Diskon</option>
-                                          <option value="PPN" {{ $inv->ppn ? 'selected' : '' }}>PPN</option>
-                                        </select>
-                                      </div>
-                                    </div>
+                                     <div class="col-lg-4">
+                                     <label for="potongan" class="form-label col-form-label col-form-label-md">Diskon/Potongan/PPN</label>
+                                     </div>
+                                       <div class="col-lg-6">
+                                         <select class="form-control bg-light border-0" name="select_potongan" data-choices data-choices-search-false data-choices-removeItem id="choices-potongan">
+                                           <option value="-" {{ $inv->diskon || $inv->potongan != 0|| $inv->ppn ? '' : 'selected' }}>-</option>
+                                           <option value="Diskon" {{ $inv->diskon ? 'selected' : '' }}>Diskon (%)</option>
+                                           <option value="Potongan" {{ $inv->potongan ? 'selected' : '' }}>Spesial Diskon (Rp)</option>
+                                           <option value="PPN" {{ $inv->ppn ? 'selected' : '' }}>PPN (%)</option>
+                                         </select>
+                                       </div>
+                                     </div>
                                   <div class="row mb-1"  >
                                     <div class="col-lg-4" >
                                     </div>

@@ -633,17 +633,19 @@
                                        </div>
                                      </div>
                                      {{-- End Input --}}
-                                 <div class="row mb-1">
-                                   <div class="col-lg-4">
-                                   <label for="potongan" class="form-label col-form-label col-form-label-md">Spesial Diskon</label>
-                                   </div>
-                                     <div class="col-lg-6">
-                                       <select class="form-control bg-light border-0" name="select-potongan" value="{{ old('select-potongan') }}" data-choices data-choices-search-false data-choices-removeItem id="choices-potongan">
-                                         <option value="-">-</option>
-                                         <option value="Potongan">Spesial Diskon</option>
-                                       </select>
-                                     </div>
-                                   </div>
+                                   <div class="row mb-1">
+                                    <div class="col-lg-4">
+                                    <label for="potongan" class="form-label col-form-label col-form-label-md">Diskon/Potongan/PPN</label>
+                                    </div>
+                                      <div class="col-lg-6">
+                                        <select class="form-control bg-light border-0" name="select-potongan" value="{{ old('select-potongan') }}" data-choices data-choices-search-false data-choices-removeItem id="choices-potongan">
+                                          <option value="-">-</option>
+                                          <option value="Diskon">Diskon (%)</option>
+                                          <option value="Potongan">Spesial Diskon (Rp)</option>
+                                          <option value="PPN">PPN (%)</option>
+                                        </select>
+                                      </div>
+                                    </div>
                                  <div class="row mb-1"  >
                                    <div class="col-lg-4" >
                                    </div>
