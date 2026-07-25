@@ -39,7 +39,7 @@
                     <div class="row justify-content-center">
                        <div class="col-xxl-12">
                          <div class="card">
-                           <form action="/invoice/updateInvoice/{{$inv->id}}" id="invoice_form" method ="POST" enctype="multipart/form-data">
+                           <form action="/invoice/updateInvoice/{{$inv->id}}" id="invoice_form" data-invoice-id="{{ $inv->id }}" method ="POST" enctype="multipart/form-data">
                             @csrf
                             @method('put')
                              <div class="card-body border-bottom border-bottom-dashed p-4">
@@ -231,7 +231,7 @@
                                  <tr class="table-active">
                                   <th scope="col" style="width: 50px;">#</th>
                                   <th scope="col">Item</th>
-                                  <th scope="col">Satuan</th>
+                                  <th scope="col" style="min-width: 110px; width: 110px;">Satuan</th>
                                   <th scope="col" style="width: 120px;">
                                    <div class="d-flex currency-select input-light align-items-center">Harga
                                     <select class="form-selectborder-0 bg-light" data-choices data-choices-search-false id="choices-payment-currency" onchange="otherPayment()">
@@ -375,7 +375,7 @@
 
                                    </td>
                                    <td>
-                                    <select class="form-control bg-light border-0" data-choices data-choices-search-false id="satuan-{{$index+1}}" name="satuan[{{$index}}]" required>
+                                    <select class="form-select bg-light border-0" style="min-width: 95px;" id="satuan-{{$index+1}}" name="satuan[{{$index}}]" required>
                                     
                                     <option value="{{$jual->satuan}}"selected>{{$jual->satuan}}</option>
                                     @foreach(['Pcs', 'Set', 'Und', 'Blok', 'Rim', 'Lbr', 'Ktk', 'Unit', 'Kg', 'Lainnya', 'Pax'] as $option)
@@ -515,7 +515,7 @@
                                <!--end row-->
                                <div class="hstack gap-2 justify-content-start d-print-none mt-4">
                                 <button type="submit" id="update" class="btn btn-info"><i class="ri-printer-line align-bottom me-1"></i>Update</button>
-                                <a href="{{route('daftar_invoice')}}" class="btn btn-warning"><i class=" ri-arrow-go-back-line align-bottom me-1"></i>Kembali</a>
+                                <a href="{{ route('daftar_invoice') }}" class="btn btn-secondary btn-cancel-ibekami"><i class="ri-close-line align-bottom me-1"></i>Batal</a>
                                </div>
                              </div>
                             </form>
@@ -553,6 +553,7 @@
 <script src="{{asset('vendor/jsvalidation/js/jsvalidation.js')}}"></script>
 <script src="{{asset('js/halaman/update-invoice.js')}}"></script>
 <script src="{{asset('js/halaman/invoice.js')}}"></script>
+<script src="{{asset('js/halaman/draft-invoice-ibekami.js')}}"></script>
 
 <script>
     // Logic untuk Material Dropdown (Auto-fill Satuan, Validasi Stok & Tampilkan Sisa Awal)
@@ -738,7 +739,7 @@
                 </div>
             </td>
             <td>
-                <select class="form-select bg-light border-0" name="satuan[${count}]" id="satuan-${count}" required>
+                <select class="form-select bg-light border-0" style="min-width: 95px;" name="satuan[${count}]" id="satuan-${count}" required>
                     <option value="">Pilih</option>
                     <option value="Pcs">Pcs</option>
                     <option value="Set">Set</option>

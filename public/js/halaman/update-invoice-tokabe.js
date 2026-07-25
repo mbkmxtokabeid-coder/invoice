@@ -173,13 +173,6 @@ function new_link() {
       document.getElementById("newlink").appendChild(e);
       usedIds.push(count);
 
-      var choicesElement = document.getElementById("satuan-" + count);
-      new Choices(choicesElement, {
-        placeholderValue: "This is a placeholder set in the config",
-        searchPlaceholderValue: "This is a search placeholder",
-        searchEnabled: false
-      });
-
       var choicesElements = document.querySelectorAll("[data-choices]");
       Array.from(choicesElements).forEach(function (element) {
         new Choices(element, {

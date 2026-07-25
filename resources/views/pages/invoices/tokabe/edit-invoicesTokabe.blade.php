@@ -252,7 +252,7 @@
                                  <tr class="table-active">
                                   <th scope="col" style="width: 50px;">#</th>
                                   <th scope="col" style="min-width: 500px;">Item</th>
-                                  <th scope="col">Satuan</th>
+                                   <th scope="col" style="min-width: 110px; width: 110px;">Satuan</th>
                                   <th scope="col" style="width: 120px;">
                                    <div class="d-flex currency-select input-light align-items-center">Harga
                                     <select class="form-selectborder-0 bg-light" data-choices data-choices-search-false id="choices-payment-currency" onchange="otherPayment()">
@@ -402,7 +402,7 @@
 
                                    </td>
                                    <td>
-                                    <select class="form-control bg-light border-0 @error ('satuan.'.$index) is-invalid @enderror" data-choices data-choices-search-false id="satuan-{{$index+1}}" name="satuan[{{$index}}]" required>
+                                    <select class="form-select bg-light border-0 @error ('satuan.'.$index) is-invalid @enderror" style="min-width: 95px;" id="satuan-{{$index+1}}" name="satuan[{{$index}}]" required>
                                     
                                     <option value="{{$jual->satuan}}"selected>{{$jual->satuan}}</option>
                                     @foreach(['Pcs', 'Set', 'Und', 'Blok', 'Rim', 'Lbr', 'Ktk', 'Unit', 'Kg', 'Lainnya', 'Pax'] as $option)
@@ -790,7 +790,7 @@
                 </div>
             </td>
             <td>
-                <select class="form-select" name="satuan[${count}]" id="satuan-${count + 1}" required>
+                <select class="form-select bg-light border-0" style="min-width: 95px;" name="satuan[${count}]" id="satuan-${count + 1}" required>
                     <option value="">Pilih</option>
                     <option value="Pcs">Pcs</option>
                     <option value="Set">Set</option>

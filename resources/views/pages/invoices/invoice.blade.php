@@ -448,7 +448,7 @@
                                     <th scope="col" style="width: 50px;">#</th>
                                     <!-- Menambahkan min-width: 500px pada TH agar kolom tidak dipress pada layar laptop -->
                                     <th scope="col" style="min-width: 500px;">Item</th>
-                                    <th scope="col">Satuan</th>
+                                    <th scope="col" style="min-width: 110px; width: 110px;">Satuan</th>
                                     <th scope="col" style="width: 120px;">
                                      <div class="d-flex currency-select input-light align-items-center">Harga
                                       <select class="form-select border-0 bg-light" data-choices data-choices-search-false id="choices-payment-currency" onchange="otherPayment()">
@@ -528,7 +528,7 @@
 
                                      </td>
                                      <td>
-                                      <select class="form-select @error ('satuan.0') is-invalid @enderror" id="satuan-1" name="satuan[0]" required>
+                                      <select class="form-select bg-light border-0 @error ('satuan.0') is-invalid @enderror" style="min-width: 95px;" id="satuan-1" name="satuan[0]" required>
                                       <option value="">Pilih</option>
                                       <option value="Pcs">Pcs</option>
                                       <option value="Set">Set</option>
@@ -683,6 +683,7 @@
                                       </span>
                                   </span>
                                 </button>
+                                <a href="{{ route('daftar_invoice') }}" class="btn btn-secondary btn-cancel-ibekami"><i class="ri-close-line align-bottom me-1"></i>Batal</a>
                                </div>
                              </div>
                             </form>
@@ -729,6 +730,7 @@
 <script src="{{asset('vendor/jsvalidation/js/jsvalidation.js')}}"></script>
 <script src="{{asset('js/halaman/tabel-item.js')}}"></script>
 <script src="{{asset('js/halaman/invoice.js')}}"></script>
+<script src="{{asset('js/halaman/draft-invoice-ibekami.js')}}"></script>
 
 <script>
     var count = document.querySelectorAll('#newlink tr.product').length;
@@ -785,7 +787,7 @@
 
             </td>
             <td>
-                <select class="form-select" name="satuan[${count}]" id="satuan-${count + 1}" required>
+                <select class="form-select bg-light border-0" style="min-width: 95px;" name="satuan[${count}]" id="satuan-${count + 1}" required>
                     <option value="">Pilih</option>
                     <option value="Pcs">Pcs</option>
                     <option value="Set">Set</option>

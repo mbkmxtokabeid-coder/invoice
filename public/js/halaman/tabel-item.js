@@ -168,7 +168,7 @@ function new_link() {
       t +=
         '</select></div><textarea class="form-control bg-light border-0" id="productDetails-' +
         count +
-        '" name="deskripsi_item[]" rows="2" placeholder="Deskripsi Item"></textarea></td><td><select class="form-control bg-light border-0" id="satuan-' + count + '" name="satuan[]" required><option value="">Pilih</option><option value="Pcs">Pcs</option><option value="Set">Set</option><option value="Und">Und</option><option value="Blok">Blok</option><option value="Rim">Rim</option><option value="Lbr">Lbr</option><option value="Ktk">Ktk</option><option value="Unit">Unit</option><option value="Kg">Kg</option><option value="Lainnya">Lainnya</option></select></td><td><input type="text" class="form-control product-price bg-light border-0" id="productRate-' 
+        '        " name="deskripsi_item[]" rows="2" placeholder="Deskripsi Item"></textarea></td><td><select class="form-select bg-light border-0" id="satuan-' + count + '" name="satuan[]" required><option value="">Pilih</option><option value="Pcs">Pcs</option><option value="Set">Set</option><option value="Und">Und</option><option value="Blok">Blok</option><option value="Rim">Rim</option><option value="Lbr">Lbr</option><option value="Ktk">Ktk</option><option value="Unit">Unit</option><option value="Kg">Kg</option><option value="Lainnya">Lainnya</option></select></td><td><input type="text" class="form-control product-price bg-light border-0" id="productRate-' 
         +count +
         '" name="hrg[]" data-cleave=\'{ "numeral": true, "numeralThousandsGroupStyle": "thousand" }\' placeholder="Rp. 0.000" onChange="autoCalc(this)" required /></td><td><div class="input-step"><input type="number" class="text-center" id="product-qty-' +
         count +
@@ -180,13 +180,6 @@ function new_link() {
       document.getElementById("newlink").appendChild(e);
       usedIds.push(count);
       
-      var choicesElement = document.getElementById("satuan-" + count);
-      new Choices(choicesElement, {
-        placeholderValue: "This is a placeholder set in the config",
-        searchPlaceholderValue: "This is a search placeholder",
-        searchEnabled: false
-      });
-
       var choicesElements = document.querySelectorAll("[data-choices]");
       Array.from(choicesElements).forEach(function (element) {
         new Choices(element, {
@@ -239,13 +232,15 @@ document.addEventListener("DOMContentLoaded", function () {
 totalPembayaran();
 remove();
 
+// Event delegation untuk tombol Delete item
+$(document).on('click', '.product-removal a, .product-removal button', function (e) {
+  e.preventDefault();
+  removeItem(e);
+});
+
 // Batas
 function remove() {
-  Array.from(document.querySelectorAll(".product-removal a")).forEach(function (e) {
-    e.addEventListener("click", function (e) {
-      removeItem(e);
-    });
-  });
+  // Legacy compatibility - delegation handles clicks
 }
 
 function resetRow() {
