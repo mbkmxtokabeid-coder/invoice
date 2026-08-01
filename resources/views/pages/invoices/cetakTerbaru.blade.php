@@ -28,13 +28,31 @@
         window.onload = function() {
             window.print();
         };
-    </script>
-    
+    <style>
+      .watermark-bg {
+        position: fixed;
+        top: 40%;
+        left: 50%;
+        transform: translate(-50%, -50%) rotate(-30deg);
+        font-size: 120px;
+        font-weight: 900;
+        color: rgba(0, 0, 0, 0.08);
+        text-transform: uppercase;
+        letter-spacing: 12px;
+        pointer-events: none;
+        z-index: 1000;
+        white-space: nowrap;
+        user-select: none;
+      }
+    </style>
 </head>
 {{-- <div class="main-content"> --}}
 
             {{-- <div class="page-content"> --}}
                 <div class="container-fluid">
+                    <div class="watermark-bg">
+                        {{ strtoupper($type ?? 'ASLI') }}
+                    </div>
 
                     <!-- start page title -->
 

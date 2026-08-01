@@ -435,11 +435,16 @@
                                                   <i class="las la-ellipsis-h align-middle fs-18"></i>
                                               </button>
                                               <ul class="dropdown-menu dropdown-menu-end shadow-lg">
-                                                  <li>
-                                                      <a class="dropdown-item" href="{{ url('cetak/'.$inv->id) }}">
-                                                          <i class="las la-print  fs-18 align-middle me-2 text-muted"></i>Cetak Invoice
-                                                      </a>
-                                                  </li>
+                                                   <li>
+                                                       <a class="dropdown-item" href="{{ url('cetak/'.$inv->id.'?type=asli') }}" target="_blank">
+                                                           <i class="las la-print fs-18 align-middle me-2 text-primary"></i>Cetak Invoice (ASLI)
+                                                       </a>
+                                                   </li>
+                                                   <li>
+                                                       <a class="dropdown-item" href="{{ url('cetak/'.$inv->id.'?type=copy') }}" target="_blank">
+                                                           <i class="las la-print fs-18 align-middle me-2 text-danger"></i>Cetak Invoice (COPY)
+                                                       </a>
+                                                   </li>
                                                   <li>
                                                       <a class="dropdown-item" href="{{ url('view/download/'.$inv->id) }}" target="_blank">
                                                           <i class="las la-file-download fs-18 align-middle me-2 text-muted"></i>Download

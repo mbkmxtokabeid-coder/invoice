@@ -744,8 +744,12 @@ class PenjualanTokabeController extends Controller
         return redirect()->back()->with('batal', 'Invoice Tokabe berhasil dibatalkan.');
     }
 
-    public function cetakInvoiceTKB($id)
+    public function cetakInvoiceTKB(Request $request, $id)
     {
+        $type = strtolower($request->query('type', 'asli'));
+        if (!in_array($type, ['asli', 'copy'])) {
+            $type = 'asli';
+        }
         $penjualan = PenjualanTokabe::where('id', $id)->first();
         $invoice = Invoice::where('id', $penjualan->invoice)->first();
         $penjualan_barang = PenjualanJasaTokabe::where('penjualan_id', $id)->get();
@@ -809,7 +813,7 @@ class PenjualanTokabeController extends Controller
             $jumlahHarga[] = number_format($item->jumlah_harga, 0, ',', '.');
         }
 
-        return view('pages.invoices.tokabe.downloadTKB', compact('invoice', 'penjualan', 'barang', 'penjualan_barang', 'hargaMod', 'jumlahHarga', 'norek', 'toko', 'totHargaMod', 'dp', 'biayaLain', 'sisaBayarMod', 'formatTanggal', 'admin', 'persen'));
+        return view('pages.invoices.tokabe.downloadTKB', compact('invoice', 'penjualan', 'barang', 'penjualan_barang', 'hargaMod', 'jumlahHarga', 'norek', 'toko', 'totHargaMod', 'dp', 'biayaLain', 'sisaBayarMod', 'formatTanggal', 'admin', 'persen', 'type'));
     }
 
     public function viewDownloadInvoiceTKB($id)

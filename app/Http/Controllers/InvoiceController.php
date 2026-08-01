@@ -339,8 +339,12 @@ class InvoiceController extends Controller
     }
 
 
-    public function cetakInvoice($id)
+    public function cetakInvoice(Request $request, $id)
     {
+        $type = strtolower($request->query('type', 'asli'));
+        if (!in_array($type, ['asli', 'copy'])) {
+            $type = 'asli';
+        }
         $penjualan = Penjualan::where('id', $id)->first();
         $invoice = Invoice::where('id', $penjualan->invoice)->first();
         $penjualan_barang = PenjualanBarang::where('penjualan_id', $id)->get();
@@ -400,7 +404,7 @@ class InvoiceController extends Controller
             $jumlahHarga[] = number_format($item->jumlah_harga, 0, ',', '.');
         }
 
-        return view('pages.invoices.cetak', compact('invoice', 'penjualan', 'barang', 'penjualan_barang', 'hargaMod', 'jumlahHarga', 'norek', 'totHargaMod', 'dp', 'biayaLain', 'sisaBayarMod', 'formatTanggal', 'admin','toko'));
+        return view('pages.invoices.cetak', compact('invoice', 'penjualan', 'barang', 'penjualan_barang', 'hargaMod', 'jumlahHarga', 'norek', 'totHargaMod', 'dp', 'biayaLain', 'sisaBayarMod', 'formatTanggal', 'admin','toko', 'type'));
     }
 
 
@@ -561,8 +565,12 @@ class InvoiceController extends Controller
     }
     
     
-    public function cetakInvoiceBaru($id)
+    public function cetakInvoiceBaru(Request $request, $id)
     {
+        $type = strtolower($request->query('type', 'asli'));
+        if (!in_array($type, ['asli', 'copy'])) {
+            $type = 'asli';
+        }
         $penjualan = Penjualan::where('id', $id)->first();
         $invoice = Invoice::where('id', $penjualan->invoice)->first();
         $namaInv = $penjualan->nomor_invoice;
@@ -627,9 +635,9 @@ class InvoiceController extends Controller
         
        
        if ($penjualan->invoice === 5) {
-            return view('pages.invoices.download-tokabe', compact('invoice', 'penjualan', 'barang', 'penjualan_barang', 'hargaMod', 'jumlahHarga', 'norek', 'totHargaMod', 'dp', 'biayaLain', 'sisaBayarMod', 'formatTanggal', 'admin', 'persen','namaInv','toko'));
+            return view('pages.invoices.download-tokabe', compact('invoice', 'penjualan', 'barang', 'penjualan_barang', 'hargaMod', 'jumlahHarga', 'norek', 'totHargaMod', 'dp', 'biayaLain', 'sisaBayarMod', 'formatTanggal', 'admin', 'persen','namaInv','toko', 'type'));
         }
-        return view('pages.invoices.cetakTerbaru', compact('invoice', 'penjualan', 'barang', 'penjualan_barang', 'hargaMod', 'jumlahHarga', 'norek', 'totHargaMod','totalHarga', 'dp', 'biayaLain', 'sisaBayarMod', 'formatTanggal', 'admin', 'persen','namaInv','toko'));
+        return view('pages.invoices.cetakTerbaru', compact('invoice', 'penjualan', 'barang', 'penjualan_barang', 'hargaMod', 'jumlahHarga', 'norek', 'totHargaMod','totalHarga', 'dp', 'biayaLain', 'sisaBayarMod', 'formatTanggal', 'admin', 'persen','namaInv','toko', 'type'));
     }
 
     public function downloadInvoice()

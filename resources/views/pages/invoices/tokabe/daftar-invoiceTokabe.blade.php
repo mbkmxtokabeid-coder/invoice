@@ -408,8 +408,13 @@
                                               <ul class="dropdown-menu dropdown-menu-end shadow-lg">
                                                   {{-- CETAK --}}
                                                   <li>
-                                                      <a class="dropdown-item" href="{{route('cetak.inv.tkb',['id' => $inv->id])}}" target="_blank">
-                                                          <i class="las la-print fs-18 align-middle me-2 text-muted"></i>Cetak Invoice
+                                                      <a class="dropdown-item" href="{{route('cetak.inv.tkb',['id' => $inv->id, 'type' => 'asli'])}}" target="_blank">
+                                                          <i class="las la-print fs-18 align-middle me-2 text-primary"></i>Cetak Invoice (ASLI)
+                                                      </a>
+                                                  </li>
+                                                  <li>
+                                                      <a class="dropdown-item" href="{{route('cetak.inv.tkb',['id' => $inv->id, 'type' => 'copy'])}}" target="_blank">
+                                                          <i class="las la-print fs-18 align-middle me-2 text-danger"></i>Cetak Invoice (COPY)
                                                       </a>
                                                   </li>
 

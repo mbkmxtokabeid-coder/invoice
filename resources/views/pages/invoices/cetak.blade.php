@@ -52,14 +52,28 @@
     border-top: 1px solid black;
   }
 
-  .ts th {
-    font-family: Bookman Old Style, sans-serif;
-    letter-spacing: 1px;
-
+  .watermark-bg {
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-30deg);
+    font-size: 110px;
+    font-weight: 900;
+    color: rgba(0, 0, 0, 0.09);
+    text-transform: uppercase;
+    letter-spacing: 12px;
+    pointer-events: none;
+    z-index: -1;
+    white-space: nowrap;
+    user-select: none;
   }
 </style>
 
 <body>
+
+  <div class="watermark-bg">
+    {{ strtoupper($type ?? 'ASLI') }}
+  </div>
 
 
   <div class="row">

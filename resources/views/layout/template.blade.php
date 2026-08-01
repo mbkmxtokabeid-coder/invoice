@@ -190,11 +190,11 @@
                         <div class="collapse menu-dropdown" id="sidebarDashboard" >
                             <ul class="nav nav-sm flex-column">
                                 <li class="nav-item">
-                                    <a class="nav-link menu-link" href="/invoice">
+                                    <a class="nav-link menu-link" href="{{ url('/') }}">
                                         <i class="las la-database"></i> <span data-key="t-invoices">Dashboard Ibekami</span>
                                     </a>
                                     @if (Auth::check() && (Auth::user()->role == 'Admin' || Auth::user()->role == 'Pemilik'))
-                                    <a class="nav-link menu-link" href="/welcomeTKB">
+                                    <a class="nav-link menu-link" href="{{ url('/welcomeTKB') }}">
                                         <i class="las la-database"></i> <span data-key="t-invoices">Dashboard Tokabe</span>
                                     </a>
                                     @endif
@@ -434,7 +434,7 @@
                     @else
                     <li class="menu-title mt-3"><i class="ri-more-fill"></i> <span data-key="t-pages">Surat</span></li>
                      <li class="nav-item">
-                       <a class="nav-link menu-link" href="/daftar-spk">
+                       <a class="nav-link menu-link" href="{{ route('daftar-spk') }}">
                         <i class="ri-mail-settings-line"></i> <span data-key="t-invoices">SPK</span>
                        </a>
                      </li>
