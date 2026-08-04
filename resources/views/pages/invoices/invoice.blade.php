@@ -608,9 +608,9 @@
                                      <div class="col lg-12">
                                        <div class="form-check mb-1 col-lg-12" id="alamatPembayaran" style="display: none;">
                                          <input class="form-check-input" type="radio" name="norek" id="flexRadioDefault1" value="BNI" checked>
-                                         <label class="form-check-label" for="flexRadioDefault1">
-                                           BNI | A/N : Oky Irawan | No. Rek : 816029999
-                                         </label>
+                                          <label class="form-check-label" for="flexRadioDefault1">
+                                            BSI | A/N : Yusni Kurniasih | No. Rek : 2845999999
+                                          </label>
                                          </div>
                                        
                                      </div>

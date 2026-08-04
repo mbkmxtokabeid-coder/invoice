@@ -85,8 +85,10 @@ class Penjualan extends Model
             return "Mandiri | A/N : Yusni Kurniasih | No. Rek : 1050000329999";
         } elseif ($tgl && $tgl < '2026-07-23') {
             return "BSI | A/N : Yusni Kurniasih | No. Rek : 2845999999";
-        } else {
+        } elseif (($tgl && $tgl < '2026-08-04') || ($this->id && $this->id <= 2464)) {
             return "BNI | A/N : Oky Irawan | No. Rek : 816029999";
+        } else {
+            return "BSI | A/N : Yusni Kurniasih | No. Rek : 2845999999";
         }
     }
 }
