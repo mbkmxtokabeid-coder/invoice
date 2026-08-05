@@ -33,7 +33,7 @@
         <div class="col-xxl-12">
           <div class="card">
             {{-- Start Isi Form --}}
-            <form action="/invoice/update-stokMaterial/{{$material->id}}" class="needs-validation" method="POST" enctype="multipart/form-data" novalidate>
+            <form action="{{ url('/update-stokMaterial/'.$material->id) }}" class="needs-validation" method="POST" enctype="multipart/form-data" novalidate>
               @csrf
               @method('put')
               <div class="card-body p-4">

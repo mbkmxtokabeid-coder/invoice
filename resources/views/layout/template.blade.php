@@ -232,17 +232,17 @@
                           <ul class="nav nav-sm flex-column">
 
                               <li class="nav-item">
-                                <a class="nav-link menu-link" href="/listBarang">
+                                <a class="nav-link menu-link" href="{{ route('listBarang') }}">
                                   <i class="las la-box-open "></i> <span data-key="t-invoices">Daftar Barang</span>
                               </a>
                               </li>
                               <li class="nav-item">
-                                <a class="nav-link menu-link" href="/listMaterial">
+                                <a class="nav-link menu-link" href="{{ route('listMaterial') }}">
                                   <i class="las la-tools "></i> <span data-key="t-invoices">Daftar Material</span>
                               </a>
                               </li>
                               <li class="nav-item">
-                                <a class="nav-link menu-link" href="/listInventaris">
+                                <a class="nav-link menu-link" href="{{ route('listInventaris') }}">
                                   <i class="las la-dolly-flatbed "></i> <span data-key="t-invoices">Daftar Inventaris</span>
                               </a>
                               </li>
@@ -381,17 +381,17 @@
                       <div class="collapse menu-dropdown" id="sidebarProduct">
                           <ul class="nav nav-sm flex-column">
                               <li class="nav-item">
-                                <a class="nav-link menu-link" href="/listBarang">
+                                <a class="nav-link menu-link" href="{{ route('listBarang') }}">
                                   <i class="las la-box-open "></i> <span data-key="t-invoices">Daftar Barang</span>
                               </a>
                               </li>
                               <li class="nav-item">
-                                <a class="nav-link menu-link" href="/listMaterial">
+                                <a class="nav-link menu-link" href="{{ route('listMaterial') }}">
                                   <i class="las la-tools "></i> <span data-key="t-invoices">Daftar Material</span>
                               </a>
                               </li>
                               <li class="nav-item">
-                                <a class="nav-link menu-link" href="/listInventaris">
+                                <a class="nav-link menu-link" href="{{ route('listInventaris') }}">
                                   <i class="las la-dolly-flatbed "></i> <span data-key="t-invoices">Daftar Inventaris</span>
                               </a>
                               </li>
@@ -449,7 +449,7 @@
                     @endif
                     @if (Auth::user()->role === 'Stockist')
                     <li class="nav-item mt-2">
-                        <a class="nav-link menu-link" href="/listBarang">
+                        <a class="nav-link menu-link" href="{{ route('listBarang') }}">
                           <i class="las la-box-open "></i> <span data-key="t-invoices">Daftar Barang</span>
                       </a>
                       </li>

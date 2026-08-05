@@ -26,7 +26,7 @@
               <h4 class="mb-3">Apakah ingin menghapus data?</h4>
               <div class="hstack gap-2 justify-content-center">
                   <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                  <form id="deleteForm" action="/invoice/deleteMaterial" method="POST">
+                  <form id="deleteForm" action="/deleteMaterial" method="POST">
                     @csrf
                     @method('delete')
 
