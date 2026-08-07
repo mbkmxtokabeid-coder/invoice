@@ -38,7 +38,7 @@ class UserController extends Controller
         'status' => 'Aktif',
       ]);
       Alert::success('User Berhasil ditambahkan');
-      return redirect('daftar-user');
+      return redirect()->route('user.index');
     }
   }
 
@@ -53,12 +53,12 @@ class UserController extends Controller
         $user->status = 'Non Aktif';
         $user->save();
         Alert::success('User Di Non-Aktifkan');
-        return redirect('/daftar-user');
+        return redirect()->route('user.index');
       } else {
         $user->status = 'Aktif';
         $user->save();
         Alert::success('User Di Aktifkan');
-        return redirect('/daftar-user');
+        return redirect()->route('user.index');
       }
     }
   }

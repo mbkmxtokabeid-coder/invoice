@@ -346,13 +346,13 @@
                         <ul class="nav nav-sm flex-column">
 
                             <li class="nav-item">
-                            <a class="nav-link menu-link" href="/daftar-user">
+                            <a class="nav-link menu-link" href="{{ route('user.index') }}">
                                 <i class="las la-address-book"></i> <span data-key="t-invoices">Daftar Karyawan</span>
                             </a>
                             </li>
 
                             <li class="nav-item">
-                            <a class="nav-link menu-link" href="/add-user">
+                            <a class="nav-link menu-link" href="{{ route('user.add') }}">
                                 <i class="las la-user-plus"></i> <span data-key="t-invoices">Tambah Karyawan</span>
                             </a>
                             </li>

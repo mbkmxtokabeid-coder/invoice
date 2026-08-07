@@ -16,7 +16,7 @@ class Pemilik
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (auth()->user()->role === 'Pemilik') {
+        if (strtolower(auth()->user()->role) === 'pemilik') {
             return $next($request);
         }
         Alert::error('Kamu tidak memiliki akses Pemilik');

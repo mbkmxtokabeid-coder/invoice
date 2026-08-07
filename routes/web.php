@@ -49,9 +49,9 @@ Route::group(['middleware' => ['auth']], function () {
         // ROUTE KHUSUS PEMILIK
         // ====================================================================
         Route::group(['middleware' => ['pemilik']], function () {
-            Route::get('/add-user', [UserController::class, 'addUser']);
-            Route::post('/post-user', [UserController::class, 'storeUser']);
-            Route::get('/daftar-user', [UserController::class, 'index']);
+            Route::get('/add-user', [UserController::class, 'addUser'])->name('user.add');
+            Route::post('/post-user', [UserController::class, 'storeUser'])->name('user.store');
+            Route::get('/daftar-user', [UserController::class, 'index'])->name('user.index');
             Route::get('/status-user/{id}', [UserController::class, 'status'])->name('user.status');
             Route::get('/edit-user/{id}', [UserController::class, 'edit'])->name('user.edit');
             Route::put('/update-user/{id}', [UserController::class, 'update'])->name('user.update');

@@ -34,7 +34,7 @@
             {{-- Start Card --}}
             <div class="card">
               {{-- Start Form --}}
-              <form method="POST" action="/invoice/post-user" class="needs-validation">
+              <form method="POST" action="{{ route('user.store') }}" class="needs-validation">
                 @csrf
                 <div class="card-body p-4">
                   {{-- Start Row 1 --}}
