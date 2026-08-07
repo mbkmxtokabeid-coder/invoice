@@ -577,18 +577,37 @@
         }
     });
 
-    // Auto Hitung "Hasil" berdasarkan input Panjang dan Lebar
-    $(document).on('input', '.material-panjang, .material-lebar', function() {
-        var row = $(this).closest('.material-row');
+    function calcEditMaterialQty(row) {
         var panjang = parseFloat(row.find('.material-panjang').val());
         var lebar = parseFloat(row.find('.material-lebar').val());
-        
-        // Cek jika Panjang dan Lebar bukan kosong (NaN)
+        var productRow = row.closest('tr.product');
+        if (!productRow.length) {
+            productRow = row.closest('tr');
+        }
+        var itemQty = parseFloat(productRow.find('input[name="qty[]"], [id^="product-qty-"]').val()) || 1;
+
         if (!isNaN(panjang) && !isNaN(lebar)) {
-            var hasil = panjang * lebar;
-            // Masukkan nilai hasil dan trigger input untuk validasi pemotongan stok
+            var hasil = (panjang * lebar) * itemQty;
+            row.find('.material-qty').val(parseFloat(hasil.toFixed(4))).trigger('input');
+        } else if (!isNaN(panjang)) {
+            var hasil = panjang * itemQty;
             row.find('.material-qty').val(parseFloat(hasil.toFixed(4))).trigger('input');
         }
+    }
+
+    // Auto Hitung "Hasil" berdasarkan input Panjang, Lebar, dan Quantity
+    $(document).on('input', '.material-panjang, .material-lebar', function() {
+        calcEditMaterialQty($(this).closest('.material-row'));
+    });
+
+    $(document).on('input change', 'input[name="qty[]"], [id^="product-qty-"]', function() {
+        var productRow = $(this).closest('tr.product');
+        if (!productRow.length) {
+            productRow = $(this).closest('tr');
+        }
+        productRow.find('.material-row').each(function() {
+            calcEditMaterialQty($(this));
+        });
     });
 
     // Validasi Qty/Hasil Input tidak boleh melebihi stok & Update Angka Sisa Secara Realtime

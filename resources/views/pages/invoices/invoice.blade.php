@@ -26,20 +26,29 @@
         row.find('.material-qty').val(''); // Reset qty saat ganti material
     });
 
-    // Kalkulasi Ukuran P x L dan Validasi Qty Input tidak boleh melebihi stok
-    $(document).on('input', '.material-panjang, .material-lebar', function() {
-        var row = $(this).closest('.material-row');
+    function calcMaterialQty(row) {
         var p = parseFloat(row.find('.material-panjang').val()) || 0;
         var l = parseFloat(row.find('.material-lebar').val()) || 0;
-        
-        var hasil = p * l;
+
+        var productRow = row.closest('tr.product');
+        if (!productRow.length) {
+            productRow = row.closest('tr');
+        }
+        var itemQty = parseFloat(productRow.find('input[name="qty[]"], [id^="product-qty-"]').val()) || 1;
+
+        var hasil = 0;
+        if (p > 0 && l > 0) {
+            hasil = (p * l) * itemQty;
+        } else if (p > 0 && l === 0) {
+            hasil = p * itemQty;
+        } else if (l > 0 && p === 0) {
+            hasil = l * itemQty;
+        }
+
         var qtyInput = row.find('.material-qty');
-        
-        // Set hasil jika > 0
         qtyInput.val(hasil > 0 ? hasil : '');
 
         var max = parseFloat(qtyInput.attr('max'));
-        
         if (!isNaN(max) && hasil > max) {
             Swal.fire({
                 icon: 'warning',
@@ -50,11 +59,27 @@
                 showConfirmButton: false,
                 timer: 3000
             });
-            // Mengosongkan field agar tidak bisa disubmit jika lebih dari stok
             row.find('.material-panjang').val('');
             row.find('.material-lebar').val('');
             qtyInput.val('');
         }
+    }
+
+    // Kalkulasi Ukuran (P x L) x Quantity dan Validasi Stok
+    $(document).on('input', '.material-panjang, .material-lebar', function() {
+        var row = $(this).closest('.material-row');
+        calcMaterialQty(row);
+    });
+
+    // Update material qty saat item quantity berubah
+    $(document).on('input change', 'input[name="qty[]"], [id^="product-qty-"]', function() {
+        var productRow = $(this).closest('tr.product');
+        if (!productRow.length) {
+            productRow = $(this).closest('tr');
+        }
+        productRow.find('.material-row').each(function() {
+            calcMaterialQty($(this));
+        });
     });
 
     // Hapus Material Row (Sub-Item)

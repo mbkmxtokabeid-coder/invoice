@@ -107,19 +107,42 @@ $(document).ready(function () {
         }
     });
 
-    // Kalkulasi Ukuran P x L dan Validasi Qty Input tidak boleh melebihi stok
-    $(document).on('input', '.material-panjang, .material-lebar', function() {
-        var row = $(this).closest('.material-row');
+    function calcTokabeAddMaterialQty(row) {
         var p = parseFloat(row.find('.material-panjang').val()) || 0;
         var l = parseFloat(row.find('.material-lebar').val()) || 0;
-        
-        var hasil = p * l;
+        var productRow = row.closest('tr.product');
+        if (!productRow.length) {
+            productRow = row.closest('tr');
+        }
+        var itemQty = parseFloat(productRow.find('input[name="qty[]"], [id^="product-qty-"]').val()) || 1;
+
+        var hasil = 0;
+        if (p > 0 && l > 0) {
+            hasil = (p * l) * itemQty;
+        } else if (p > 0 && l === 0) {
+            hasil = p * itemQty;
+        } else if (l > 0 && p === 0) {
+            hasil = l * itemQty;
+        }
+
         var qtyInput = row.find('.material-qty');
-        
-        // Set hasil jika > 0
         qtyInput.val(hasil > 0 ? hasil : '');
-        // Trigger input agar perhitungan sisa stok berjalan
         qtyInput.trigger('input'); 
+    }
+
+    // Kalkulasi Ukuran (P x L) x Quantity Tokabe
+    $(document).on('input', '.material-panjang, .material-lebar', function() {
+        calcTokabeAddMaterialQty($(this).closest('.material-row'));
+    });
+
+    $(document).on('input change', 'input[name="qty[]"], [id^="product-qty-"]', function() {
+        var productRow = $(this).closest('tr.product');
+        if (!productRow.length) {
+            productRow = $(this).closest('tr');
+        }
+        productRow.find('.material-row').each(function() {
+            calcTokabeAddMaterialQty($(this));
+        });
     });
 
     // Validasi Qty Input tidak boleh melebihi stok & hitung sisa
