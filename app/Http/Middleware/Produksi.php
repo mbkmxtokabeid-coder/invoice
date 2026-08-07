@@ -18,7 +18,7 @@ class Produksi
     public function handle(Request $request, Closure $next)
     {
 
-        if (auth()->user()->role === 'Produksi') {
+        if (strtolower(auth()->user()->role) === 'produksi') {
             return $next($request);
         }
         Alert::error('Kamu tidak memiliki akses produksi');

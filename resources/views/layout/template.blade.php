@@ -439,12 +439,17 @@
                        </a>
                      </li>
                     @endif
-                    @if (Auth::user()->role === 'Produksi')
+                    @if (strtolower(Auth::user()->role) === 'produksi')
+                    <li class="nav-item">
+                        <a class="nav-link menu-link" href="{{ route('listMaterial') }}">
+                            <i class="las la-tools"></i> <span data-key="t-invoices">Daftar Material</span>
+                        </a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link menu-link" href="{{route('stokTinta')}}">
                             <i class="mdi mdi-printer-3d-nozzle"></i> <span>Stok Tinta</span>
                         </a>
-                        </li>
+                    </li>
                     @endif
                     @endif
                     @if (Auth::user()->role === 'Stockist')

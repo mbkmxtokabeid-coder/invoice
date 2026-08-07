@@ -16,8 +16,8 @@ class Admin
      */
     public function handle(Request $request, Closure $next)
     {
-        $allowedRoles = ['Admin', 'Pemilik', 'Magang', 'Stockist', 'Produksi', 'AdminTKB'];
-        if (in_array(auth()->user()->role, $allowedRoles)) {
+        $allowedRoles = ['admin', 'pemilik', 'magang', 'stockist', 'produksi', 'admintkb'];
+        if (in_array(strtolower(auth()->user()->role), $allowedRoles)) {
             return $next($request);
         }
         Alert::error('Kamu tidak memiliki akses Admin');

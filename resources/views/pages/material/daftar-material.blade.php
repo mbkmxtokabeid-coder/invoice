@@ -26,7 +26,7 @@
               <h4 class="mb-3">Apakah ingin menghapus data?</h4>
               <div class="hstack gap-2 justify-content-center">
                   <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                  <form id="deleteForm" action="/deleteMaterial" method="POST">
+                  <form id="deleteForm" action="{{ url('/deleteMaterial') }}" method="POST">
                     @csrf
                     @method('delete')
 
@@ -67,7 +67,7 @@
         <div class="row pb-2 align-items-end" style="margin-top:-10px;">
           {{-- Start Button Add Barang --}}
           <div class="col-sm-3" style="margin-right: -150px;">
-            <a href="addMaterial" class="btn btn-md btn-primary mt-2">
+            <a href="{{ url('/addMaterial') }}" class="btn btn-md btn-primary mt-2">
               <i class="las la-plus"></i>Tambah Material</a>
             </div>
             {{-- End Button Add Barang --}}
@@ -116,7 +116,7 @@
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end">
                                         <li>
-                                            <a class="dropdown-item" href="edit-stokMaterial/{{$mtr->id}}"><i class="las la-pen fs-18 align-middle me-2 text-muted"></i>
+                                            <a class="dropdown-item" href="{{ url('/edit-stokMaterial/'.$mtr->id) }}"><i class="las la-pen fs-18 align-middle me-2 text-muted"></i>
                                                 Update Stock</a>
                                         </li>
                                         <li class="dropdown-divider"></li>
