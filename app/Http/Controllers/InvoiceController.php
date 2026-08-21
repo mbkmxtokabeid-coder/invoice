@@ -420,15 +420,14 @@ class InvoiceController extends Controller
         $barang = [];
         $hargaMod = [];
         $jumlahHarga = [];
-        $totHargaMod = number_format($penjualan->total_pembayaran, 0, ',', '.');
+        $totHargaMod = number_format($penjualan->total_harga, 0, ',', '.');
         $totalHarga = number_format($penjualan->total_harga, 0, ',', '.');
         $sisaBayarMod = $penjualan->status === 'Lunas' ? '0' : number_format($penjualan->sisa_pembayaran, 0, ',', '.');
         
-        $admin = $admin_now->nama;
+        $admin = $admin_now ? $admin_now->nama : 'Admin';
         $tanggal =  $penjualan->tgl_penjualan;
         Carbon::setLocale('id');
         $persen = '';
-        $dp = null;
 
         // Ubah format tanggal menjadi tanggal string
         $tanggalString = Carbon::parse($tanggal)->toDateString();
@@ -436,19 +435,20 @@ class InvoiceController extends Controller
         // Format tanggal yang diinginkan dengan bulan dalam bahasa Indonesia
         $formatTanggal = Carbon::parse($tanggalString)->isoFormat('DD MMMM YYYY');
 
-
         $norek = $penjualan->norek_text;
 
-        if ($penjualan->dp != null) {
-
+        if ($penjualan->dp == null) {
+            $dp = 0;
+        } else {
             $dp = number_format($penjualan->dp, 0, ',', '.');
         }
 
         if ($penjualan->diskon != null || $penjualan->potongan != null || $penjualan->ppn != null) {
-            if ($penjualan->diskon || $penjualan->ppn) {
-                $potongan = ($penjualan->diskon ? $penjualan->diskon : $penjualan->ppn) / 100 * $penjualan->total_harga;
-                $biayaLain = 'Rp.' . number_format($potongan, 0, ',', '.');
-            } else {
+            if ($penjualan->diskon) {
+                $biayaLain = number_format($penjualan->diskon, 0, ',', '.') . '%';
+            }else if( $penjualan->ppn){
+                $biayaLain = number_format($penjualan->ppn / 100 * $penjualan->total_harga);
+            }else {
                 $biayaLain = 'Rp.' . number_format($penjualan->potongan, 0, ',', '.');
             }
         } else {
@@ -470,7 +470,7 @@ class InvoiceController extends Controller
         if (strpos($penjualan->nomor_invoice, "T") === 0) {
             $toko = "Total Karya Berkah";
         } else {
-            $toko = "Ikhtiar Berkah";
+            $toko = "Ibekami.id";
         }
         
        
@@ -504,7 +504,7 @@ class InvoiceController extends Controller
         $barang = [];
         $hargaMod = [];
         $jumlahHarga = [];
-        $totHargaMod = number_format($penjualan->total_pembayaran, 0, ',', '.');
+        $totHargaMod = number_format($penjualan->total_harga, 0, ',', '.');
         $totalHarga = number_format($penjualan->total_harga, 0, ',', '.');
         $sisaBayarMod = $penjualan->status === 'Lunas' ? '0' : number_format($penjualan->sisa_pembayaran, 0, ',', '.');
         
@@ -512,7 +512,6 @@ class InvoiceController extends Controller
         $tanggal =  $penjualan->tgl_penjualan;
         Carbon::setLocale('id');
         $persen = '';
-        $dp = null;
 
         // Ubah format tanggal menjadi tanggal string
         $tanggalString = Carbon::parse($tanggal)->toDateString();
@@ -520,18 +519,20 @@ class InvoiceController extends Controller
         // Format tanggal yang diinginkan dengan bulan dalam bahasa Indonesia
         $formatTanggal = Carbon::parse($tanggalString)->isoFormat('DD MMMM YYYY');
 
-
         $norek = $penjualan->norek_text;
 
-        if ($penjualan->dp != null) {
+        if ($penjualan->dp == null) {
+            $dp = 0;
+        } else {
             $dp = number_format($penjualan->dp, 0, ',', '.');
         }
 
         if ($penjualan->diskon != null || $penjualan->potongan != null || $penjualan->ppn != null) {
-            if ($penjualan->diskon || $penjualan->ppn) {
-                $potongan = ($penjualan->diskon ? $penjualan->diskon : $penjualan->ppn) / 100 * $penjualan->total_harga;
-                $biayaLain = 'Rp.' . number_format($potongan, 0, ',', '.');
-            } else {
+            if ($penjualan->diskon) {
+                $biayaLain = number_format($penjualan->diskon, 0, ',', '.') . '%';
+            }else if( $penjualan->ppn){
+                $biayaLain = number_format($penjualan->ppn / 100 * $penjualan->total_harga);
+            }else {
                 $biayaLain = 'Rp.' . number_format($penjualan->potongan, 0, ',', '.');
             }
         } else {
@@ -554,7 +555,7 @@ class InvoiceController extends Controller
         if (strpos($penjualan->nomor_invoice, "T") === 0) {
             $toko = "Total Karya Berkah";
         } else {
-            $toko = "Ikhtiar Berkah";
+            $toko = "Ibekami.id";
         }
         
         // 3. RETURN VIEW (Sesuai kode asli Anda)

@@ -1,402 +1,205 @@
-<!DOCTYPE html>
-<html lang="id">
+<html>
+
 <head>
-    <meta charset="utf-8" />
-    <title>{{$namaInv}} - {{$penjualan->customer}}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <style>
-        /* RESET & BASIC STYLES */
-        body {
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            color: #333;
-            background-color: #f0f0f0; /* Background abu-abu di layar HP */
-            margin: 0;
-            padding: 20px;
-            font-size: 14px;
-        }
-
-        /* CONTAINER A4 - KUNCI AGAR TIDAK RESPONSIF */
-        .invoice-box {
-            max-width: 210mm; /* Lebar A4 */
-            margin: auto;
-            background: #fff;
-            padding: 30px;
-            border: 1px solid #eee;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
-        }
-
-        /* LAYOUT DENGAN TABLE (LEBIH STABIL DARI FLEXBOX UNTUK PDF/PRINT) */
-        table {
-            width: 100%;
-            line-height: inherit;
-            text-align: left;
-            border-collapse: collapse;
-        }
-
-        table td {
-            padding: 5px;
-            vertical-align: top;
-        }
-
-        /* HEADER */
-        .title-header td {
-            padding-bottom: 20px;
-        }
-
-        .title-header h1 {
-            margin: 0;
-            font-size: 24px;
-            color: #333;
-        }
-        
-        .company-info {
-            text-align: right;
-            font-size: 12px;
-            color: #555;
-        }
-
-        /* INFO INVOICE & CUSTOMER */
-        .info-section td {
-            padding-bottom: 40px;
-        }
-
-        .info-label {
-            font-weight: bold;
-            color: #555;
-            text-transform: uppercase;
-            font-size: 10px;
-            margin-bottom: 2px;
-        }
-        
-        .info-value {
-            font-size: 14px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-        
-        .address-value {
-            font-size: 12px;
-            color: #666;
-            line-height: 1.4;
-        }
-
-        /* TABEL BARANG */
-        .items-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-        
-        .items-table th {
-            background: #f8f9fa;
-            color: #333;
-            font-weight: bold;
-            padding: 10px;
-            border-bottom: 2px solid #ddd;
-            font-size: 12px;
-            text-transform: uppercase;
-        }
-        
-        .items-table td {
-            padding: 10px;
-            border-bottom: 1px solid #eee;
-            font-size: 13px;
-        }
-
-        .items-table tr:last-child td {
-            border-bottom: none;
-        }
-
-        /* TOTAL & PAYMENT */
-        .total-section {
-            width: 100%;
-        }
-        
-        .payment-info {
-            font-size: 12px;
-            color: #d9534f; /* Merah sesuai request */
-            line-height: 1.5;
-            padding-top: 10px;
-            border-top: 2px dashed #eee;
-        }
-
-        .total-table {
-            width: 300px;
-            float: right;
-        }
-
-        .total-table td {
-            padding: 5px 0;
-            text-align: right;
-        }
-
-        .total-table .label {
-            color: #777;
-            padding-right: 15px;
-        }
-        
-        .total-table .value {
-            font-weight: bold;
-        }
-
-        .grand-total {
-            font-size: 16px;
-            font-weight: bold;
-            color: #438a7a; /* Hijau sesuai request */
-            border-top: 2px dashed #eee;
-            padding-top: 10px !important;
-        }
-        
-        .grand-total-unpaid {
-             color: #d9534f; /* Merah */
-        }
-
-        /* FOOTER SIGNATURE */
-        .signature-section {
-            margin-top: 50px;
-            width: 100%;
-            font-size: 11px;
-            text-align: center;
-        }
-        
-        .sign-box {
-            margin-top: 60px;
-            font-weight: bold;
-            text-decoration: underline;
-        }
-
-        /* PRINT SETTINGS */
-        @media print {
-            body {
-                background: none;
-                margin: 0;
-                padding: 0;
-            }
-            .invoice-box {
-                box-shadow: none;
-                border: none;
-                width: 100%;
-                max-width: 100%;
-                padding: 0;
-            }
-            /* Hilangkan tombol print saat dicetak */
-            .no-print {
-                display: none;
-            }
-        }
-        
-        /* TOMBOL PRINT DI HP */
-        .fab-print {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #007bff;
-            color: white;
-            padding: 15px 20px;
-            border-radius: 50px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            text-decoration: none;
-            font-weight: bold;
-            z-index: 9999;
-        }
-    </style>
+  <title>{{ $namaInv ?? 'Print Document' }} - {{ $penjualan->customer ?? '' }}</title>
+  <link href="style.css" type="text/css" rel="stylesheet" />
 </head>
+<style>
+  body {
+    font-family: Bookman Old Style, sans-serif;
+    letter-spacing: 1px;
+    color: #000000;
+    font-size: 12px;
+  }
+
+  /* Create two equal columns that floats next to each other */
+  .column {
+    float: left;
+    width: 50%;
+  }
+
+  /* Clear floats after the columns */
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+
+  .noborders td {
+    border: 0;
+  }
+
+  .no td {
+    border: 0;
+    border-top: 0;
+  }
+
+  .tp td {
+    border: 0;
+    border-top: 1px solid black;
+  }
+
+  .watermark-bg {
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-30deg);
+    font-size: 110px;
+    font-weight: 900;
+    color: rgba(0, 0, 0, 0.09);
+    text-transform: uppercase;
+    letter-spacing: 12px;
+    pointer-events: none;
+    z-index: -1;
+    white-space: nowrap;
+    user-select: none;
+  }
+</style>
 
 <body>
 
-    <!-- Tombol Print Floating (Hanya muncul di Layar HP/Web) -->
-    <a href="javascript:window.print()" class="fab-print no-print">
-        🖨️ Simpan PDF
-    </a>
+  <div class="watermark-bg">
+    {{ strtoupper($type ?? 'ASLI') }}
+  </div>
 
-    <div class="invoice-box">
-        <!-- HEADER -->
-        <table class="title-header">
-            <tr>
-                <td style="width: 60%;">
-                    <img src="{{asset('images/Logo IBEKAMI.png')}}" alt="Logo" style="height: 50px; margin-bottom: 2px;">
-                    <!-- Teks Tambahan di bawah Logo -->
-                    <div style="font-size: 11px; font-weight: bold; color: #555; line-height: 1.2; margin-bottom: 5px;">
-                        Ikhtiar Berkah, Ekonomi Kreatif <br>
-                        Asli Medan Indonesia (IBEKAMI)
-                    </div>
-                    <a href="https://ibekami.id" style="color:#007bff; text-decoration:none; font-weight:bold;">Ibekami.id</a>
-                </td>
-                <td class="company-info">
-                    <h1 style="color: #333;">INVOICE</h1>
-                    Nomor: <strong>#{{$penjualan->nomor_invoice}}</strong><br>
-                    Tanggal: {{$formatTanggal}}
-                </td>
-            </tr>
-        </table>
-
-        <!-- INFO PELANGGAN -->
-        <table class="info-section">
-            <tr>
-                <td style="width: 50%;">
-                    <div class="info-label">Ditagihkan Kepada (Bill To):</div>
-                    <div class="info-value">{{$penjualan->customer}}</div>
-                    <div class="address-value">
-                        <strong>{{$penjualan->perusahaan}}</strong><br>
-                        {{$penjualan->no_telepon}}
-                    </div>
-                </td>
-                <td style="width: 50%; text-align: right;">
-                    <div class="info-label">Dari (From):</div>
-                    <div class="info-value">{{ $toko }}</div>
-                    <div class="address-value">
-                        JL Setia Budi Komplek Setia Budi Point NO D-10<br>
-                        Kel. Tanjung Sari, Medan<br>
-                        www.ibekami.id
-                    </div>
-                </td>
-            </tr>
-        </table>
-
-        <!-- TABEL BARANG -->
-        <table class="items-table">
-            <thead>
-                <tr>
-                    <th style="width: 5%; text-align: center;">#</th>
-                    <th style="width: 50%;">Deskripsi Barang</th>
-                    <th style="width: 15%;">Harga</th>
-                    <th style="width: 10%; text-align: center;">Qty</th>
-                    <th style="width: 20%; text-align: right;">Jumlah</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($penjualan_barang as $index => $jual)
-                    @foreach ($barang[$index] as $item)
-                    <tr>
-                        <td style="text-align: center;">{{ $index + 1 }}</td>
-                        <td>
-                            <strong>{{$item->jenis_barang}}</strong><br>
-                            <span style="font-size: 11px; color: #777;">{{$jual->deskripsi_item}}</span>
-                        </td>
-                        <td>Rp.{{$hargaMod[$index]}}</td>
-                        <td style="text-align: center;">{{$jual->qty}}</td>
-                        <td style="text-align: right;">{{$jumlahHarga[$index]}}</td>
-                    </tr>
-                    @endforeach
-                @endforeach
-            </tbody>
-        </table>
-
-        <!-- TOTAL & PAYMENT INFO -->
-        <table class="total-section">
-            <tr>
-                <!-- KOLOM KIRI: INFO PEMBAYARAN -->
-                <td style="width: 60%; vertical-align: top;">
-                    @if (strpos($penjualan->jenis_pembayaran, 'Cash') === false)
-                        <div class="payment-info">
-                            <strong>MOHON TRANSFER KE:</strong><br>
-                            {!! nl2br(e($penjualan->norek_text)) !!}
-                        </div>
-                    @endif
-                </td>
-
-                <!-- KOLOM KANAN: HITUNGAN TOTAL -->
-                <td style="width: 40%; vertical-align: top;">
-                    <table class="total-table">
-                        <tr>
-                            <td class="label">Total Harga:</td>
-                            <td class="value">{{$totalHarga}}</td>
-                        </tr>
-
-                        @if (!is_null($penjualan->diskon) && $penjualan->potongan == 0)
-                        <tr>
-                            <td class="label">Diskon ({{$persen}}):</td>
-                            <td class="value">- {{$biayaLain}}</td>
-                        </tr>
-                        @endif
-
-                        @if (!is_null($penjualan->potongan) && $penjualan->potongan > 0)
-                        <tr>
-                            <td class="label">Spesial Diskon:</td>
-                            <td class="value">- {{$biayaLain}}</td>
-                        </tr>
-                        @endif
-
-                        @if ($penjualan->potongan == 0 && !is_null($penjualan->ppn))
-                        <tr>
-                            <td class="label">PPN ({{$persen}}):</td>
-                            <td class="value">{{$biayaLain}}</td>
-                        </tr>
-                        @endif
-
-                        <tr>
-                            <td class="label">Total Pembayaran:</td>
-                            <td class="value" style="font-size: 14px;">{{$totHargaMod}}</td>
-                        </tr>
-
-                        @if (!is_null($dp))
-                        <tr>
-                            <td class="label">DP / Panjar:</td>
-                            <td class="value">- Rp.{{$dp}}</td>
-                        </tr>
-                        @endif
-
-                        <tr>
-                            <td class="grand-total {{ $penjualan->status === 'Belum Lunas' ? 'grand-total-unpaid' : '' }} label" style="border-top: 2px solid #ddd;">Sisa Tagihan:</td>
-                            <td class="grand-total {{ $penjualan->status === 'Belum Lunas' ? 'grand-total-unpaid' : '' }} value" style="border-top: 2px solid #ddd;">Rp.{{$sisaBayarMod}}</td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-        </table>
-
-        <!-- FOOTER TANDA TANGAN -->
-        <table class="signature-section">
-            <tr>
-                <td style="width: 30%;">
-                    Diterima Oleh,<br>
-                    ( {{$penjualan->customer}} )
-                    <div class="sign-box" style="margin-top: 50px;"></div>
-                </td>
-                <td style="width: 40%;"></td>
-                <td style="width: 30%;">
-                    Medan, {{$formatTanggal}}<br>
-                    Hormat Kami,
-                    
-                    <!-- LOGIKA STEMPEL & TTD LUNAS -->
-                    @if($penjualan->status == 'Lunas')
-                        <div style="position: relative; height: 50px; margin-top: 0px; z-index: 1;">
-                            <!-- GAMBAR STEMPEL -->
-                            <img src="{{asset('images/Logo IBEKA ID.png')}}" style="position: absolute; top: 3px; left: 50%; transform: translateX(-75%); height: 60px; z-index: 1;" alt="Stempel Lunas">
-                            <!-- GAMBAR TTD -->
-                            <img src="{{asset('images/ttd.png')}}" style="position: absolute; top: 3px; left: 50%; transform: translateX(-20%); height: 65px; z-index: 2;" alt="TTD Lunas">
-                        </div>
-                        <div class="sign-box" style="margin-top: 25px;">
-                    @else
-                        <div class="sign-box">
-                    @endif
-                            @if($toko == 'Total Karya Berkah')
-                                Oky Irawan
-                            @else
-                                {{$admin}}
-                            @endif
-                        </div>
-                </td>
-            </tr>
-        </table>
-        
-        <!-- FOOTER WEBSITE -->
-        <div style="text-align: center; margin-top: 30px; font-size: 10px; color: #888; border-top: 1px solid #eee; padding-top: 10px;">
-            @if($toko == 'Total Karya Berkah')
-                Kunjungi website Kami, tokabe.id | Total Karya Berkah, member of KADIN INDONESIA.
-            @else
-                Terima Kasih telah mendukung UMKM kami, dengan senang hati melayani.
-            @endif
-        </div>
+  <div class="row">
+    <div class="column">
+      <b style="font-size: 16px;font-family: Bookman Old Style, sans-serif;
+  letter-spacing: 1px;
+  font-style: normal;
+  font-weight: 900;
+  color: #000000;">{{ $toko }}</b><br>
+      <div style="text-align:left; font-size: 12px;">
+        @if ($toko == 'Total Karya Berkah')
+        JL GARUDA NO 27B KOTA MEDAN 20122<br>
+        @endif
+        JL SETIA BUDI KOMP. SETIA BUDI POINT NO D-10<br>KOTA MEDAN 20132<br>
+        Wa: 08112272727
+      </div><br>
+      <br>
+      Nomor Invoice : {{$penjualan->nomor_invoice}}
+    </div>
+    <div class="column" style="text-align:right; font-size: 12px;">
+      <div style="position: absolute; left: 400px;top: 10px;">
+        Kepada :<br>
+        Perusahaan/Instansi :<br>
+        No. Telp :</div>
+    </div>
+    <div class="column" style="text-align:left;">
+      <div style="position: absolute; left:560px;top: 10px;">
+        <b style="font-size: 12px">{{$penjualan->customer}}</b><br>
+        <b>{{$penjualan->perusahaan}}</b><br>
+        <b>{{$penjualan->no_telepon}}</b>
+      </div>
     </div>
 
-    <!-- Script auto print jika dibuka di desktop, opsional -->
+    <table width="100%" style=" border-collapse:collapse; font-size: 12px; border-bottom: 1px solid black;">
+      <tr class="ts" style="border-bottom: 1px solid black;">
+        <th rowspan="1">No</th>
+        <th>Deskripsi Barang</th>
+        <th>Qty</th>
+        <th>Harga</th>
+        <th>Jumlah</th>
+      </tr>
+
+      @foreach ($penjualan_barang as $index => $jual)
+          @foreach ($barang[$index] as $item)
+          @php
+              $nomor = $index + 1;
+          @endphp
+          <tr id="rowHover" class="noborders">
+            <td width="1%" align="center"> {{$nomor}}</td>
+            <td width="25%" style="padding-left: 10px;"> {{$item->jenis_barang}} {{$jual->deskripsi_item}}</td>
+            <td width="5%" id="column_padding" align="center"> {{$jual->qty}} {{$jual->satuan}}</td>
+            <td width="10%" id="column_padding" align="center">Rp.{{$hargaMod[$index]}}</td>
+            <td width="10%" id="column_padding" align="center">Rp.{{$jumlahHarga[$index]}}</td>
+
+          </tr>
+          @endforeach
+      @endforeach
+
+    </table>
+    <div style="position: absolute; bottom: 220px; font-size: 10px">{{$norek}}</div>
+
+    <div class="column" style="text-align: left; font-size: 12px">
+      <div style="position: absolute; right: 180px; bottom: 65px;">
+        <b>Total</b><br>
+        <b>DP</b><br>
+        @if (!is_null($penjualan->diskon))
+            <b>Diskon</b><br>
+        @endif
+        @if (!is_null($penjualan->potongan))
+            <b>Potongan</b><br>
+        @endif
+        @if (!is_null($penjualan->ppn))
+            <b>PPN(11%)</b><br>
+        @endif
+        @if (is_null($penjualan->diskon) && is_null($penjualan->potongan) && is_null($penjualan->ppn))
+            <b></b><br>
+        @endif
+        <b>Sisa Bayar</b><br>
+      </div>
+    </div>
+
+    <div class="column" style="text-align: left; font-size: 12px">
+      <div style="position: absolute; right: 10px;bottom: 65px;">
+        <b>Rp.{{$totHargaMod}}</b><br>
+        <b>Rp.{{$dp}}</b><br>
+        <b>({{$biayaLain}})</b><br>
+        <b>Rp.{{$sisaBayarMod}}</b><br>
+      </div>
+    </div>
+
+    <div style="position: absolute; width: 240mm; left: 0; right: 0; margin-left: auto; margin-right: auto; bottom:5px; font-size: 10px">
+      @if($toko == 'Total Karya Berkah')
+      <center><i>Kunjungi website Kami, tokabe.id | Total Karya Berkah, member of KADIN INDONESIA.</i></center>
+      @else
+      <center><i>Terima Kasih telah mendukung UMKM kami, dengan senang hati melayani.</i></center>
+      @endif
+    </div>
+
+    <div class="row">
+      <div class="column" style="text-align: center; font-size: 12px">
+        <div style="position: absolute; left: 20px;bottom: 10px;">
+          <h4>diterima oleh</h4>
+          <p><br><br><br><br><br><br></p>
+          <h4>( {{$penjualan->customer}} )</h4>
+        </div>
+      </div>
+
+      <div class="column" style="text-align: center; font-size: 12px">
+        <div style="position: absolute; right:340px;bottom: 10px;">
+
+          <h4>Medan,{{$formatTanggal}}</h4>
+          
+          @if($penjualan->status == 'Lunas')
+            <div style="position: relative; height: 110px; margin-top: 10px; margin-bottom: 10px;">
+                <!-- GAMBAR STEMPEL -->
+                <img src="{{asset('images/Logo IBEKA ID.png')}}" style="position: absolute; top: 15px; left: 50%; transform: translateX(-70%); height: 90px; z-index: -2;" alt="Stempel Lunas">
+                
+                <!-- GAMBAR TTD -->
+                <img src="{{asset('images/ttd.png')}}" style="position: absolute; top: 0; left: 50%; transform: translateX(-30%); height: 90px; z-index: -1;" alt="TTD Lunas">
+            </div>
+          @else
+            <p><br><br><br><br><br><br></p>
+          @endif
+
+          @if($toko == 'Total Karya Berkah')
+          <h4>Oky Irawan</h4>
+          @else
+          <h4>{{$admin}}</h4>
+          @endif
+        </div>
+      </div>
+    </div>
+
     <script>
-        // Cek jika layar lebar (PC), otomatis print preview
-        if(window.innerWidth > 768) {
-             window.print();
-        }
+      window.load = print_d();
+
+      function print_d() {
+        window.print();
+      }
     </script>
 </body>
+
 </html>
