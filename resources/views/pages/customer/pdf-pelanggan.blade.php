@@ -63,9 +63,7 @@
            <th scope="col">Nama</th>
            <th scope="col">Perusahaan</th>
            <th scope="col">No Telepon</th>
-           @if($invoices)
            <th scope="col">Kategori</th>
-           @endif
           </tr>
          </thead>
         <tbody>
@@ -76,7 +74,11 @@
           <td>{{$cust->perusahaan}}</td>
           <td>{{$cust->no_telepon}}</td>
           @if($invoices)
-          <td>{{ $invoices->where('id', $cust->invoice)->first()->nama_invoice }}</td>
+          <td>{{ $invoices->nama_invoice }}</td>
+          @elseif(isset($allInvoices))
+          <td>{{ optional($allInvoices->where('id', $cust->invoice)->first())->nama_invoice ?? '-' }}</td>
+          @else
+          <td>-</td>
           @endif
          </tr>
         @endforeach

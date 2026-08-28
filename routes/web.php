@@ -213,6 +213,10 @@ Route::group(['middleware' => ['auth']], function () {
 
             // ROUTE DAFTAR CUSTOMER
             Route::get('/daftar-pelanggan', [CustomerController::class, 'index'])->name('daftar.pelanggan');
+            Route::get('/daftar-customer', [CustomerController::class, 'index'])->name('daftar.customer');
+            Route::get('/daftar-costumer', [CustomerController::class, 'index']);
+            Route::get('/customer', [CustomerController::class, 'index']);
+            Route::get('/costumer', [CustomerController::class, 'index']);
             Route::post('/pdf-pelanggan', [CustomerController::class, 'show'])->name('export.pelanggan');
 
             // ROUTE LAPORAN

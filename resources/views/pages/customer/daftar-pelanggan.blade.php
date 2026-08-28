@@ -95,7 +95,7 @@
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $cust->customer }}</td>
-                            <td>{{ $invoices->where('id', $cust->invoice)->first()->nama_invoice }}</td>
+                            <td>{{ optional($invoices->where('id', $cust->invoice)->first())->nama_invoice ?? '-' }}</td>
                             <td>{{ $cust->perusahaan }}</td>
                             <td>{{ $cust->no_telepon }}</td>
                         </tr>

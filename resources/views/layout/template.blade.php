@@ -273,7 +273,7 @@
                             </li>
                             
                              <li class="nav-item">
-                                <a class="nav-link menu-link" href="/daftar-spj">
+                                <a class="nav-link menu-link" href="{{ route('spj.index') }}">
                                 <i class="ri-mail-send-line"></i> <span data-key="t-invoices">SPJ</span>
                             </a>
                             </li>
@@ -289,19 +289,19 @@
                             <ul class="nav nav-sm flex-column">
 
                             <li class="nav-item">
-                                <a class="nav-link menu-link" href="/daftar-laporan">
+                                <a class="nav-link menu-link" href="{{ url('/daftar-laporan') }}">
                                 <i class="ri-file-chart-line"></i> <span data-key="t-invoices">Laporan Penjualan</span>
                             </a>
                             </li>
                             
                             <li class="nav-item">
-                                <a class="nav-link menu-link" href="/daftar-laporanPembelian">
+                                <a class="nav-link menu-link" href="{{ url('/daftar-laporanPembelian') }}">
                                   <i class="ri-calculator-line"></i><span data-key="t-invoices">Laporan Pembelian</span>
                             </a>
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link menu-link" href="/daftar-pelanggan">
+                                <a class="nav-link menu-link" href="{{ route('daftar.pelanggan') }}">
                                 <i class="ri-file-user-line"></i> <span data-key="t-invoices">Daftar Customer</span>
                             </a>
                             </li>
@@ -422,7 +422,7 @@
                             </li>
                             
                              <li class="nav-item">
-                                <a class="nav-link menu-link" href="/daftar-spj">
+                                <a class="nav-link menu-link" href="{{ route('spj.index') }}">
                                 <i class="ri-mail-send-line"></i> <span data-key="t-invoices">SPJ</span>
                             </a>
                             </li>

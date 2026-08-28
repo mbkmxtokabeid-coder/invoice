@@ -123,8 +123,8 @@ class CustomerController extends Controller
 
                 return Excel::download(new DaftarCustomerExport($kustomer, $selectedInvoice), 'Daftar Pelanggan ' . $namaInvoice. '.xlsx', \Maatwebsite\Excel\Excel::XLSX);
             } else {
-                
-            return view('pages.customer.pdf-pelanggan', compact('customers', 'invoices'));
+                $allInvoices = Invoice::all();
+                return view('pages.customer.pdf-pelanggan', compact('customers', 'invoices', 'allInvoices'));
             }
         }
 
