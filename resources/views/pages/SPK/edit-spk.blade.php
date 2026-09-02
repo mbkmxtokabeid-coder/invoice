@@ -56,6 +56,12 @@
                         <div class="col-lg-9 input-light mb-2">
                           <select class="form-select bg-light" name="pekerjaan" required>
                             <option disabled value="">Pilih Pekerjaan</option>
+                            @php
+                              $defaultPekerjaan = ['Plakat', 'Stempel', 'Tumbler', 'Cutting/Grafir', 'Print UV', 'Reklame', 'Cetakan Umum', 'Souvenir', 'Customized', 'Material'];
+                            @endphp
+                            @if(!in_array($spk->pekerjaan, $defaultPekerjaan) && !empty($spk->pekerjaan))
+                              <option value="{{ $spk->pekerjaan }}" selected>{{ $spk->pekerjaan }}</option>
+                            @endif
                             <option value="Plakat" {{ $spk->pekerjaan == 'Plakat' ? 'selected' : '' }}>Plakat</option>
                             <option value="Stempel" {{ $spk->pekerjaan == 'Stempel' ? 'selected' : '' }}>Stempel</option>
                             <option value="Tumbler" {{ $spk->pekerjaan == 'Tumbler' ? 'selected' : '' }}>Tumbler</option>
