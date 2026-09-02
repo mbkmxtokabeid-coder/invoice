@@ -120,7 +120,7 @@
                         </div>
                       </div>
                       {{-- End Input Nama Customer --}}
-                      {{-- Start Input Nama Customer --}}
+                      {{-- Start Input Nomor Telepon --}}
                       <div class="row col-lg-12 col-sm-6">
                         <label for="phone-number" class="col-lg-5 col-form-label">Nomor Telepon</label>
                         <div class="col-lg-7 input-light mb-2">
@@ -128,7 +128,16 @@
                             placeholder="xxxx xxxx xxxx" id="phone-number">
                         </div>
                       </div>
-                      {{-- End Input Nama Customer --}}
+                      {{-- End Input Nomor Telepon --}}
+                      {{-- Start Input Nama Penandatangan --}}
+                      <div class="row col-lg-12 col-sm-6">
+                        <label class="col-lg-5 col-form-label">Nama Penandatangan</label>
+                        <div class="col-lg-7 input-light mb-2">
+                          <input type="text" value="{{old('nama_penandatangan')}}" name="nama_penandatangan" class="form-control"
+                            placeholder="Nama di bawah tanggal (Contoh: Oky Irawan)">
+                        </div>
+                      </div>
+                      {{-- End Input Nama Penandatangan --}}
                     </div>
                     {{-- End Isi Form --}}
                   </div>

@@ -26,6 +26,7 @@ class SPBRequest extends FormRequest
             'customer' => 'required|min:2',
             'perusahaan' => 'required|min:2',
             'no_telp' => 'required|regex:/^[0-9\+\s-]+$/|min:2',
+            'nama_penandatangan' => 'nullable|string|max:255',
             'barang_id[]' => 'required',
             'deskripsi_item[]' => 'required',
             'satuan[]' => 'required',

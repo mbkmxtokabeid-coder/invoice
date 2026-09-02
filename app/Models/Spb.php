@@ -14,6 +14,7 @@ class Spb extends Model
         'customer',
         'perusahaan',
         'nomor_telepon',
+        'nama_penandatangan',
         'jumlah_item',
         'status',
     ];

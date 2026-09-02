@@ -51,6 +51,7 @@ class SpbController extends Controller
             'customer' => 'required',
             'perusahaan' => 'required',
             'no_telp' => 'required',
+            'nama_penandatangan' => 'nullable|string',
             'barang_id' => 'required|array',
             'barang_id.*' => 'required',
             'deskripsi_item' => 'required|array',
@@ -67,6 +68,7 @@ class SpbController extends Controller
             'customer' => $request->customer,
             'perusahaan' => $request->perusahaan,
             'nomor_telepon' => $request->no_telp,
+            'nama_penandatangan' => $request->nama_penandatangan,
             'jumlah_item' => $item,
             'status' => 'Belum diantar',
         ]);
@@ -149,6 +151,7 @@ class SpbController extends Controller
             'customer' => 'required',
             'perusahaan' => 'required',
             'no_telp' => 'required',
+            'nama_penandatangan' => 'nullable|string',
             'barang_id' => 'required|array',
             'barang_id.*' => 'required',
             'deskripsi_item' => 'required|array',
@@ -171,6 +174,7 @@ class SpbController extends Controller
         $spb->customer = $request->customer;
         $spb->perusahaan = $request->perusahaan;
         $spb->nomor_telepon = $request->no_telp;
+        $spb->nama_penandatangan = $request->nama_penandatangan;
         $spb->jumlah_item = $item;
         $spb->save();
         BarangSpb::where('spb', $id)->delete();

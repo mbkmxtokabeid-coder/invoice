@@ -141,8 +141,10 @@ Dokumen-dokumen / barang-barang tersebut telah diterima dengan baik.</div>
 
     <h4>Medan, {{$formatTanggal}}</h4>
     <p><br><br></p>
-    @if($spb->nama_spb == 1)
-   <h4 style="text-decoration: underline; text-decoration-style: dashed">( {{auth()->user()->nama}} )</h4>
+    @if(!empty($spb->nama_penandatangan))
+    <h4 style="text-decoration: underline; text-decoration-style: dashed">( {{$spb->nama_penandatangan}} )</h4>
+    @elseif($spb->nama_spb == 1)
+   <h4 style="text-decoration: underline; text-decoration-style: dashed">( {{auth()->user()->nama ?? 'Admin'}} )</h4>
    @else
    <h4 style="text-decoration: underline; text-decoration-style: dashed">( Oky Irawan )</h4>
    @endif
