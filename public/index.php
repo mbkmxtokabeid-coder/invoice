@@ -1,5 +1,7 @@
 <?php
 
+error_reporting(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED);
+
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Http\Request;
 
@@ -16,7 +18,7 @@ define('LARAVEL_START', microtime(true));
 |
 */
 
-if (file_exists($maintenance = __DIR__.'/../../storage/framework/maintenance.php')) {
+if (file_exists($maintenance = __DIR__.'/../storage/framework/maintenance.php')) {
     require $maintenance;
 }
 //$app->bind('path.public', function() { return __DIR__; });
@@ -32,7 +34,7 @@ if (file_exists($maintenance = __DIR__.'/../../storage/framework/maintenance.php
 |
 */
 
-require __DIR__.'/../../invoiceib/vendor/autoload.php';
+require __DIR__.'/../vendor/autoload.php';
 
 /*
 |--------------------------------------------------------------------------
@@ -45,7 +47,7 @@ require __DIR__.'/../../invoiceib/vendor/autoload.php';
 |
 */
 
-$app = require_once __DIR__.'/../../invoiceib/bootstrap/app.php';
+$app = require_once __DIR__.'/../bootstrap/app.php';
 
 $kernel = $app->make(Kernel::class);
 

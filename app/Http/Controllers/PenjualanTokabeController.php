@@ -119,9 +119,9 @@ class PenjualanTokabeController extends Controller
         // Konversi bulan ke angka Romawi
         $romawiBulan = $this->convertToRoman((int)$month);
 
-        // Ambil invoice terakhir di bulan dan tahun yang sama
-        $lastInvoice = PenjualanTokabe::whereYear('created_at', $year)
-            ->whereMonth('created_at', $month)
+        // Ambil invoice terakhir di bulan dan tahun yang sama berdasarkan tgl_penjualan
+        $lastInvoice = PenjualanTokabe::whereYear('tgl_penjualan', $year)
+            ->whereMonth('tgl_penjualan', $month)
             ->orderByRaw("CAST(SUBSTRING_INDEX(nomor_invoice, '/', 1) AS UNSIGNED) DESC")
             ->pluck('nomor_invoice')
             ->first();
@@ -177,7 +177,7 @@ class PenjualanTokabeController extends Controller
     // --- END VALIDASI ---
 
     $invoice = Invoice::where('nama_invoice', $request->inv)->first();
-    $nmr_inv = $this->generateNoInvoice();
+    $nmr_inv = $this->generateNoInvoice($request->tgl_jual);
 
     $status = ($request->jns_pem == 'Cash Lunas' || $request->jns_pem == 'Transfer Lunas') ? 'Lunas' : 'Belum Lunas';
     $tanggalPenjualan = $request->tgl_jual . ":" . $request->jam;
