@@ -77,11 +77,55 @@
 }
 </style>
 
-<style>
-  .no-caret::after {
-    display: none !important;
-  }
-</style>
+  <style>
+    .no-caret::after {
+      display: none !important;
+    }
+    #scroll-horizontal {
+      width: 100% !important;
+    }
+    #scroll-horizontal th,
+    #scroll-horizontal td {
+      vertical-align: middle;
+    }
+    #scroll-horizontal .col-pekerjaan {
+      min-width: 240px !important;
+      max-width: 360px !important;
+      white-space: normal !important;
+      word-break: break-word !important;
+    }
+    #scroll-horizontal .col-pelanggan {
+      min-width: 110px !important;
+      max-width: 160px !important;
+      white-space: normal !important;
+      word-break: break-word !important;
+    }
+    #scroll-horizontal .col-jenis {
+      min-width: 90px !important;
+      max-width: 140px !important;
+      white-space: normal !important;
+      word-break: break-word !important;
+    }
+    #scroll-horizontal .col-timeline {
+      min-width: 130px !important;
+      max-width: 180px !important;
+      white-space: normal !important;
+      word-break: break-word !important;
+      font-size: 13px;
+    }
+    .item-pekerjaan {
+      line-height: 1.45;
+    }
+    .item-pekerjaan-multi {
+      display: block;
+      padding: 3px 0;
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.15);
+    }
+    .item-pekerjaan-multi:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+  </style>
 
 @endsection
 @extends('layout.template')
@@ -209,25 +253,25 @@
               </div>
               <div class="card-body">
                 {{-- <div class="table-responsive table-card"> --}}
-                  <table class="table table-nowrap dt-responsive align-middle table-hover table-bordered mb-0" id="scroll-horizontal" >
+                  <table class="table dt-responsive align-middle table-hover table-bordered mb-0" id="scroll-horizontal" >
                     <thead>
                       <tr class="text-muted text-uppercase">
-                        <th scope="col">No.</th>
-                         <th scope="col" style="width: 12%;" class="text-center">Status</th>
+                        <th scope="col" style="width: 4%;" class="text-center text-nowrap">No.</th>
+                        <th scope="col" style="width: 12%;" class="text-center text-nowrap">Status</th>
                         @if (Auth::user()->role == 'Admin' || Auth::user()->role == 'Pemilik')
                        
-                        <th scope="col">Nomor Invoice</th>
-                        <th scope="col" >Tanggal SPK</th>
+                        <th scope="col" class="text-nowrap">Nomor Invoice</th>
+                        <th scope="col" class="text-nowrap">Tanggal SPK</th>
                         @endif
                         
-                        <th scope="col">Pekerjaan</th>
-                        <th scope="col" class="text-center">Pelanggan</th>
-                        <th scope="col" style="width: 8%;">Jenis</th>
-                        <th scope="col">Target Penyelesaian</th>
-                        <th scope="col"class="text-center">Timeline</th>
-                        <th scope="col" style="width: 10%;" class="text-center">Respon</th>
+                        <th scope="col" class="col-pekerjaan">Pekerjaan</th>
+                        <th scope="col" class="text-center col-pelanggan">Pelanggan</th>
+                        <th scope="col" class="col-jenis">Jenis</th>
+                        <th scope="col" class="text-center text-nowrap">Target Penyelesaian</th>
+                        <th scope="col" class="text-center col-timeline">Timeline</th>
+                        <th scope="col" style="width: 10%;" class="text-center text-nowrap">Respon</th>
 
-                        <th scope="col" class="text-center" style="width: 12%;">Aksi</th>
+                        <th scope="col" class="text-center text-nowrap" style="width: 8%;">Aksi</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -237,12 +281,12 @@
                         @elseif ($surat->color == 'purple') class="text-success"
                         @elseif ($surat->status_kerja == 'Selesai' || $surat->status_spk == 'Selesai') class="text-primary"
                         @endif>
-                        <td>
+                        <td class="text-center text-nowrap">
                           <p class="fw-medium mb-0">{{$loop->iteration}}</p>
                         </td>
                         
                         
-                        <td class="text-center">
+                        <td class="text-center text-nowrap">
                   @if (Auth::check())
                     {{-- Jika role Admin --}}
                     @if (Auth::user()->role === 'Admin' && $surat->timeline_produksi)
@@ -297,34 +341,60 @@
                         
                         @if (Auth::user()->role == 'Admin' || Auth::user()->role == 'Pemilik')
                        
-                        <td>
+                        <td class="text-nowrap">
                           <p class="fw-medium mb-0 text-center">{{$surat->nomor_invoice}}</p>
                         </td>
-                        <td>
+                        <td class="text-nowrap">
                           <p class="fw-medium mb-0">{{$surat->tgl_mulai}}</p>
                         </td>
                         @endif
 
-                        <td>
-                          <p class="fw-medium mb-0">{{$surat->pekerjaan}}</p>
+                        <td class="col-pekerjaan">
+                          <div class="fw-medium mb-0 item-pekerjaan">
+                            @if(strpos($surat->pekerjaan, '), ') !== false)
+                              @php
+                                $items = explode('), ', $surat->pekerjaan);
+                              @endphp
+                              @foreach($items as $index => $itemText)
+                                <div class="item-pekerjaan-multi">
+                                  <i class="ri-checkbox-blank-circle-fill text-muted me-1" style="font-size: 6px; vertical-align: middle;"></i>
+                                  {{ $itemText }}{{ !$loop->last ? ')' : '' }}
+                                </div>
+                              @endforeach
+                            @else
+                              <p class="mb-0">{{$surat->pekerjaan}}</p>
+                            @endif
+                          </div>
                         </td>
 
-                        <td>
+                        <td class="col-pelanggan">
                           <p class="fw-medium text-center mb-0">{{$surat->customer}}</p>
                         </td>
-                        <td>
+                        <td class="col-jenis">
                           <p class="fw-medium mb-0">{{$surat->jenis_bahan}}</p>
                         </td>
-                        <td>
-                          <p class="fw-medium mb-0 text-center">{{$surat->target_selesai}}</p>
+                        <td class="text-center text-nowrap" style="font-size: 13px;">
+                          @php
+                            $tglTarget = $surat->target_selesai ? \Carbon\Carbon::parse($surat->target_selesai) : null;
+                          @endphp
+                          @if($tglTarget)
+                            <div>{{ $tglTarget->format('d/m/Y') }}</div>
+                            <small class="text-muted">{{ $tglTarget->format('H:i') }}</small>
+                          @else
+                            -
+                          @endif
                         </td>
-                        <td>
-                          <p id="timeline-{{$surat->id}}" data-spk-id="{{$surat->id}}" class="timeline fw-medium mb-0 text-center">{{$surat->timeline}}</p>
-                          <p class="timeline fw-medium mb-0 text-center">{{$surat->timeline_design}}</p>
-                          <p class="timeline fw-medium mb-0 text-center">{{$surat->timeline_produksi}}</p>
+                        <td class="text-center col-timeline">
+                          <div id="timeline-{{$surat->id}}" data-spk-id="{{$surat->id}}" class="timeline fw-medium mb-0">{{$surat->timeline}}</div>
+                          @if($surat->timeline_design)
+                            <small class="timeline text-muted d-block">{{$surat->timeline_design}}</small>
+                          @endif
+                          @if($surat->timeline_produksi)
+                            <small class="timeline text-muted d-block">{{$surat->timeline_produksi}}</small>
+                          @endif
                         </td>
 
-                        <td class="text-center">
+                        <td class="text-center text-nowrap">
                           @if (Auth::check() && Auth::user()->role == 'Produksi')
                           <div class="dropdown">
                             @if ($surat->status_kerja === 'Selesai')
@@ -374,7 +444,7 @@
                           @endif
                         </td>
 
-                        <td>
+                        <td class="text-center text-nowrap">
                           <div class="dropdown text-center">
                             <button class="btn btn-soft-secondary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="las la-ellipsis-h align-middle fs-18"></i>
