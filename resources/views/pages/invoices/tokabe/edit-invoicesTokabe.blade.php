@@ -229,7 +229,7 @@
 
                                  <!-- TEMPLATE TERSEMBUNYI UNTUK OPTION MATERIAL DAN BARANG -->
                                  <div id="template-options-material" style="display: none;">
-                                    <option value="">-- Pilih Material (Opsional) --</option>
+                                    <option value="">-- Pilih Material --</option>
                                     @if(isset($materials))
                                       @foreach ($materials as $mat)
                                           <option value="{{ $mat->id }}" data-stok="{{ $mat->stok }}" data-satuan="{{ $mat->satuan }}">
@@ -351,7 +351,7 @@
                                                  <div class="col-md-4">
                                                      <label class="form-label text-muted mb-1" style="font-size: 0.8rem;">Pilih Material</label>
                                                      <select class="form-select form-select-sm material-select" name="material_id[{{$index}}][]">
-                                                         <option value="">-- Pilih Material (Opsional) --</option>
+                                                         <option value="">-- Pilih Material --</option>
                                                          @if(isset($materials))
                                                              @foreach ($materials as $mat)
                                                                  @php
@@ -699,13 +699,49 @@
         }
     });
 
+    // 1. BUAT MAPPING MATERIAL REQUIRED DI JAVASCRIPT
+    const isMaterialRequiredMap = {};
+    @if(isset($jenisBarang))
+        @foreach ($jenisBarang as $jns)
+            isMaterialRequiredMap["{{$jns->id}}"] = "{{$jns->is_material_required ?? 0}}";
+        @endforeach
+    @endif
+
+    function updateMaterialVisibility($select) {
+        var selectedBarangId = $select.val();
+        var td = $select.closest('td');
+        var materialContainers = td.find('.materials-container, [class*="material-container-"], .material-row');
+        var tambahBtn = td.find('.add-material, .btn-tambah-material');
+        var isNonMaterial = (isMaterialRequiredMap[selectedBarangId] == "1"); // ON = Non-Material
+
+        if (isNonMaterial) {
+            materialContainers.hide();
+            tambahBtn.hide();
+            materialContainers.find('select.material-select').val('');
+            materialContainers.find('input.material-panjang, input.material-lebar, input.material-qty').val('');
+        } else {
+            materialContainers.show();
+            tambahBtn.show();
+        }
+    }
+
+    $(document).on('change', 'select[name^="barang_id"]', function() {
+        updateMaterialVisibility($(this));
+    });
+
+    setTimeout(function() {
+        $('select[name^="barang_id"]').each(function() {
+            updateMaterialVisibility($(this));
+        });
+    }, 200);
+
     // Script Tambah Form Row Material Secara Dinamis dalam 1 Barang
     $(document).on('click', '.btn-tambah-material', function() {
         var index = $(this).data('index');
         var container = $(this).closest('td').find('.material-container-' + index);
         
         var materialOptionsDOM = document.getElementById('template-options-material');
-        var materialOptions = materialOptionsDOM ? materialOptionsDOM.innerHTML : '<option value="">-- Pilih Material (Opsional) --</option>';
+        var materialOptions = materialOptionsDOM ? materialOptionsDOM.innerHTML : '<option value="">-- Pilih Material --</option>';
 
         var newRow = `
             <div class="row mt-2 material-row border-top pt-2 position-relative">
@@ -756,7 +792,7 @@
         
         // 1. Siapkan Opsi Material (dari PHP ke JS)
         var materialOptionsDOM = document.getElementById('template-options-material');
-        var materialOptions = materialOptionsDOM ? materialOptionsDOM.innerHTML : '<option value="">-- Pilih Material (Opsional) --</option>';
+        var materialOptions = materialOptionsDOM ? materialOptionsDOM.innerHTML : '<option value="">-- Pilih Material --</option>';
 
         // 2. Siapkan Opsi Item Barang (dari PHP ke JS)
         var itemOptionsDOM = document.getElementById('template-options-barang');

@@ -14,7 +14,7 @@ class BarangController extends Controller
     {
         // Menambahkan filter is_active = 1
         $barang = Barang::where('is_active', 1)
-            ->select('id', 'jenis_barang', 'kode_barang', 'kategori_id', 'stok', 'harga_modal', 'harga_jual', 'created_at', 'updated_at')
+            ->select('id', 'jenis_barang', 'kode_barang', 'kategori_id', 'stok', 'harga_modal', 'harga_jual', 'is_material_required', 'created_at', 'updated_at')
             ->get()
             ->map(function ($item) {
                 $item->stok = max(0, $item->stok);
@@ -217,5 +217,21 @@ class BarangController extends Controller
             $totalPotensiProfit->total_profit /= 1000000;
         }
         return response()->json($totalPotensiProfit);
+    }
+
+    public function toggleMaterial(Request $request, $id)
+    {
+        $barang = Barang::find($id);
+        if (!$barang) {
+            return response()->json(['status' => 'error', 'message' => 'Barang tidak ditemukan'], 404);
+        }
+        $barang->is_material_required = $request->input('is_material_required', 0);
+        $barang->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Status material berhasil diperbarui',
+            'is_material_required' => $barang->is_material_required
+        ]);
     }
 }

@@ -171,6 +171,7 @@
                                 <th>Stok</th>
                                 <th>Harga Modal</th>
                                 <th>Harga Jual</th>
+                                <th>Material</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -186,6 +187,11 @@
                               <td>{{$brg->stok}}</td>
                               <td id="harga-modal">Rp. {{$brg->formattedModal}}</td>
                               <td id="harga-jual">Rp. {{$brg->formattedJual}}</td>
+                              <td>
+                                <div class="form-check form-switch text-center d-flex justify-content-center">
+                                  <input class="form-check-input toggle-material-switch" type="checkbox" role="switch" data-id="{{$brg->id}}" {{$brg->is_material_required ? 'checked' : ''}} style="cursor: pointer; transform: scale(1.3);">
+                                </div>
+                              </td>
                                 <td>
                                   <div class="dropdown text-center">
                                     <button class="btn btn-soft-secondary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -226,12 +232,42 @@
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
 <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
-<!--<script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>-->
-
-<!--<script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>-->
 
 <script src="{{asset('js/pages/datatables.init.js')}}"></script>
-<!--<script src="{{asset('libs/cleave.js/cleave.min.js')}}"></script>-->
-<!--<script src="{{asset('js/halaman/form-masks.js')}}"></script>-->
 <script src="{{asset('js/halaman/barang.js')}}"></script>
+<script>
+  $(document).on('change', '.toggle-material-switch', function() {
+      var barangId = $(this).data('id');
+      var isRequired = $(this).is(':checked') ? 1 : 0;
+      var $switch = $(this);
+
+      $.ajax({
+          url: '/barang/toggle-material/' + barangId,
+          type: 'POST',
+          data: {
+              _token: '{{ csrf_token() }}',
+              is_material_required: isRequired
+          },
+          success: function(response) {
+              if (response.status === 'success') {
+                  const Toast = Swal.mixin({
+                      toast: true,
+                      position: 'top-end',
+                      showConfirmButton: false,
+                      timer: 2000,
+                      timerProgressBar: true
+                  });
+                  Toast.fire({
+                      icon: 'success',
+                      title: response.message
+                  });
+              }
+          },
+          error: function() {
+              alert('Gagal memperbarui status material');
+              $switch.prop('checked', !isRequired);
+          }
+      });
+  });
+</script>
 @endsection

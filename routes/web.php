@@ -178,6 +178,7 @@ Route::group(['middleware' => ['auth']], function () {
             Route::delete('deleteBarang/{id}', [BarangController::class, 'destroy']);
             Route::get('/edit-stok/{id}', [BarangController::class, 'edit']);
             Route::put('/update-stok/{id}', [BarangController::class, 'update']);
+            Route::post('/barang/toggle-material/{id}', [BarangController::class, 'toggleMaterial'])->name('barang.toggle_material');
             
             // ROUTE MATERIAL
             Route::get('listMaterial', [MaterialController::class, 'index'])->name('listMaterial');

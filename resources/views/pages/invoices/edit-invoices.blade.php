@@ -637,6 +637,42 @@
         }
     });
 
+    // 1. BUAT MAPPING MATERIAL REQUIRED DI JAVASCRIPT
+    const isMaterialRequiredMap = {};
+    @if(isset($jenisBarang))
+        @foreach ($jenisBarang as $jns)
+            isMaterialRequiredMap["{{$jns->id}}"] = "{{$jns->is_material_required ?? 0}}";
+        @endforeach
+    @endif
+
+    function updateMaterialVisibility($select) {
+        var selectedBarangId = $select.val();
+        var td = $select.closest('td');
+        var materialContainers = td.find('.materials-container, [class*="material-container-"], .material-row');
+        var tambahBtn = td.find('.add-material, .btn-tambah-material');
+        var isNonMaterial = (isMaterialRequiredMap[selectedBarangId] == "1"); // ON = Non-Material
+
+        if (isNonMaterial) {
+            materialContainers.hide();
+            tambahBtn.hide();
+            materialContainers.find('select.material-select').val('');
+            materialContainers.find('input.material-panjang, input.material-lebar, input.material-qty').val('');
+        } else {
+            materialContainers.show();
+            tambahBtn.show();
+        }
+    }
+
+    $(document).on('change', 'select[name^="barang_id"]', function() {
+        updateMaterialVisibility($(this));
+    });
+
+    setTimeout(function() {
+        $('select[name^="barang_id"]').each(function() {
+            updateMaterialVisibility($(this));
+        });
+    }, 200);
+
     // Script Tambah Form Row Material Secara Dinamis dalam 1 Barang
     $(document).on('click', '.btn-tambah-material', function() {
         var index = $(this).data('index');
