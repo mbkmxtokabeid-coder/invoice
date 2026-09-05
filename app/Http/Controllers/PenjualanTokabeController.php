@@ -559,6 +559,37 @@ class PenjualanTokabeController extends Controller
             $penjualan->potongan = null;
         }
         
+        // Server-side recalculation guard
+        if ($jenisPotongan == 'PPN' && $nilai_potongan > 0) {
+            $expectedPem = $tot_harga + round($tot_harga * ($nilai_potongan / 100));
+            if ($tot_pem <= 0 || abs($tot_pem - $expectedPem) > 5) {
+                $tot_pem = $expectedPem;
+            }
+        } elseif ($jenisPotongan == 'PPH' && $nilai_potongan > 0) {
+            $expectedPem = $tot_harga - round($tot_harga * ($nilai_potongan / 100));
+            if ($tot_pem <= 0 || abs($tot_pem - $expectedPem) > 5) {
+                $tot_pem = max(0, $expectedPem);
+            }
+        } elseif ($jenisPotongan == 'Diskon' && $nilai_potongan > 0) {
+            $expectedPem = $tot_harga - round($tot_harga * ($nilai_potongan / 100));
+            if ($tot_pem <= 0 || abs($tot_pem - $expectedPem) > 5) {
+                $tot_pem = max(0, $expectedPem);
+            }
+        } elseif ($jenisPotongan == 'Potongan' && $nilai_potongan > 0) {
+            $expectedPem = $tot_harga - $nilai_potongan;
+            if ($tot_pem <= 0 || abs($tot_pem - $expectedPem) > 5) {
+                $tot_pem = max(0, $expectedPem);
+            }
+        } elseif ($tot_pem <= 0) {
+            $tot_pem = $tot_harga;
+        }
+
+        if ($status == 'Lunas') {
+            $sisa_pem = 0;
+        } else {
+            $sisa_pem = max(0, $tot_pem - $dp);
+        }
+
         $penjualan->total_pembayaran = $tot_pem;
         $penjualan->sisa_pembayaran = $sisa_pem;
         $penjualan->save();

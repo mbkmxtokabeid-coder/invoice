@@ -135,7 +135,7 @@
       
       <div class="signatures">
        <div class="col-3">
-        <p class="text-center">Ikhtiar Berkah, {{$tanggal}}</p>
+        <p class="text-center">{{ !empty($namaPerusahaan) ? $namaPerusahaan : 'Ikhtiar Berkah' }}, {{$tanggal}}</p>
 
         <p class="text-center">Disiapkan Oleh,</p>
         <p class="text-center">&nbsp;</p> <!-- Gunakan paragraf kosong untuk membuat jarak -->

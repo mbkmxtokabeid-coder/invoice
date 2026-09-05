@@ -543,7 +543,7 @@
                                     <label for="totalPembayaran" class="form-label col-form-label col-form-label-md">Total Pembayaran</label>
                                     </div>
                                       <div class="col-lg-6">
-                                        <input type="text" class="form-control bg-light border-0" rows="1" placeholder="Total Pembayaran" id="total-pembelian" name="tot_pem" value="{{ old('tot_pem') }}" readonly>
+                                        <input type="text" class="form-control bg-light border-0" rows="1" placeholder="Total Pembayaran" id="total-pembelian" name="tot_pem" value="{{ old('tot_pem', number_format($inv->total_pembayaran)) }}" readonly>
                                       </div>
                                     </div>
                                     <div class="row mb-1">

@@ -33,7 +33,7 @@
       <div class="row col-lg-6 mt-2">
         <h5 id="changePerusahaan">Laporan Penjualan </h5>
       </div>
-      <form action="/invoice/laporan-export" method="POST">
+      <form action="/invoice/laporan-export" method="POST" target="_blank">
       @csrf
       <div class="row col-lg-12 col-sm-6 mt-3">
       <label class="col-lg-2 col-form-label" >Perusahaan</label>

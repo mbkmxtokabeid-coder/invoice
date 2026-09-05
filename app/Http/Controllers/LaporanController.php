@@ -48,6 +48,64 @@ class LaporanController extends Controller
 
         return view('pages.laporan.daftar-laporan', compact('katInv', 'namaBulan', 'daftarTahun','perusahaan'));
     }
+    /**
+     * Mempersiapkan data relasi item dan format PPN/Diskon/Potongan untuk laporan PDF
+     */
+    private function preparePenjualansForPdf($penjualans)
+    {
+        foreach ($penjualans as $inv) {
+            $inv->formatted_tgl_penjualan = Carbon::parse($inv->tgl_penjualan)->locale('id')->isoFormat('DD MMMM YYYY');
+            $inv->formatted_total_pembayaran = 'Rp.' . number_format($inv->total_pembayaran, 0, ',', ',');
+            $inv->formatted_total_harga = 'Rp.' . number_format($inv->total_harga, 0, ',', ',');
+
+            $hasPpn = !empty($inv->ppn) && (float)$inv->ppn > 0;
+            $hasDiskon = !empty($inv->diskon) && (float)$inv->diskon > 0;
+            $hasPotongan = !empty($inv->potongan) && (float)$inv->potongan > 0;
+            $hasPph = !empty($inv->pph) && (float)$inv->pph > 0;
+
+            $autoPpnPersen = 0;
+            if (!$hasPpn && !$hasDiskon && !$hasPotongan && !$hasPph && $inv->total_pembayaran > $inv->total_harga && $inv->total_harga > 0) {
+                $autoPpnNominal = $inv->total_pembayaran - $inv->total_harga;
+                $autoPpnPersen = round(($autoPpnNominal / $inv->total_harga) * 100);
+                $hasPpn = true;
+            }
+
+            if ($hasDiskon) {
+                $inv->lain = 'dsc ' . $inv->diskon . '%';
+            } elseif ($hasPpn) {
+                $ppnVal = !empty($inv->ppn) ? $inv->ppn : $autoPpnPersen;
+                $inv->lain = 'ppn ' . $ppnVal . '%';
+            } elseif ($hasPph) {
+                $inv->lain = 'pph ' . $inv->pph . '%';
+            } elseif ($hasPotongan) {
+                $inv->lain = 'pot Rp.' . number_format($inv->potongan, 0, ',', '.');
+            } else {
+                $inv->lain = '-';
+            }
+
+            // --- INJEKSI KODE RELASI ITEM ---
+            if (isset($inv->id)) {
+                $isTokabe = $inv instanceof \App\Models\PenjualanTokabe;
+                $tableRelasi = $isTokabe ? 'penjualan_tokabe_barang' : 'penjualan_barang';
+                $fkColumn = $isTokabe ? 'penjualan_tokabe_id' : 'penjualan_id';
+
+                try {
+                    $inv->items = DB::table($tableRelasi)
+                        ->join('barang', $tableRelasi . '.barang_id', '=', 'barang.id')
+                        ->where($tableRelasi . '.' . $fkColumn, $inv->id)
+                        ->whereNull($tableRelasi . '.deleted_at')
+                        ->select('barang.jenis_barang', $tableRelasi . '.deskripsi_item', $tableRelasi . '.qty', $tableRelasi . '.satuan')
+                        ->get();
+                } catch (\Exception $e) {
+                    $inv->items = collect([]);
+                }
+            } else {
+                $inv->items = collect([]);
+            }
+        }
+        return $penjualans;
+    }
+
     // Export ByDate (Custom Date)
     public function exportByDate(Request $request)
     {
@@ -62,7 +120,8 @@ class LaporanController extends Controller
             Alert::error('Mohon isi Nama Perusahaan terlebih dahulu');
             return redirect('/daftar-laporan');
         }
-        $namaPerusahaan = Perusahaan::where('id', $request->perusahaan)->first()->nama_perusahaan;
+        $perusahaanModel = Perusahaan::find($request->perusahaan);
+        $namaPerusahaan = $perusahaanModel ? $perusahaanModel->nama_perusahaan : '';
         if (strpos($tgl_custom, ' to ') !== false) {
             // Jika terdapat kata "to" dalam string
             $tglArray = explode(' to ', $tgl_custom);
@@ -73,69 +132,41 @@ class LaporanController extends Controller
             $tglMulai = date('Y-m-d', strtotime(trim($tgl_custom)));
         }
 
-
         if ($namaPerusahaan == 'Total Karya Berkah') {
-            if ($request->invoice == 'semua') {
-                // dd($tglMulai, $tglAkhir);
-                if (is_null($tglAkhir)) {
-                    $penjualans = PenjualanTokabe::whereDate('tgl_penjualan', $tglMulai)->get();
-                    $tglMulaiFormat = Carbon::parse($tglMulai)->isoFormat('DD MMMM YYYY');
-
-                    $grandTotal = $penjualans->sum('total_pembayaran');
-                } else {
-                    $penjualans = PenjualanTokabe::whereBetween('tgl_penjualan', [$tglMulai, $tglAkhir])->get();
-                    $tglMulaiFormat = Carbon::parse($tglMulai)->isoFormat('DD MMMM YYYY');
-                    $tglAkhirFormat = Carbon::parse($tglAkhir)->isoFormat('DD MMMM YYYY');
-
-                    $grandTotal = $penjualans->sum('total_pembayaran');
-                }
+            $query = PenjualanTokabe::query();
+            if (is_null($tglAkhir)) {
+                $query->whereDate('tgl_penjualan', $tglMulai);
+                $tglMulaiFormat = Carbon::parse($tglMulai)->isoFormat('DD MMMM YYYY');
             } else {
-                if (is_null($tglAkhir)) {
-                    $penjualans = PenjualanTokabe::whereDate('tgl_penjualan', $tglMulai)->where('invoice', $request->invoice)->get();
-                    $tglMulaiFormat = Carbon::parse($tglMulai)->isoFormat('DD MMMM YYYY');
-
-                    $grandTotal = $penjualans->sum('total_pembayaran');
-                } else {
-                    $penjualans = PenjualanTokabe::whereBetween('tgl_penjualan', [$tglMulai, $tglAkhir])->where('invoice', $request->invoice)->get();
-                    $tglMulaiFormat = Carbon::parse($tglMulai)->isoFormat('DD MMMM YYYY');
-                    $tglAkhirFormat = Carbon::parse($tglAkhir)->isoFormat('DD MMMM YYYY');
-
-                    $grandTotal = $penjualans->sum('total_pembayaran');
-                }
+                $query->whereBetween('tgl_penjualan', [$tglMulai . ' 00:00:00', $tglAkhir . ' 23:59:59']);
+                $tglMulaiFormat = Carbon::parse($tglMulai)->isoFormat('DD MMMM YYYY');
+                $tglAkhirFormat = Carbon::parse($tglAkhir)->isoFormat('DD MMMM YYYY');
             }
+
+            if ($request->invoice != 'semua' && !empty($request->invoice)) {
+                $query->where('invoice', $request->invoice);
+            }
+            $penjualans = $query->get();
+            $grandTotal = $penjualans->sum('total_pembayaran');
         } else {
-            if ($request->invoice == 'semua') {
-                // dd($tglMulai, $tglAkhir);
-                if (is_null($tglAkhir)) {
-                    $penjualans = Penjualan::whereDate('tgl_penjualan', $tglMulai)->get();
-                    $tglMulaiFormat = Carbon::parse($tglMulai)->isoFormat('DD MMMM YYYY');
-
-                    $grandTotal = $penjualans->sum('total_pembayaran');
-                } else {
-                    $penjualans = Penjualan::whereBetween('tgl_penjualan', [$tglMulai, $tglAkhir])->get();
-                    $tglMulaiFormat = Carbon::parse($tglMulai)->isoFormat('DD MMMM YYYY');
-                    $tglAkhirFormat = Carbon::parse($tglAkhir)->isoFormat('DD MMMM YYYY');
-
-                    $grandTotal = $penjualans->sum('total_pembayaran');
-                }
+            $query = Penjualan::query()->where('status', '<>', 'Batal');
+            if (is_null($tglAkhir)) {
+                $query->whereDate('tgl_penjualan', $tglMulai);
+                $tglMulaiFormat = Carbon::parse($tglMulai)->isoFormat('DD MMMM YYYY');
             } else {
-                if (is_null($tglAkhir)) {
-                    $penjualans = Penjualan::whereDate('tgl_penjualan', $tglMulai)->where('invoice', $request->invoice)->get();
-                    $tglMulaiFormat = Carbon::parse($tglMulai)->isoFormat('DD MMMM YYYY');
-
-                    $grandTotal = $penjualans->sum('total_pembayaran');
-                } else {
-                    $penjualans = Penjualan::whereBetween('tgl_penjualan', [$tglMulai, $tglAkhir])->where('invoice', $request->invoice)->get();
-                    $tglMulaiFormat = Carbon::parse($tglMulai)->isoFormat('DD MMMM YYYY');
-                    $tglAkhirFormat = Carbon::parse($tglAkhir)->isoFormat('DD MMMM YYYY');
-
-                    $grandTotal = $penjualans->sum('total_pembayaran');
-                }
+                $query->whereBetween('tgl_penjualan', [$tglMulai . ' 00:00:00', $tglAkhir . ' 23:59:59']);
+                $tglMulaiFormat = Carbon::parse($tglMulai)->isoFormat('DD MMMM YYYY');
+                $tglAkhirFormat = Carbon::parse($tglAkhir)->isoFormat('DD MMMM YYYY');
             }
+
+            if ($request->invoice != 'semua' && !empty($request->invoice)) {
+                $query->where('invoice', $request->invoice);
+            }
+            $penjualans = $query->get();
+            $grandTotal = $penjualans->sum('total_pembayaran');
         }
 
-
-        $periode = 'Tanggal ' . $tglAkhirFormat != null ? $tglMulaiFormat . ' - ' . $tglAkhirFormat : $tglMulaiFormat;
+        $periode = $tglAkhirFormat != null ? 'Tanggal ' . $tglMulaiFormat . ' - ' . $tglAkhirFormat : 'Tanggal ' . $tglMulaiFormat;
 
         if ($penjualans->isEmpty()) {
             Alert::error('Data pada tanggal tersebut tidak tersedia');
@@ -144,163 +175,74 @@ class LaporanController extends Controller
             $tanggal = Carbon::now()->locale('id')->isoFormat('DD MMMM YYYY');
 
             if ($request->export_type == 'excel') {
-                return Excel::download(new LaporanExport($penjualans), 'Laporan dari tanggal ' . $tglMulai . ' Hingga tanggal ' . $tglAkhir . ' '  . '.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+                return Excel::download(new LaporanExport($penjualans, $namaPerusahaan), 'Laporan dari tanggal ' . $tglMulai . ' Hingga tanggal ' . $tglAkhir . ' '  . '.xlsx', \Maatwebsite\Excel\Excel::XLSX);
             } elseif ($request->export_type == 'pdf') {
                 Carbon::setLocale('id');
                 $formatGrandTotal = 'Rp.' . number_format($grandTotal, 0, ',', ',');
-                // Render tampilan PDF
-                foreach ($penjualans as $inv) {
-                    $inv->formatted_tgl_penjualan = Carbon::parse($inv->tgl_penjualan)->locale('id')->isoFormat('DD MMMM YYYY');
-                    $inv->formatted_total_pembayaran = 'Rp.' . number_format($inv->total_pembayaran, 0, ',', ',');
-
-                    $inv->formatted_total_harga = 'Rp.' . number_format($inv->total_harga, 0, ',', ',');
-
-                    if ($inv->diskon || $inv->potongan || $inv->ppn) {
-                        if ($inv->diskon) {
-                            $inv->lain = 'dsc ' . $inv->diskon . '%';
-                        } elseif ($inv->ppn) {
-                            $inv->lain = 'ppn ' . $inv->ppn . '%';
-                        } else {
-                            $inv->lain = 'pot Rp.' . number_format($inv->potongan, 0, ',', '.');
-                        }
-                    } else {
-                        $inv->lain = '-';
-                    }
-
-                    // --- INJEKSI KODE RELASI ITEM ---
-                    if (isset($inv->id)) {
-                        $isTokabe = $inv instanceof \App\Models\PenjualanTokabe;
-                        $tableRelasi = $isTokabe ? 'penjualan_tokabe_barang' : 'penjualan_barang';
-                        $fkColumn = $isTokabe ? 'penjualan_tokabe_id' : 'penjualan_id';
-
-                        try {
-                            $inv->items = DB::table($tableRelasi)
-                                ->join('barang', $tableRelasi . '.barang_id', '=', 'barang.id')
-                                ->where($tableRelasi . '.' . $fkColumn, $inv->id)
-                                ->whereNull($tableRelasi . '.deleted_at')
-                                ->select('barang.jenis_barang', $tableRelasi . '.deskripsi_item', $tableRelasi . '.qty', $tableRelasi . '.satuan')
-                                ->get();
-                        } catch (\Exception $e) {
-                            $inv->items = collect([]);
-                        }
-                    } else {
-                        $inv->items = collect([]);
-                    }
-                }
+                $this->preparePenjualansForPdf($penjualans);
                 return view('pages.laporan.pdf-non-status', compact('penjualans', 'namaInvoice', 'formatGrandTotal', 'tanggal', 'periode', 'namaPerusahaan'));
             }
         }
-        // dd($penjualans);
-
     }
 
     // Export ByInvoice
     public function exportByInvoice(Request $request)
     {
-        // $nama_invoice = '';
+        if (is_null($request->perusahaan)) {
+            Alert::error('Mohon isi Nama Perusahaan terlebih dahulu');
+            return redirect('daftar-laporan');
+        }
+        $perusahaanModel = Perusahaan::find($request->perusahaan);
+        $namaPerusahaan = $perusahaanModel ? $perusahaanModel->nama_perusahaan : 'Ikhtiar Berkah';
+
         $status_invoice = $request->status;
         $invoice = Invoice::find($request->invoice); // Mengambil data invoice berdasarkan ID
         $namaInvoice = $invoice ? $invoice->nama_invoice : 'Semua Invoice';
 
-
-        if ($request->invoice == 'semua') {
-            if ($status_invoice == 'Lunas') {
-                $penjualans = Penjualan::orderByDesc('created_at')->where('status', $status_invoice)->get(); // Mengambil koleksi objek penjualan
-                $grandTotal = $penjualans->sum('total_pembayaran');
-                // dd($grandTotal);
-            } elseif ($status_invoice == 'Belum Lunas') {
-                $penjualans = Penjualan::orderByDesc('created_at')->where('status', $status_invoice)->get(); // Mengambil koleksi objek
-                $status_invoice = 'Belum Lunas';
-                $grandTotal = $penjualans->sum('total_pembayaran');
-            } elseif ($status_invoice == 'Batal') {
-                $penjualans = Penjualan::orderByDesc('created_at')->where('status', $status_invoice)->get(); // Mengambil koleksi objek
-                $status_invoice = 'Batal';
-                $grandTotal = $penjualans->sum('total_pembayaran');
-            } else {
-                $penjualans = Penjualan::orderByDesc('created_at')->get(); // Mengambil koleksi objek penjualan
-                $status_invoice = 'Seluruh Status';
-                $grandTotal = $penjualans->sum('total_pembayaran');
+        if ($namaPerusahaan == 'Total Karya Berkah') {
+            $query = PenjualanTokabe::orderByDesc('created_at');
+            if ($request->invoice != 'semua' && !empty($request->invoice)) {
+                $query->where('invoice', $request->invoice);
             }
+            if ($status_invoice != 'semua' && !empty($status_invoice)) {
+                $query->where('status', $status_invoice);
+            }
+            $penjualans = $query->get();
         } else {
-            if ($status_invoice == 'Lunas') {
-                $penjualans = Penjualan::orderByDesc('created_at')->where('invoice', $request->invoice)->where('status', $status_invoice)->get(); // Mengambil koleksi objek penjualan
-                $grandTotal = $penjualans->sum('total_pembayaran');
-            } elseif ($status_invoice == 'Belum Lunas') {
-                $penjualans = Penjualan::orderByDesc('created_at')->where('invoice', $request->invoice)->where('status', $status_invoice)->get(); // Mengambil koleksi objek
-                $grandTotal = $penjualans->sum('total_pembayaran');
-            } elseif ($status_invoice == 'Batal') {
-                $penjualans = Penjualan::orderByDesc('created_at')->where('invoice', $request->invoice)->where('status', $status_invoice)->get(); // Mengambil koleksi objek
-                $grandTotal = $penjualans->sum('total_pembayaran');
-            } else {
-                $penjualans = Penjualan::orderByDesc('created_at')->where('invoice', $request->invoice)->get();
-                $status_invoice = 'Seluruh Status';
-                $grandTotal = $penjualans->sum('total_pembayaran');
+            $query = Penjualan::orderByDesc('created_at');
+            if ($request->invoice != 'semua' && !empty($request->invoice)) {
+                $query->where('invoice', $request->invoice);
             }
+            if ($status_invoice != 'semua' && !empty($status_invoice)) {
+                $query->where('status', $status_invoice);
+            }
+            $penjualans = $query->get();
         }
+
+        $grandTotal = $penjualans->sum('total_pembayaran');
+        if ($status_invoice == 'semua' || empty($status_invoice)) {
+            $status_invoice = 'Seluruh Status';
+        }
+
         if ($penjualans->isEmpty()) {
             Alert::error('Data Invoice tersebut tidak tersedia');
             return redirect('daftar-laporan');
-            // session()->forget('Alert');
         } else {
             $tanggal = Carbon::now()->locale('id')->isoFormat('DD MMMM YYYY');
-            // $export = new LaporanExport($penjualans);
             if ($request->export_type == 'excel') {
-                // var_dump($penjualans);die;
-                return Excel::download(new LaporanExport($penjualans), 'Laporan ' . $namaInvoice . ' ' . $status_invoice . ' ' . $tanggal . '.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+                return Excel::download(new LaporanExport($penjualans, $namaPerusahaan), 'Laporan ' . $namaInvoice . ' ' . $status_invoice . ' ' . $tanggal . '.xlsx', \Maatwebsite\Excel\Excel::XLSX);
             } elseif ($request->export_type == 'pdf') {
-
                 Carbon::setLocale('id');
-
-                // format grand total
                 $formatGrandTotal = 'Rp.' . number_format($grandTotal, 0, ',', ',');
-                // Render tampilan PDF
-                foreach ($penjualans as $inv) {
-                    $inv->formatted_tgl_penjualan = Carbon::parse($inv->tgl_penjualan)->locale('id')->isoFormat('DD MMMM YYYY');
-                    $inv->formatted_total_pembayaran = 'Rp.' . number_format($inv->total_pembayaran, 0, ',', ',');
-
-                    $inv->formatted_total_harga = 'Rp.' . number_format($inv->total_harga, 0, ',', ',');
-
-                    if ($inv->diskon || $inv->potongan || $inv->ppn) {
-                        if ($inv->diskon) {
-                            $inv->lain = 'dsc ' . $inv->diskon . '%';
-                        } elseif ($inv->ppn) {
-                            $inv->lain = 'ppn ' . $inv->ppn . '%';
-                        } else {
-                            $inv->lain = 'pot Rp.' . number_format($inv->potongan, 0, ',', '.');
-                        }
-                    } else {
-                        $inv->lain = '-';
-                    }
-
-                    // --- INJEKSI KODE RELASI ITEM ---
-                    if (isset($inv->id)) {
-                        $isTokabe = $inv instanceof \App\Models\PenjualanTokabe;
-                        $tableRelasi = $isTokabe ? 'penjualan_tokabe_barang' : 'penjualan_barang';
-                        $fkColumn = $isTokabe ? 'penjualan_tokabe_id' : 'penjualan_id';
-
-                        try {
-                            $inv->items = DB::table($tableRelasi)
-                                ->join('barang', $tableRelasi . '.barang_id', '=', 'barang.id')
-                                ->where($tableRelasi . '.' . $fkColumn, $inv->id)
-                                ->whereNull($tableRelasi . '.deleted_at')
-                                ->select('barang.jenis_barang', $tableRelasi . '.deskripsi_item', $tableRelasi . '.qty', $tableRelasi . '.satuan')
-                                ->get();
-                        } catch (\Exception $e) {
-                            $inv->items = collect([]);
-                        }
-                    } else {
-                        $inv->items = collect([]);
-                    }
-                }
-                return view('pages.laporan.pdf', compact('penjualans', 'namaInvoice', 'status_invoice', 'formatGrandTotal', 'tanggal'));
-                
+                $this->preparePenjualansForPdf($penjualans);
+                return view('pages.laporan.pdf', compact('penjualans', 'namaInvoice', 'status_invoice', 'formatGrandTotal', 'tanggal', 'namaPerusahaan'));
             }
         }
     }
+
     // Export berdasarkan bulan pada tahun sekarang
     public function exportByMonth(Request $request)
     {
-
         $bulanIndonesia = $request->bulan;
         $periode = 'Bulan ' . $request->bulan;
         $invoice = Invoice::find($request->invoice); // Mengambil data invoice berdasarkan ID
@@ -351,7 +293,6 @@ class LaporanController extends Controller
                 $bulanInggris = 'December';
                 break;
             default:
-                // Jika nama bulan tidak valid, lakukan penanganan kesalahan di sini
                 break;
         }
 
@@ -383,7 +324,6 @@ class LaporanController extends Controller
             }
         }
 
-        // dd($request->bulan, $bulan, $tahun);
         if ($penjualans->isEmpty()) {
             Alert::error('Data Laporan Pada Bulan ' . $request->bulan . ' Tahun ' . $tahun . ' tidak tersedia');
             return redirect('daftar-laporan');
@@ -394,58 +334,18 @@ class LaporanController extends Controller
             } elseif ($request->export_type == 'pdf') {
                 Carbon::setLocale('id');
                 $formatGrandTotal = 'Rp.' . number_format($grandTotal, 0, ',', ',');
-                // Render tampilan PDF
-                foreach ($penjualans as $inv) {
-                    $inv->formatted_tgl_penjualan = Carbon::parse($inv->tgl_penjualan)->locale('id')->isoFormat('DD MMMM YYYY');
-                    $inv->formatted_total_pembayaran = 'Rp.' . number_format($inv->total_pembayaran, 0, ',', ',');
-
-                    $inv->formatted_total_harga = 'Rp.' . number_format($inv->total_harga, 0, ',', ',');
-
-                    if ($inv->diskon || $inv->potongan || $inv->ppn) {
-                        if ($inv->diskon) {
-                            $inv->lain = 'dsc ' . $inv->diskon . '%';
-                        } elseif ($inv->ppn) {
-                            $inv->lain = 'ppn ' . $inv->ppn . '%';
-                        } else {
-                            $inv->lain = 'pot Rp.' . number_format($inv->potongan, 0, ',', '.');
-                        }
-                    } else {
-                        $inv->lain = '-';
-                    }
-
-                    // --- INJEKSI KODE RELASI ITEM ---
-                    if (isset($inv->id)) {
-                        $isTokabe = $inv instanceof \App\Models\PenjualanTokabe;
-                        $tableRelasi = $isTokabe ? 'penjualan_tokabe_barang' : 'penjualan_barang';
-                        $fkColumn = $isTokabe ? 'penjualan_tokabe_id' : 'penjualan_id';
-
-                        try {
-                            $inv->items = DB::table($tableRelasi)
-                                ->join('barang', $tableRelasi . '.barang_id', '=', 'barang.id')
-                                ->where($tableRelasi . '.' . $fkColumn, $inv->id)
-                                ->whereNull($tableRelasi . '.deleted_at')
-                                ->select('barang.jenis_barang', $tableRelasi . '.deskripsi_item', $tableRelasi . '.qty', $tableRelasi . '.satuan')
-                                ->get();
-                        } catch (\Exception $e) {
-                            $inv->items = collect([]);
-                        }
-                    } else {
-                        $inv->items = collect([]);
-                    }
-                }
+                $this->preparePenjualansForPdf($penjualans);
                 return view('pages.laporan.pdf-non-status', compact('penjualans', 'namaInvoice', 'formatGrandTotal', 'tanggal', 'periode', 'namaPerusahaan'));
             }
         }
     }
 
-
     // Export Laporan Berdasarkan Tahun
-   public function exportByYear(Request $request)
+    public function exportByYear(Request $request)
     {
         $periode = 'Tahun ' . $request->tahun;
         $invoice = Invoice::find($request->invoice); // Mengambil data invoice berdasarkan ID
         $namaInvoice = $invoice ? $invoice->nama_invoice : 'Semua Invoice';
-        // $tahun = date('Y', strtotime($request->tahun));
         $tahun = $request->tahun;
         if (is_null($request->perusahaan)) {
             Alert::error('Mohon isi Nama Perusahaan terlebih dahulu');
@@ -453,14 +353,12 @@ class LaporanController extends Controller
         }
         $namaPerusahaan = Perusahaan::where('id', $request->perusahaan)->first()->nama_perusahaan;
 
-        // dd($tahun);
-
         if ($namaPerusahaan == 'Total Karya Berkah') {
             if ($request->invoice == 'semua') {
                 $penjualans = PenjualanTokabe::whereYear('tgl_penjualan', $tahun)->get();
                 $grandTotal = $penjualans->sum('total_pembayaran');
             } else {
-                $penjualans = PenjualanTokabe::whereYear('tgl_penjualan', $tahun)->get()->where('invoice', $request->invoice);
+                $penjualans = PenjualanTokabe::whereYear('tgl_penjualan', $tahun)->where('invoice', $request->invoice)->get();
                 $grandTotal = $penjualans->sum('total_pembayaran');
             }
         } else {
@@ -476,9 +374,6 @@ class LaporanController extends Controller
             }
         }
 
-        $invoice = Invoice::find($request->invoice); // Mengambil data invoice berdasarkan ID
-        $namaInvoice = $invoice ? $invoice->nama_invoice : 'Semua Invoice';
-
         if ($penjualans->isEmpty()) {
             Alert::error('Data Laporan ' . $namaInvoice . ' Tahun ' . $tahun . ' tidak tersedia');
             return redirect('daftar-laporan');
@@ -489,45 +384,7 @@ class LaporanController extends Controller
             } elseif ($request->export_type == 'pdf') {
                 Carbon::setLocale('id');
                 $formatGrandTotal = 'Rp.' . number_format($grandTotal, 0, ',', ',');
-                // Render tampilan PDF
-                foreach ($penjualans as $inv) {
-                    $inv->formatted_tgl_penjualan = Carbon::parse($inv->tgl_penjualan)->locale('id')->isoFormat('DD MMMM YYYY');
-                    $inv->formatted_total_pembayaran = 'Rp.' . number_format($inv->total_pembayaran, 0, ',', ',');
-
-                    $inv->formatted_total_harga = 'Rp.' . number_format($inv->total_harga, 0, ',', ',');
-
-                    if ($inv->diskon || $inv->potongan || $inv->ppn) {
-                        if ($inv->diskon) {
-                            $inv->lain = 'dsc ' . $inv->diskon . '%';
-                        } elseif ($inv->ppn) {
-                            $inv->lain = 'ppn ' . $inv->ppn . '%';
-                        } else {
-                            $inv->lain = 'pot Rp.' . number_format($inv->potongan, 0, ',', '.');
-                        }
-                    } else {
-                        $inv->lain = '-';
-                    }
-
-                    // --- INJEKSI KODE RELASI ITEM ---
-                    if (isset($inv->id)) {
-                        $isTokabe = $inv instanceof \App\Models\PenjualanTokabe;
-                        $tableRelasi = $isTokabe ? 'penjualan_tokabe_barang' : 'penjualan_barang';
-                        $fkColumn = $isTokabe ? 'penjualan_tokabe_id' : 'penjualan_id';
-
-                        try {
-                            $inv->items = DB::table($tableRelasi)
-                                ->join('barang', $tableRelasi . '.barang_id', '=', 'barang.id')
-                                ->where($tableRelasi . '.' . $fkColumn, $inv->id)
-                                ->whereNull($tableRelasi . '.deleted_at')
-                                ->select('barang.jenis_barang', $tableRelasi . '.deskripsi_item', $tableRelasi . '.qty', $tableRelasi . '.satuan')
-                                ->get();
-                        } catch (\Exception $e) {
-                            $inv->items = collect([]);
-                        }
-                    } else {
-                        $inv->items = collect([]);
-                    }
-                }
+                $this->preparePenjualansForPdf($penjualans);
                 return view('pages.laporan.pdf-non-status', compact('penjualans', 'namaInvoice', 'formatGrandTotal', 'tanggal', 'periode', 'namaPerusahaan'));
             }
         }

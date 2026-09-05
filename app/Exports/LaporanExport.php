@@ -27,10 +27,12 @@ class LaporanExport implements FromArray, ShouldAutoSize, WithHeadings, WithEven
      */
     
     protected $penjualans;
+    protected $namaPerusahaan;
 
-    public function __construct(Collection $penjualans)
+    public function __construct(Collection $penjualans, $namaPerusahaan = null)
     {
         $this->penjualans = $penjualans;
+        $this->namaPerusahaan = $namaPerusahaan;
     }
 
     public function headings(): array
@@ -69,13 +71,21 @@ class LaporanExport implements FromArray, ShouldAutoSize, WithHeadings, WithEven
             $penjualan->tgl_penjualan = Carbon::parse($penjualan->tgl_penjualan)->locale('id')->isoFormat('DD MMMM, YYYY');
 
             // --- AMBIL DATA BARANG SAMA SEPERTI PDF ---
-            if ($penjualan instanceof \App\Models\Penjualan) {
-                $items = DB::table('penjualan_barang')
-                    ->join('barang', 'penjualan_barang.barang_id', '=', 'barang.id')
-                    ->where('penjualan_barang.penjualan_id', $penjualan->id)
-                    ->whereNull('penjualan_barang.deleted_at')
-                    ->select('barang.jenis_barang', 'penjualan_barang.deskripsi_item', 'penjualan_barang.qty', 'penjualan_barang.satuan')
-                    ->get();
+            if (isset($penjualan->id)) {
+                $isTokabe = $penjualan instanceof \App\Models\PenjualanTokabe;
+                $tableRelasi = $isTokabe ? 'penjualan_tokabe_barang' : 'penjualan_barang';
+                $fkColumn = $isTokabe ? 'penjualan_tokabe_id' : 'penjualan_id';
+
+                try {
+                    $items = DB::table($tableRelasi)
+                        ->join('barang', $tableRelasi . '.barang_id', '=', 'barang.id')
+                        ->where($tableRelasi . '.' . $fkColumn, $penjualan->id)
+                        ->whereNull($tableRelasi . '.deleted_at')
+                        ->select('barang.jenis_barang', $tableRelasi . '.deskripsi_item', $tableRelasi . '.qty', $tableRelasi . '.satuan')
+                        ->get();
+                } catch (\Exception $e) {
+                    $items = collect([]);
+                }
             } else {
                 $items = collect([]);
             }
@@ -103,14 +113,27 @@ class LaporanExport implements FromArray, ShouldAutoSize, WithHeadings, WithEven
             $jumlahGabungan = implode("\n\n", $jumlahArr);
             // ------------------------------------------
 
-            if ($penjualan->diskon || $penjualan->potongan || $penjualan->ppn) {
-                if ($penjualan->diskon) {
-                    $penjualan->lain = 'dsc ' . $penjualan->diskon . '%';
-                } elseif ($penjualan->ppn) {
-                    $penjualan->lain = 'ppn ' . $penjualan->ppn . '%';
-                } else {
-                    $penjualan->lain = 'pot Rp.' . number_format($penjualan->potongan, 0, ',', '.');
-                }
+            $hasPpn = !empty($penjualan->ppn) && (float)$penjualan->ppn > 0;
+            $hasDiskon = !empty($penjualan->diskon) && (float)$penjualan->diskon > 0;
+            $hasPotongan = !empty($penjualan->potongan) && (float)$penjualan->potongan > 0;
+            $hasPph = !empty($penjualan->pph) && (float)$penjualan->pph > 0;
+
+            $autoPpnPersen = 0;
+            if (!$hasPpn && !$hasDiskon && !$hasPotongan && !$hasPph && $penjualan->total_pembayaran > $penjualan->total_harga && $penjualan->total_harga > 0) {
+                $autoPpnNominal = $penjualan->total_pembayaran - $penjualan->total_harga;
+                $autoPpnPersen = round(($autoPpnNominal / $penjualan->total_harga) * 100);
+                $hasPpn = true;
+            }
+
+            if ($hasDiskon) {
+                $penjualan->lain = 'dsc ' . $penjualan->diskon . '%';
+            } elseif ($hasPpn) {
+                $ppnVal = !empty($penjualan->ppn) ? $penjualan->ppn : $autoPpnPersen;
+                $penjualan->lain = 'ppn ' . $ppnVal . '%';
+            } elseif ($hasPph) {
+                $penjualan->lain = 'pph ' . $penjualan->pph . '%';
+            } elseif ($hasPotongan) {
+                $penjualan->lain = 'pot Rp.' . number_format($penjualan->potongan, 0, ',', '.');
             } else {
                 $penjualan->lain = '-';
             }
@@ -150,7 +173,8 @@ class LaporanExport implements FromArray, ShouldAutoSize, WithHeadings, WithEven
                     ],
                 ]);
 
-                $event->sheet->getDelegate()->setCellValue('A1', 'LAPORAN PENJUALAN IKHTIAR BERKAH ');
+                $perusahaanTitle = !empty($this->namaPerusahaan) ? strtoupper($this->namaPerusahaan) : 'IKHTIAR BERKAH';
+                $event->sheet->getDelegate()->setCellValue('A1', 'LAPORAN PENJUALAN ' . $perusahaanTitle . ' ');
                 
                 // HEADING
                 $heading = 'A2:K2';
@@ -183,10 +207,11 @@ class LaporanExport implements FromArray, ShouldAutoSize, WithHeadings, WithEven
                 $event->sheet->getDelegate()->getStyle($columnH)->getNumberFormat()->setFormatCode('Rp#,##0.00');
                 $event->sheet->getDelegate()->getStyle($totalRange)->getNumberFormat()->setFormatCode('Rp#,##0.00');
 
+                $perusahaanNama = !empty($this->namaPerusahaan) ? $this->namaPerusahaan : 'IKHTIAR BERKAH';
                 $footerDataKiri = [
                     [
                         'row' => $lastRow + 3,
-                        'text' => 'IKHTIAR BERKAH, ' . Carbon::now()->locale('id')->isoFormat('DD MMMM YYYY'),
+                        'text' => $perusahaanNama . ', ' . Carbon::now()->locale('id')->isoFormat('DD MMMM YYYY'),
                         'underline' => false,
                     ],
                     [

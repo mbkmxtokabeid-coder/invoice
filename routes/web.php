@@ -228,12 +228,25 @@ Route::group(['middleware' => ['auth']], function () {
             Route::post('/laporan-penjualan-barang-export', [LaporanController::class, 'exportByBarang'])->name('export.barang');
             Route::post('/invoice-export', [LaporanController::class, 'exportInvoice'])->name('export.invoice');
 
+            // ALIAS ROUTE LAPORAN DENGAN PREFIX /invoice
+            Route::post('/invoice/laporan-export', [LaporanController::class, 'exportByInvoice']);
+            Route::post('/invoice/laporan-export-date', [LaporanController::class, 'exportByDate']);
+            Route::post('/invoice/laporan-export-month', [LaporanController::class, 'exportByMonth']);
+            Route::post('/invoice/laporan-export-year', [LaporanController::class, 'exportByYear']);
+            Route::get('/invoice/getInvoices/{id}', [CustomerController::class, 'getInvoices']);
+
             // ROUTE LAPORAN PEMBELIAN
             Route::get('/daftar-laporanPembelian', [LaporanPembelianController::class, 'index']);
             Route::post('/laporan-exportPembelian', [LaporanPembelianController::class, 'exportByVendor']);
             Route::post('/laporanPembelian-export-date', [LaporanPembelianController::class, 'exportByDate']);
             Route::post('/laporanPembelian-export-month', [LaporanPembelianController::class, 'exportByMonth']);
             Route::post('/laporanPembelian-export-year', [LaporanPembelianController::class, 'exportByYear']);
+
+            // ALIAS ROUTE LAPORAN PEMBELIAN DENGAN PREFIX /invoice
+            Route::post('/invoice/laporan-exportPembelian', [LaporanPembelianController::class, 'exportByVendor']);
+            Route::post('/invoice/laporanPembelian-export-date', [LaporanPembelianController::class, 'exportByDate']);
+            Route::post('/invoice/laporanPembelian-export-month', [LaporanPembelianController::class, 'exportByMonth']);
+            Route::post('/invoice/laporanPembelian-export-year', [LaporanPembelianController::class, 'exportByYear']);
         });
 
         // ====================================================================

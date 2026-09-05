@@ -33,7 +33,7 @@
       <div class="row col-lg-6 mt-2">
         <h5 id="changePerusahaan">Laporan Pembelian </h5>
       </div>
-      <form action="/invoice/laporan-exportPembelian" method="POST">
+      <form action="/invoice/laporan-exportPembelian" method="POST" target="_blank">
       @csrf
      
 
@@ -81,7 +81,7 @@
       <div class="row col-lg-6 mt-2">
         <h5>Laporan Pembelian Custom</h5>
       </div>
-      <form action="/invoice/laporanPembelian-export-date" method="POST">
+      <form action="/invoice/laporanPembelian-export-date" method="POST" target="_blank">
         @csrf
         
       <div class="row col-lg-12 col-sm-6 mt-3">
@@ -120,7 +120,7 @@
     {{-- Start Card --}}
     <div class="card">
     <div class="card-body row g-3">
-      <form action="/invoice/laporanPembelian-export-month" method="POST">
+      <form action="/invoice/laporanPembelian-export-month" method="POST" target="_blank">
         @csrf
       <div class="row col-lg-6 mt-2">
         <h5>Laporan Pembelian Bulanan Tahun <script>document.write(new Date().getFullYear())</script></h5>

@@ -251,24 +251,54 @@ class InvoiceController extends Controller
         $penjualan->total_harga = $tot_harga;
         $penjualan->status = $status;
         
-        if ($request->select_potongan == 'PPN') {
-            $penjualan->ppn = $request->biaya_lain;
+        $jenisPotongan = $request->select_potongan ?? $request->input('select-potongan');
+        $rawPotongan = $request->biaya_lain ?? ($request->ptg ?? $request->input('biaya_lain'));
+        $nilai_potongan = intval(preg_replace('/[^0-9]/', '', $rawPotongan ?? '0'));
+
+        if ($jenisPotongan == 'PPN') {
+            $penjualan->ppn = $nilai_potongan;
             $penjualan->diskon = null;
             $penjualan->potongan = null;
-        } else if ($request->select_potongan == 'Diskon') {
+        } else if ($jenisPotongan == 'Diskon') {
             $penjualan->ppn = null;
-            $penjualan->diskon = $request->biaya_lain;
+            $penjualan->diskon = $nilai_potongan;
             $penjualan->potongan = null;
-        } else if ($request->select_potongan == 'Potongan') {
+        } else if ($jenisPotongan == 'Potongan') {
             $penjualan->ppn = null;
             $penjualan->diskon = null;
-            $penjualan->potongan = intval(str_replace(',', '', $request->biaya_lain));
+            $penjualan->potongan = $nilai_potongan;
         } else {
             $penjualan->ppn = null;
             $penjualan->diskon = null;
             $penjualan->potongan = null;
         }
-        
+
+        // Server-side recalculation guard
+        if ($jenisPotongan == 'PPN' && $nilai_potongan > 0) {
+            $expectedPem = $tot_harga + round($tot_harga * ($nilai_potongan / 100));
+            if ($tot_pem <= 0 || abs($tot_pem - $expectedPem) > 5) {
+                $tot_pem = $expectedPem;
+            }
+        } elseif ($jenisPotongan == 'Diskon' && $nilai_potongan > 0) {
+            $expectedPem = $tot_harga - round($tot_harga * ($nilai_potongan / 100));
+            if ($tot_pem <= 0 || abs($tot_pem - $expectedPem) > 5) {
+                $tot_pem = max(0, $expectedPem);
+            }
+        } elseif ($jenisPotongan == 'Potongan' && $nilai_potongan > 0) {
+            $expectedPem = $tot_harga - $nilai_potongan;
+            if ($tot_pem <= 0 || abs($tot_pem - $expectedPem) > 5) {
+                $tot_pem = max(0, $expectedPem);
+            }
+        } elseif ($tot_pem <= 0) {
+            $tot_pem = $tot_harga;
+        }
+
+        if ($status == 'Lunas') {
+            $sisa_pemb = 0;
+        } else {
+            $sisa_pemb = max(0, $tot_pem - $dp);
+        }
+
         $penjualan->total_pembayaran = $tot_pem;
         $penjualan->sisa_pembayaran = $sisa_pemb;
         $penjualan->save();
