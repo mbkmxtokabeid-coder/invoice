@@ -199,7 +199,7 @@
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end">
                                         <li>
-                                            <a class="dropdown-item" href="/edit-stok/{{$brg->id}}"><i class="las la-pen fs-18 align-middle me-2 text-muted"></i>
+                                            <a class="dropdown-item" href="{{ url('/edit-stok/'.$brg->id) }}"><i class="las la-pen fs-18 align-middle me-2 text-muted"></i>
                                                 Update Stock</a>
                                         </li>
                                         <li class="dropdown-divider"></li>
@@ -241,8 +241,13 @@
       var isRequired = $(this).is(':checked') ? 1 : 0;
       var $switch = $(this);
 
+      var toggleUrl = "{{ route('barang.toggle_material', ':id') }}".replace(':id', barangId);
+      if (window.location.pathname.startsWith('/invoice') && !toggleUrl.includes('/invoice')) {
+          toggleUrl = window.location.origin + '/invoice/barang/toggle-material/' + barangId;
+      }
+
       $.ajax({
-          url: '/barang/toggle-material/' + barangId,
+          url: toggleUrl,
           type: 'POST',
           data: {
               _token: '{{ csrf_token() }}',
@@ -261,10 +266,23 @@
                       icon: 'success',
                       title: response.message
                   });
+              } else {
+                  alert(response.message || 'Gagal memperbarui status material');
+                  $switch.prop('checked', !isRequired);
               }
           },
-          error: function() {
-              alert('Gagal memperbarui status material');
+          error: function(xhr, status, error) {
+              var errorMsg = 'Gagal memperbarui status material';
+              if (xhr.responseJSON && xhr.responseJSON.message) {
+                  errorMsg += ': ' + xhr.responseJSON.message;
+              } else if (xhr.status === 404) {
+                  errorMsg += ' (URL route tidak ditemukan - 404)';
+              } else if (xhr.status === 419) {
+                  errorMsg += ' (Sesi telah kedaluwarsa, silakan refresh halaman - 419)';
+              } else if (xhr.status === 500) {
+                  errorMsg += ' (Terjadi kesalahan server - 500)';
+              }
+              alert(errorMsg);
               $switch.prop('checked', !isRequired);
           }
       });

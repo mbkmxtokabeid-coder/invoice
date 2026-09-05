@@ -221,17 +221,24 @@ class BarangController extends Controller
 
     public function toggleMaterial(Request $request, $id)
     {
-        $barang = Barang::find($id);
-        if (!$barang) {
-            return response()->json(['status' => 'error', 'message' => 'Barang tidak ditemukan'], 404);
-        }
-        $barang->is_material_required = $request->input('is_material_required', 0);
-        $barang->save();
+        try {
+            $barang = Barang::find($id);
+            if (!$barang) {
+                return response()->json(['status' => 'error', 'message' => 'Barang tidak ditemukan'], 404);
+            }
+            $barang->is_material_required = $request->input('is_material_required', 0);
+            $barang->save();
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Status material berhasil diperbarui',
-            'is_material_required' => $barang->is_material_required
-        ]);
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Status material berhasil diperbarui',
+                'is_material_required' => $barang->is_material_required
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 }

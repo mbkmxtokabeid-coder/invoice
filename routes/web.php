@@ -179,6 +179,7 @@ Route::group(['middleware' => ['auth']], function () {
             Route::get('/edit-stok/{id}', [BarangController::class, 'edit']);
             Route::put('/update-stok/{id}', [BarangController::class, 'update']);
             Route::post('/barang/toggle-material/{id}', [BarangController::class, 'toggleMaterial'])->name('barang.toggle_material');
+            Route::post('/invoice/barang/toggle-material/{id}', [BarangController::class, 'toggleMaterial'])->name('barang.toggle_material_invoice');
             
             // ROUTE MATERIAL
             Route::get('listMaterial', [MaterialController::class, 'index'])->name('listMaterial');
