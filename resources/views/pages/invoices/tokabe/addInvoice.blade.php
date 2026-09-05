@@ -44,7 +44,7 @@ $(document).ready(function () {
         var container = $(this).closest('td').find('.material-container-' + index);
         
         var materialOptionsDOM = document.getElementById('template-options-material');
-        var materialOptions = materialOptionsDOM ? materialOptionsDOM.innerHTML : '<option value="">-- Pilih Material (Opsional) --</option>';
+        var materialOptions = materialOptionsDOM ? materialOptionsDOM.innerHTML : '<option value="">-- Pilih Material --</option>';
 
         var newRow = `
             <div class="row mt-2 material-row border-top pt-2 position-relative">
@@ -170,63 +170,48 @@ $(document).ready(function () {
         }
     });
 
-    // 1. BUAT MAPPING KATEGORI DI JAVASCRIPT
+    // 1. BUAT MAPPING KATEGORI & MATERIAL REQUIRED DI JAVASCRIPT
     const kategoriMap = {};
+    const isMaterialRequiredMap = {};
     @if(isset($jenisBarang))
         @foreach ($jenisBarang as $jns)
             kategoriMap["{{$jns->id}}"] = "{{$jns->kategori_id}}";
+            isMaterialRequiredMap["{{$jns->id}}"] = "{{$jns->is_material_required ?? 0}}";
         @endforeach
     @endif
 
-    $("#invoice_form").submit(function (e) {
-    e.preventDefault();
+    // Show/Hide material: ON (1) = Non-Material / Sembunyikan Pilihan & Tombol Material, OFF (0) = Pakai Material / Tampilkan
+    function updateMaterialVisibility($select) {
+        var selectedBarangId = $select.val();
+        var td = $select.closest('td');
+        var materialContainers = td.find('.materials-container, [class*="material-container-"], .material-row');
+        var tambahBtn = td.find('.add-material, .btn-tambah-material');
+        var isNonMaterial = (isMaterialRequiredMap[selectedBarangId] == "1"); // ON = Non-Material
 
-    // --- START VALIDASI MATERIAL WAJIB BERDASARKAN KATEGORI ---
-    let isMaterialValid = true;
-    let materialErrorMsg = "";
-
-    // KATEGORI ID YANG MEWAJIBKAN MATERIAL (Contoh: 1 dan 2)
-    const KATEGORI_WAJIB_MATERIAL = ["2", "4"];
-
-    $('#newlink .product').each(function(index) {
-        let rowNum = index + 1;
-        
-        // 2. AMBIL ID BARANG YANG DIPILIH (Pencarian menggunakan starts with karena array index)
-        let selectedBarangId = $(this).find('select[name^="barang_id"]').val();
-        
-        // 3. COCOKKAN ID BARANG DENGAN MAP KATEGORI KITA
-        let kategoriId = kategoriMap[selectedBarangId];
-        
-        // Cek jika kategori_id termasuk di dalam daftar KATEGORI_WAJIB_MATERIAL
-        if (KATEGORI_WAJIB_MATERIAL.includes(String(kategoriId))) {
-            // Karena Multi Material, kita periksa setidaknya 1 material terisi
-            let hasValidMaterial = false;
-            $(this).find('.material-row').each(function() {
-                let mId = $(this).find('.material-select').val();
-                let mQty = $(this).find('.material-qty').val();
-                
-                if (mId !== "" && mQty > 0) {
-                    hasValidMaterial = true;
-                }
-            });
-
-            if (!hasValidMaterial) {
-                isMaterialValid = false;
-                materialErrorMsg = `Baris ke-${rowNum}: Item ini wajib memiliki minimal 1 Material dengan Qty/Hasil > 0!`;
-                return false; // Menghentikan loop .each()
-            }
+        if (isNonMaterial) {
+            materialContainers.hide();
+            tambahBtn.hide();
+            materialContainers.find('select.material-select').val('');
+            materialContainers.find('input.material-panjang, input.material-lebar, input.material-qty').val('');
+        } else {
+            materialContainers.show();
+            tambahBtn.show();
         }
+    }
+
+    $(document).on('change addItem choice', 'select[name^="barang_id"]', function() {
+        updateMaterialVisibility($(this));
     });
 
-    if (!isMaterialValid) {
-        Swal.fire({
-            icon: 'warning',
-            title: 'Validasi Material',
-            text: materialErrorMsg,
+    // Run on page load
+    setTimeout(function() {
+        $('select[name^="barang_id"]').each(function() {
+            updateMaterialVisibility($(this));
         });
-        return false; // Membatalkan proses submit form
-    }
-    // --- END VALIDASI MATERIAL WAJIB BERDASARKAN KATEGORI ---
+    }, 200);
+
+    $("#invoice_form").submit(function (e) {
+    e.preventDefault();
 
 
     $.ajax({
@@ -481,7 +466,7 @@ $(document).ready(function () {
                                  <!-- TEMPLATE TERSEMBUNYI UNTUK OPTION MATERIAL DAN BARANG -->
                                  <!-- Solusi mempercepat Load Web: Data diletakkan di elemen HTML, BUKAN di string JS -->
                                  <div id="template-options-material" style="display: none;">
-                                    <option value="">-- Pilih Material (Opsional) --</option>
+                                    <option value="">-- Pilih Material --</option>
                                     @if(isset($materials))
                                       @foreach ($materials as $mat)
                                           <option value="{{ $mat->id }}" data-stok="{{ $mat->stok }}" data-satuan="{{ $mat->satuan }}">
@@ -492,9 +477,9 @@ $(document).ready(function () {
                                  </div>
                                  <div id="template-options-barang" style="display: none;">
                                     <option selected disabled>Pilih Item</option>
-                                    @foreach ($jenisBarang as $jns)
-                                        <option value="{{$jns->id}}" data-kategori-id="{{$jns->kategori_id}}">{{$jns->jenis_barang}}</option>
-                                    @endforeach
+                                     @foreach ($jenisBarang as $jns)
+                                         <option value="{{$jns->id}}" data-kategori-id="{{$jns->kategori_id}}">{{$jns->jenis_barang}}</option>
+                                     @endforeach
                                  </div>
                                  <!-- END TEMPLATE -->
 
@@ -527,9 +512,9 @@ $(document).ready(function () {
                                         <!-- INDEX [0] DITAMBAHKAN SECARA EKSPLISIT -->
                                         <select class="form-select @error('barang_id.0') is-invalid @enderror" data-choices data-choices-sorting="true" id="productName-1" name="barang_id[0]">
                                             <option selected disabled>Pilih Item</option>
-                                            @foreach ($jenisBarang as $jns)
-                                            <option value="{{$jns->id}}" data-kategori-id="{{$jns->kategori_id}}" {{old('barang_id.0') == $jns->id ? 'selected' : ''}}>{{$jns->jenis_barang}}</option>
-                                            @endforeach
+                                             @foreach ($jenisBarang as $jns)
+                                             <option value="{{$jns->id}}" data-kategori-id="{{$jns->kategori_id}}" {{old('barang_id.0') == $jns->id ? 'selected' : ''}}>{{$jns->jenis_barang}}</option>
+                                             @endforeach
                                         </select>
                                         @error('barang_id.0')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -547,7 +532,7 @@ $(document).ready(function () {
                                                 <label class="form-label text-muted mb-1" style="font-size: 0.8rem;">Pilih Material</label>
                                                 <!-- INDEX [0] DITAMBAHKAN SECARA EKSPLISIT -->
                                                 <select class="form-select form-select-sm material-select" name="material_id[0][]">
-                                                    <option value="">-- Pilih Material (Opsional) --</option>
+                                                    <option value="">-- Pilih Material --</option>
                                                     @if(isset($materials))
                                                       @foreach ($materials as $mat)
                                                           <option value="{{ $mat->id }}" data-stok="{{ $mat->stok }}" data-satuan="{{ $mat->satuan }}">
@@ -832,7 +817,7 @@ $(document).ready(function () {
         // MENGAMBIL DATA DARI ELEMEN HIDDEN HTML (BUKAN MELOOPING PHP DI DALAM SCRIPT)
         // Ini adalah kunci yang mengembalikan kecepatan web Anda menjadi normal
         var materialOptionsDOM = document.getElementById('template-options-material');
-        var materialOptions = materialOptionsDOM ? materialOptionsDOM.innerHTML : '<option value="">-- Pilih Material (Opsional) --</option>';
+        var materialOptions = materialOptionsDOM ? materialOptionsDOM.innerHTML : '<option value="">-- Pilih Material --</option>';
 
         var itemOptionsDOM = document.getElementById('template-options-barang');
         var itemOptions = itemOptionsDOM ? itemOptionsDOM.innerHTML : '<option selected disabled>Pilih Item</option>';

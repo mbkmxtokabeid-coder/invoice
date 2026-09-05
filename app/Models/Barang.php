@@ -18,6 +18,7 @@ class Barang extends Model
         'harga_modal',
         'harga_jual',
         'tgl_masuk',
+        'is_material_required',
     ];
     public function kategori_item()
     {

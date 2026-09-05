@@ -104,7 +104,7 @@ class PenjualanTokabeController extends Controller
         $day = $tanggal->format('d');
         $formatJam = $tanggal->format('H:i'); 
         $hariIni = sprintf('%s-%s-%s', $year, $month, $day);
-        $jenisBarang = Barang::where('is_active', 1)->get();
+        $jenisBarang = Barang::with('kategori_item')->where('is_active', 1)->get();
 
         $kontak = PenjualanTokabe::select('customer', 'no_telepon', 'perusahaan')->get();
         return view('pages.invoices.tokabe.addInvoice', compact('invoice', 'admin', 'order', 'no_invoice', 'hariIni', 'formatJam', 'kontak', 'jenisBarang', 'materials'));
@@ -154,9 +154,20 @@ class PenjualanTokabeController extends Controller
 
     public function storeInvoiceTokabe(Request $request)
 {
-    // --- 1. VALIDASI STOK MULTI-MATERIAL ---
+    // --- 1. VALIDASI & FILTERING STOK MULTI-MATERIAL ---
     if (!empty($request->barang_id)) {
         foreach ($request->barang_id as $key => $value) {
+            $barangObj = Barang::find($value);
+            // Jika is_material_required == 1 (ON), berarti barang Non-Material (tidak pakai material)
+            if ($barangObj && $barangObj->is_material_required == 1) {
+                unset($request->material_id[$key]);
+                unset($request->material_qty[$key]);
+                unset($request->material_panjang[$key]);
+                unset($request->material_lebar[$key]);
+                continue;
+            }
+
+            // Jika is_material_required == 0 (OFF), barang memakai material -> cek stoknya
             if (isset($request->material_id[$key]) && is_array($request->material_id[$key])) {
                 foreach ($request->material_id[$key] as $matIndex => $matId) {
                     if (!empty($matId)) {
@@ -403,7 +414,7 @@ class PenjualanTokabeController extends Controller
         $admin = User::where('role', 'AdminTKB')->get();
         $order = Order::all();
         $penjualan_barang = PenjualanJasaTokabe::where('penjualan_id', $id)->get();
-        $jenisBarang = Barang::all();
+        $jenisBarang = Barang::with('kategori_item')->where('is_active', 1)->get();
         $jam = substr($inv->tgl_penjualan, 11, 5);
         $nomor_unik = $inv->nomor_invoice;
         $perusahaan = $inv->perusahaan;

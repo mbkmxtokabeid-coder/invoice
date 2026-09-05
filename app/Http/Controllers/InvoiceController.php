@@ -139,7 +139,7 @@ class InvoiceController extends Controller
         $admin = User::where('role', 'Admin')->get();
         $order = Order::all();
         $penjualan_barang = PenjualanBarang::where('penjualan_id', $id)->get();
-        $jenisBarang = Barang::all();
+        $jenisBarang = Barang::with('kategori_item')->where('is_active', 1)->get();
         $materials = Material::all();
 
         $jam = substr($inv->tgl_penjualan, 11, 5);
