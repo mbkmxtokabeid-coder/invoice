@@ -322,11 +322,19 @@ class InvoiceController extends Controller
                
             }
 
-            // Bersihkan array material dari elemen kosong untuk Mencegah Array to String Conversion
-            $matIds = isset($request->material_id[$key]) && is_array($request->material_id[$key]) ? array_filter($request->material_id[$key]) : [];
-            $matQtys = isset($request->material_qty[$key]) && is_array($request->material_qty[$key]) ? array_filter($request->material_qty[$key], 'strlen') : [];
-            $matPanjangs = isset($request->material_panjang[$key]) && is_array($request->material_panjang[$key]) ? array_filter($request->material_panjang[$key], 'strlen') : [];
-            $matLebars = isset($request->material_lebar[$key]) && is_array($request->material_lebar[$key]) ? array_filter($request->material_lebar[$key], 'strlen') : [];
+            $barangObj = Barang::find($value);
+            if ($barangObj && $barangObj->is_material_required == 1) {
+                $matIds = [];
+                $matQtys = [];
+                $matPanjangs = [];
+                $matLebars = [];
+            } else {
+                // Bersihkan array material dari elemen kosong untuk Mencegah Array to String Conversion
+                $matIds = isset($request->material_id[$key]) && is_array($request->material_id[$key]) ? array_filter($request->material_id[$key]) : [];
+                $matQtys = isset($request->material_qty[$key]) && is_array($request->material_qty[$key]) ? array_filter($request->material_qty[$key], 'strlen') : [];
+                $matPanjangs = isset($request->material_panjang[$key]) && is_array($request->material_panjang[$key]) ? array_filter($request->material_panjang[$key], 'strlen') : [];
+                $matLebars = isset($request->material_lebar[$key]) && is_array($request->material_lebar[$key]) ? array_filter($request->material_lebar[$key], 'strlen') : [];
+            }
 
             $item = new PenjualanBarang();
             $item->barang_id = $value;

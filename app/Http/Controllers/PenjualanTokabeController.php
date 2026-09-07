@@ -160,10 +160,6 @@ class PenjualanTokabeController extends Controller
             $barangObj = Barang::find($value);
             // Jika is_material_required == 1 (ON), berarti barang Non-Material (tidak pakai material)
             if ($barangObj && $barangObj->is_material_required == 1) {
-                unset($request->material_id[$key]);
-                unset($request->material_qty[$key]);
-                unset($request->material_panjang[$key]);
-                unset($request->material_lebar[$key]);
                 continue;
             }
 
@@ -255,10 +251,17 @@ class PenjualanTokabeController extends Controller
                     ->where('barang_id', $barang->id)
                     ->first();
 
-                $matIds = isset($request->material_id[$key]) && is_array($request->material_id[$key]) ? array_filter($request->material_id[$key]) : [];
-                $matQtys = isset($request->material_qty[$key]) && is_array($request->material_qty[$key]) ? array_filter($request->material_qty[$key], 'strlen') : [];
-                $matPanjangs = isset($request->material_panjang[$key]) && is_array($request->material_panjang[$key]) ? array_filter($request->material_panjang[$key], 'strlen') : [];
-                $matLebars = isset($request->material_lebar[$key]) && is_array($request->material_lebar[$key]) ? array_filter($request->material_lebar[$key], 'strlen') : [];
+                if ($barang && $barang->is_material_required == 1) {
+                    $matIds = [];
+                    $matQtys = [];
+                    $matPanjangs = [];
+                    $matLebars = [];
+                } else {
+                    $matIds = isset($request->material_id[$key]) && is_array($request->material_id[$key]) ? array_filter($request->material_id[$key]) : [];
+                    $matQtys = isset($request->material_qty[$key]) && is_array($request->material_qty[$key]) ? array_filter($request->material_qty[$key], 'strlen') : [];
+                    $matPanjangs = isset($request->material_panjang[$key]) && is_array($request->material_panjang[$key]) ? array_filter($request->material_panjang[$key], 'strlen') : [];
+                    $matLebars = isset($request->material_lebar[$key]) && is_array($request->material_lebar[$key]) ? array_filter($request->material_lebar[$key], 'strlen') : [];
+                }
 
                 $data_brg = [
                     'deskripsi_item' => $request->deskripsi_item[$key] ?? '',
@@ -329,10 +332,17 @@ class PenjualanTokabeController extends Controller
         foreach ($request->barang_id as $key => $value) {
             $barang = Barang::find($value);
             if ($barang != null) {
-                $matIds = isset($request->material_id[$key]) && is_array($request->material_id[$key]) ? array_filter($request->material_id[$key]) : [];
-                $matQtys = isset($request->material_qty[$key]) && is_array($request->material_qty[$key]) ? array_filter($request->material_qty[$key], 'strlen') : [];
-                $matPanjangs = isset($request->material_panjang[$key]) && is_array($request->material_panjang[$key]) ? array_filter($request->material_panjang[$key], 'strlen') : [];
-                $matLebars = isset($request->material_lebar[$key]) && is_array($request->material_lebar[$key]) ? array_filter($request->material_lebar[$key], 'strlen') : [];
+                if ($barang && $barang->is_material_required == 1) {
+                    $matIds = [];
+                    $matQtys = [];
+                    $matPanjangs = [];
+                    $matLebars = [];
+                } else {
+                    $matIds = isset($request->material_id[$key]) && is_array($request->material_id[$key]) ? array_filter($request->material_id[$key]) : [];
+                    $matQtys = isset($request->material_qty[$key]) && is_array($request->material_qty[$key]) ? array_filter($request->material_qty[$key], 'strlen') : [];
+                    $matPanjangs = isset($request->material_panjang[$key]) && is_array($request->material_panjang[$key]) ? array_filter($request->material_panjang[$key], 'strlen') : [];
+                    $matLebars = isset($request->material_lebar[$key]) && is_array($request->material_lebar[$key]) ? array_filter($request->material_lebar[$key], 'strlen') : [];
+                }
                 
                 $penjualan_brg = [
                     'barang_id' => $barang->id,
@@ -610,10 +620,18 @@ class PenjualanTokabeController extends Controller
             foreach ($request->barang_id as $key => $value) {
                 $hrg = $request->hrg[$key] ?? 0;
                 
-                $matIds = isset($request->material_id[$key]) && is_array($request->material_id[$key]) ? array_filter($request->material_id[$key]) : [];
-                $matQtys = isset($request->material_qty[$key]) && is_array($request->material_qty[$key]) ? array_filter($request->material_qty[$key], 'strlen') : [];
-                $matPanjangs = isset($request->material_panjang[$key]) && is_array($request->material_panjang[$key]) ? array_filter($request->material_panjang[$key], 'strlen') : [];
-                $matLebars = isset($request->material_lebar[$key]) && is_array($request->material_lebar[$key]) ? array_filter($request->material_lebar[$key], 'strlen') : [];
+                $barang = Barang::find($value);
+                if ($barang && $barang->is_material_required == 1) {
+                    $matIds = [];
+                    $matQtys = [];
+                    $matPanjangs = [];
+                    $matLebars = [];
+                } else {
+                    $matIds = isset($request->material_id[$key]) && is_array($request->material_id[$key]) ? array_filter($request->material_id[$key]) : [];
+                    $matQtys = isset($request->material_qty[$key]) && is_array($request->material_qty[$key]) ? array_filter($request->material_qty[$key], 'strlen') : [];
+                    $matPanjangs = isset($request->material_panjang[$key]) && is_array($request->material_panjang[$key]) ? array_filter($request->material_panjang[$key], 'strlen') : [];
+                    $matLebars = isset($request->material_lebar[$key]) && is_array($request->material_lebar[$key]) ? array_filter($request->material_lebar[$key], 'strlen') : [];
+                }
                 
                 $itemData = new PenjualanJasaTokabe();
                 $itemData->barang_id = $value;
