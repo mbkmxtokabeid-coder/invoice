@@ -72,10 +72,10 @@
                                                 </div>
                                                 <div class="col-lg-6 col-6"></div>
                                                 <!--end col-->
-                                                <div class="col-lg-2 col-2 text-center d-flex flex-column align-items-center">
-                                                <img src="{{asset('images/Logo IBEKA ID.png')}}" class="card-logo card-logo-dark" alt="logo dark" height="50">
-                                                <a href="ibeka.id" class="link-primary mt-2" target="_blank" id="website">Ikhtiar Berkah</a>
-                                            </div>
+                                                 <div class="col-lg-2 col-2 text-center d-flex flex-column align-items-center">
+                                                 <img src="{{asset('images/Logo IBEKA ID.png')}}" class="card-logo card-logo-dark" alt="logo dark" height="50">
+                                                 <a href="https://ibekami.id" class="link-primary mt-2" target="_blank" id="website">ibekami.id</a>
+                                             </div>
 
                                                 <!--end col-->
                                                 <div class="col-4">

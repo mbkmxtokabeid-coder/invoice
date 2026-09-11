@@ -40,8 +40,8 @@
                   <div class="col-lg-9">
                     <select class="form-select" name="spj" id="spj-select">
                       <option value="">-- Pilih SPJ --</option>
-                     <option value="Ibeka" {{ old('spj', $spj->perusahaan) == 'Ibeka' ? 'selected' : '' }}>Ibeka</option>
-                     <option value="Tokabe" {{ old('spj', $spj->perusahaan) == 'Tokabe' ? 'selected' : '' }}>Tokabe</option>
+                      <option value="Ibekami" {{ old('spj', $spj->perusahaan) == 'Ibekami' || old('spj', $spj->perusahaan) == 'Ibeka' ? 'selected' : '' }}>Ibekami</option>
+                      <option value="Tokabe" {{ old('spj', $spj->perusahaan) == 'Tokabe' ? 'selected' : '' }}>Tokabe</option>
                      <option value="Personal" {{ old('spj', $spj->perusahaan) == 'Personal' ? 'selected' : '' }}>Personal</option>
 
                     </select>

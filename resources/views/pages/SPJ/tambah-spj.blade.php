@@ -39,7 +39,7 @@
                   <div class="col-lg-9">
                     <select class="form-select" name="spj" id="spj-select">
                       <option value="">-- Pilih SPJ --</option>
-                      <option value="Ibeka" {{ old('spj') == 'Ibeka' ? 'selected' : '' }}>Ibeka</option>
+                      <option value="Ibekami" {{ old('spj') == 'Ibekami' || old('spj') == 'Ibeka' ? 'selected' : '' }}>Ibekami</option>
                       <option value="Tokabe" {{ old('spj') == 'Tokabe' ? 'selected' : '' }}>Tokabe</option>
                       <option value="Personal" {{ old('spj') == 'Personal' ? 'selected' : '' }}>Personal</option>
                     </select>

@@ -483,7 +483,7 @@
              $pesan_cust .= "Status : Lunas\n";
              $pesan_cust .= "**\n\n";
              $pesan_cust .= "Terima kasih,\n";
-             $pesan_cust .= "ibeka.id";
+             $pesan_cust .= "ibekami.id";
         }
     @endphp
     <li>

@@ -11,7 +11,7 @@
 
 <!-- App favicon -->
 
-   <link rel="shortcut icon" href="{{asset('images/Logo IBEKA ID.png')}}">
+   <link rel="shortcut icon" href="{{asset('images/Ibekami.png')}}">
 
       {{-- HEAD CSS  --}}
 
@@ -150,7 +150,7 @@
             <!-- Dark Logo-->
             <a href="/invoice" class="logo logo-dark">
                 <span class="logo-sm">
-                    <img src="{{asset('images/Logo IBEKA.png')}}" alt="" height="50">
+                    <img src="{{asset('images/Ibekami.png')}}" alt="" height="40">
                 </span>
                 <span class="logo-lg">
                     <img src="{{asset('images/logo-ib-black.png')}}" alt="" height="50">
@@ -159,7 +159,7 @@
             <!-- Light Logo-->
             <a href="/invoice" class="logo logo-light">
                 <span class="logo-sm">
-                    <img src="{{asset('images/Logo IBEKA.png')}}" alt="logo" height="50">
+                    <img src="{{asset('images/Ibekami.png')}}" alt="logo" height="40">
                 </span>
                 <span class="logo-lg">
                     <img src="{{asset('images/Logo IBEKAMI Ikhtiar berkah TULISAN PUTIH.png')}}" alt="logo" height="50">
