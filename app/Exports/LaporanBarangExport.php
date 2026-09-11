@@ -33,13 +33,14 @@ class LaporanBarangExport implements FromArray, ShouldAutoSize, WithHeadings, Wi
     public function headings(): array
     {
         return [
-            ['#', '#', '#', '#', '#', '#', '#', '#', '#', '#'],
+            ['#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#'],
             [
                 'No',
                 'Nomor Invoice',
                 'Tanggal',
                 'Pelanggan',
                 'Perusahaan',
+                'Nomor HP',
                 'Deskripsi',
                 'Status',
                 'Qty',
@@ -74,6 +75,7 @@ class LaporanBarangExport implements FromArray, ShouldAutoSize, WithHeadings, Wi
                 $penjualan->tgl_penjualan,
                 $penjualan->customer,
                 $penjualan->perusahaan,
+                $penjualan->no_telepon ?? '-',
                 $deskripsi,
                 $penjualan->status,
                 $qty,
@@ -89,8 +91,8 @@ class LaporanBarangExport implements FromArray, ShouldAutoSize, WithHeadings, Wi
         return [
             AfterSheet::class => function (AfterSheet $event) {
                 // Merge and center the title
-                $event->sheet->getDelegate()->mergeCells('A1:J1');
-                $event->sheet->getDelegate()->getStyle('A1:J1')->applyFromArray([
+                $event->sheet->getDelegate()->mergeCells('A1:K1');
+                $event->sheet->getDelegate()->getStyle('A1:K1')->applyFromArray([
                     'alignment' => [
                         'horizontal' => Alignment::HORIZONTAL_CENTER,
                         'vertical' => Alignment::VERTICAL_CENTER,
@@ -103,19 +105,19 @@ class LaporanBarangExport implements FromArray, ShouldAutoSize, WithHeadings, Wi
 
                 $event->sheet->getDelegate()->setCellValue('A1', 'LAPORAN PENJUALAN BARANG IKHTIAR BERKAH');
                 // HEADING
-                $heading = 'A2:J2';
+                $heading = 'A2:K2';
                 $event->sheet->getDelegate()->getStyle($heading)->getFont()->setBold(true);
                 // Apply border to all cells in the table
                 $lastColumn = $event->sheet->getDelegate()->getHighestColumn();
                 $lastRow = $event->sheet->getDelegate()->getHighestRow();
                 $range = 'A2:' . $lastColumn . $lastRow;
                 $event->sheet->getDelegate()->getStyle($range)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
-                // Calculate and apply total in column I
-                $totalRange = 'J' . ($lastRow + 1);
-                $event->sheet->getDelegate()->setCellValue($totalRange, '=SUM(J3:J' . $lastRow . ')');
+                // Calculate and apply total in column K
+                $totalRange = 'K' . ($lastRow + 1);
+                $event->sheet->getDelegate()->setCellValue($totalRange, '=SUM(K3:K' . $lastRow . ')');
+                $columnK = 'K3:K' . $lastRow;
                 $columnJ = 'J3:J' . $lastRow;
-                $columnI = 'I3:I' . $lastRow;
-                $event->sheet->getDelegate()->setCellValue('I' . ($lastRow + 1), 'Jumlah');
+                $event->sheet->getDelegate()->setCellValue('J' . ($lastRow + 1), 'Jumlah');
 
                 $footerDataKiri = [
                     [

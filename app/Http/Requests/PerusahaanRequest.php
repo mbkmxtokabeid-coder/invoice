@@ -11,7 +11,7 @@ class PerusahaanRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,24 +22,23 @@ class PerusahaanRequest extends FormRequest
     public function rules(): array
     {
         return [
-        'nama_perusahaan' => 'required|min:3',
+          'nama_perusahaan' => 'required|min:3',
           'alamat_perusahaan' => 'required|min:10',
-          'logo' => 'image|mimes:png,jpg,jpeg|max:2048',
+          'logo' => 'nullable|image|mimes:png,jpg,jpeg,webp,svg|max:2048',
           'no_hp' => 'required|numeric'
         ];
     }
     function messages()  {
         return[
-            'nama_perusahaan.required' => 'Nama perusahaan harus diisi',
-          
-          'alamat_perusahaan.required' => 'alamat harus diisi',
+          'nama_perusahaan.required' => 'Nama perusahaan harus diisi',
+          'alamat_perusahaan.required' => 'Alamat harus diisi',
           'no_hp.required'=>'Nomor Handphone harus diisi',
           'nama_perusahaan.min' => 'Judul minimal 3 karakter',
           'no_hp.numeric' => 'Nomor telepon harus angka',
           'alamat_perusahaan.min' => 'Alamat minimal 10 karakter',
-          'Logo.mimes' => 'Format Gambar harus png/jpg/jpeg',
-          'Logo.image' => 'Harus foto/gambar',
-          'Logo.max' => 'Ukuran maksimal 2Mb',
+          'logo.mimes' => 'Format Gambar harus png/jpg/jpeg/webp/svg',
+          'logo.image' => 'Harus foto/gambar',
+          'logo.max' => 'Ukuran maksimal 2Mb',
         ];
         
     }

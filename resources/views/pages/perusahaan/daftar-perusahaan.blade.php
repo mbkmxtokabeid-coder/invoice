@@ -64,7 +64,7 @@
                           @foreach ($company as $item)
                           <tr>
                             <td class="text-center" style="width: 10px;">{{$loop->iteration}}</td>
-                            <td><img src="{{ asset('storage/images/perusahaan/'.$item->logo) }}" alt="Gambar" style="max-width:70px"></td>
+                            <td><img src="{{ asset('storage/images/perusahaan/'.($item->logo ?: 'default.png')) }}" alt="{{$item->nama_perusahaan}}" style="max-width:70px; max-height:70px; object-fit:contain;" onerror="this.onerror=null; this.src='{{ asset('storage/images/perusahaan/default.png') }}';"></td>
                             <td>{{$item->nama_perusahaan}}</td>
                             <td>{{$item->alamat_perusahaan}}</td>
                             <td>{{$item->no_hp}}</td>

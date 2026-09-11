@@ -58,6 +58,7 @@
            <th scope="col">TANGGAL</th>
            <th scope="col">CUSTOMER</th>
            <th scope="col">PERUSAHAAN</th>
+           <th scope="col">NOMOR HP</th>
            <th scope="col">DESKRIPSI ITEM</th>
            <th scope="col">JUMLAH ITEM</th>
            <th scope="col">TOTAL</th>
@@ -74,6 +75,7 @@
           <td>{{$jual->formatted_tgl_penjualan}}</td>
           <td>{{$jual->customer}}</td>
           <td>{{$jual->perusahaan}}</td>
+          <td>{{$jual->no_telepon ?? '-'}}</td>
           
           <!-- Kolom Deskripsi Item (jenis_barang & deskripsi_item) -->
           <td class="p-0" style="vertical-align: top;">
@@ -115,8 +117,8 @@
         
         <!-- Baris Footer / Jumlah -->
         <tr>
-          <!-- Menggunakan colspan="9" agar tulisan Jumlah sejajar dengan kolom sebelum Grand Total -->
-          <td colspan="9" class="text-right text-bold" style="font-weight: bold;">Jumlah :</td>
+          <!-- Menggunakan colspan="10" agar tulisan Jumlah sejajar dengan kolom sebelum Grand Total -->
+          <td colspan="10" class="text-right text-bold" style="font-weight: bold;">Jumlah :</td>
           <td colspan="2" class="text-bold" style="font-weight: bold;">{{$formatGrandTotal}}</td>
          </tr>
         </tbody>

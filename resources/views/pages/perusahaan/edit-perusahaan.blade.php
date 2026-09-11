@@ -100,9 +100,16 @@
                               </div>
                           </div>
                           <div class="row col-lg-12 col-sm-6 mb-2">
-                            <label for="colFormLabelNama" class="col-lg-4 col-form-label col-form-label-md" value=" {{$perusahaan->logo}}">Logo Perusahaan</label>
+                            <label for="colFormLabelNama" class="col-lg-4 col-form-label col-form-label-md">Logo Perusahaan</label>
                               <div class="col-lg-7">
-                                <input type="file" name="logo" class="form-control" >
+                                <div class="mb-2">
+                                  <img src="{{ asset('storage/images/perusahaan/'.($perusahaan->logo ?: 'default.png')) }}" 
+                                       alt="{{$perusahaan->nama_perusahaan}}" 
+                                       style="max-width:90px; max-height:90px; object-fit:contain; border: 1px solid #dee2e6; border-radius: 6px; padding: 4px; background: #fff;" 
+                                       onerror="this.onerror=null; this.src='{{ asset('storage/images/perusahaan/default.png') }}';">
+                                </div>
+                                <input type="file" name="logo" class="form-control" accept="image/*">
+                                <small class="text-muted d-block mt-1">Pilih file baru jika ingin mengganti logo (PNG/JPG, maks 2MB). Biarkan kosong jika tidak ingin mengubah.</small>
                               </div>
                           </div>
                           <div class="row">

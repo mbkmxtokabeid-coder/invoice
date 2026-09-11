@@ -64,6 +64,7 @@
            <th scope="col">TANGGAL</th>
            <th scope="col">CUSTOMER</th>
            <th scope="col">PERUSAHAAN</th>
+           <th scope="col">NOMOR HP</th>
            <th scope="col">DESKRIPSI</th>
            <th scope="col">STATUS</th>
            <th scope="col">QTY</th>
@@ -79,6 +80,7 @@
           <td>{{$jual->formatted_tgl_penjualan}}</td>
           <td>{{$jual->customer}}</td>
           <td>{{$jual->perusahaan}}</td>
+          <td>{{$jual->no_telepon ?? '-'}}</td>
           <td>{{ $jual->jenis_barang }} {{$jual->deskripsi_item}}</td>
           <td>{{$jual->status}}</td>
           <td>{{$jual->qty}}</td>
@@ -87,6 +89,7 @@
          </tr>
         @endforeach
         <tr>
+          <td></td>
           <td></td>
           <td></td>
           <td></td>
