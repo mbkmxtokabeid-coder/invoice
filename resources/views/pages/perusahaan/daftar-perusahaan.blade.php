@@ -64,7 +64,17 @@
                           @foreach ($company as $item)
                           <tr>
                             <td class="text-center" style="width: 10px;">{{$loop->iteration}}</td>
-                            <td><img src="{{ asset('storage/images/perusahaan/'.($item->logo ?: 'default.png')) }}" alt="{{$item->nama_perusahaan}}" style="max-width:70px; max-height:70px; object-fit:contain;" onerror="this.onerror=null; this.src='{{ asset('storage/images/perusahaan/default.png') }}';"></td>
+                            @php
+                              $logoName = $item->logo;
+                              if (empty($logoName) || $logoName === 'default.png') {
+                                  if (stripos($item->nama_perusahaan, 'ibekam') !== false || stripos($item->nama_perusahaan, 'ibeka') !== false) {
+                                      $logoName = 'Ibekami.png';
+                                  } else {
+                                      $logoName = 'default.png';
+                                  }
+                              }
+                            @endphp
+                            <td><img src="{{ asset('storage/images/perusahaan/'.$logoName) }}" alt="{{$item->nama_perusahaan}}" style="max-width:70px; max-height:70px; object-fit:contain;" onerror="this.onerror=null; this.src='{{ asset('images/Ibekami.png') }}';"></td>
                             <td>{{$item->nama_perusahaan}}</td>
                             <td>{{$item->alamat_perusahaan}}</td>
                             <td>{{$item->no_hp}}</td>

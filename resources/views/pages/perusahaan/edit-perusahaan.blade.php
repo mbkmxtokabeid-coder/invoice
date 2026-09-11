@@ -103,10 +103,20 @@
                             <label for="colFormLabelNama" class="col-lg-4 col-form-label col-form-label-md">Logo Perusahaan</label>
                               <div class="col-lg-7">
                                 <div class="mb-2">
-                                  <img src="{{ asset('storage/images/perusahaan/'.($perusahaan->logo ?: 'default.png')) }}" 
+                                  @php
+                                    $currentLogo = $perusahaan->logo;
+                                    if (empty($currentLogo) || $currentLogo === 'default.png') {
+                                        if (stripos($perusahaan->nama_perusahaan, 'ibekam') !== false || stripos($perusahaan->nama_perusahaan, 'ibeka') !== false) {
+                                            $currentLogo = 'Ibekami.png';
+                                        } else {
+                                            $currentLogo = 'default.png';
+                                        }
+                                    }
+                                  @endphp
+                                  <img src="{{ asset('storage/images/perusahaan/'.$currentLogo) }}" 
                                        alt="{{$perusahaan->nama_perusahaan}}" 
                                        style="max-width:90px; max-height:90px; object-fit:contain; border: 1px solid #dee2e6; border-radius: 6px; padding: 4px; background: #fff;" 
-                                       onerror="this.onerror=null; this.src='{{ asset('storage/images/perusahaan/default.png') }}';">
+                                       onerror="this.onerror=null; this.src='{{ asset('images/Ibekami.png') }}';">
                                 </div>
                                 <input type="file" name="logo" class="form-control" accept="image/*">
                                 <small class="text-muted d-block mt-1">Pilih file baru jika ingin mengganti logo (PNG/JPG, maks 2MB). Biarkan kosong jika tidak ingin mengubah.</small>
