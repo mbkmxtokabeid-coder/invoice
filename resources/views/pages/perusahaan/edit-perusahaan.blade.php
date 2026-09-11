@@ -105,8 +105,9 @@
                                 <div class="mb-2">
                                   @php
                                     $currentLogo = $perusahaan->logo;
+                                    $isIbekami = (stripos($perusahaan->nama_perusahaan, 'ibekam') !== false || stripos($perusahaan->nama_perusahaan, 'ibeka') !== false);
                                     if (empty($currentLogo) || $currentLogo === 'default.png') {
-                                        if (stripos($perusahaan->nama_perusahaan, 'ibekam') !== false || stripos($perusahaan->nama_perusahaan, 'ibeka') !== false) {
+                                        if ($isIbekami) {
                                             $currentLogo = 'Ibekami.png';
                                         } else {
                                             $currentLogo = 'default.png';
@@ -116,7 +117,7 @@
                                   <img src="{{ asset('storage/images/perusahaan/'.$currentLogo) }}" 
                                        alt="{{$perusahaan->nama_perusahaan}}" 
                                        style="max-width:90px; max-height:90px; object-fit:contain; border: 1px solid #dee2e6; border-radius: 6px; padding: 4px; background: #fff;" 
-                                       onerror="this.onerror=null; this.src='{{ asset('images/Ibekami.png') }}';">
+                                       onerror="if(!this.dataset.tried1){ this.dataset.tried1=1; this.src='{{ asset('images/perusahaan/'.$currentLogo) }}'; } else if(!this.dataset.tried2){ this.dataset.tried2=1; this.src='{{ asset('images/'.($isIbekami ? 'Logo IBEKAMI.png' : 'default.png')) }}'; } else { this.onerror=null; }">
                                 </div>
                                 <input type="file" name="logo" class="form-control" accept="image/*">
                                 <small class="text-muted d-block mt-1">Pilih file baru jika ingin mengganti logo (PNG/JPG, maks 2MB). Biarkan kosong jika tidak ingin mengubah.</small>

@@ -39,7 +39,9 @@ class PerusahaanController extends Controller
 
           // Simpan ke semua lokasi target agar kompatibel dengan lokal maupun berbagai konfigurasi hosting
           $targetDirs = array_unique([
+              public_path('images/perusahaan'),
               public_path('storage/images/perusahaan'),
+              base_path('public/images/perusahaan'),
               base_path('public/storage/images/perusahaan'),
               storage_path('app/public/images/perusahaan'),
           ]);
@@ -98,7 +100,9 @@ class PerusahaanController extends Controller
 
             // Simpan ke semua lokasi target agar kompatibel dengan lokal maupun berbagai konfigurasi hosting
             $targetDirs = array_unique([
+                public_path('images/perusahaan'),
                 public_path('storage/images/perusahaan'),
+                base_path('public/images/perusahaan'),
                 base_path('public/storage/images/perusahaan'),
                 storage_path('app/public/images/perusahaan'),
             ]);

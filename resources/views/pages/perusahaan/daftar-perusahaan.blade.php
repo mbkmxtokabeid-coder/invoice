@@ -66,15 +66,21 @@
                             <td class="text-center" style="width: 10px;">{{$loop->iteration}}</td>
                             @php
                               $logoName = $item->logo;
+                              $isIbekami = (stripos($item->nama_perusahaan, 'ibekam') !== false || stripos($item->nama_perusahaan, 'ibeka') !== false);
                               if (empty($logoName) || $logoName === 'default.png') {
-                                  if (stripos($item->nama_perusahaan, 'ibekam') !== false || stripos($item->nama_perusahaan, 'ibeka') !== false) {
+                                  if ($isIbekami) {
                                       $logoName = 'Ibekami.png';
                                   } else {
                                       $logoName = 'default.png';
                                   }
                               }
                             @endphp
-                            <td><img src="{{ asset('storage/images/perusahaan/'.$logoName) }}" alt="{{$item->nama_perusahaan}}" style="max-width:70px; max-height:70px; object-fit:contain;" onerror="this.onerror=null; this.src='{{ asset('images/Ibekami.png') }}';"></td>
+                            <td>
+                              <img src="{{ asset('storage/images/perusahaan/'.$logoName) }}" 
+                                   alt="{{$item->nama_perusahaan}}" 
+                                   style="max-width:70px; max-height:70px; object-fit:contain;" 
+                                   onerror="if(!this.dataset.tried1){ this.dataset.tried1=1; this.src='{{ asset('images/perusahaan/'.$logoName) }}'; } else if(!this.dataset.tried2){ this.dataset.tried2=1; this.src='{{ asset('images/'.($isIbekami ? 'Logo IBEKAMI.png' : 'default.png')) }}'; } else { this.onerror=null; }">
+                            </td>
                             <td>{{$item->nama_perusahaan}}</td>
                             <td>{{$item->alamat_perusahaan}}</td>
                             <td>{{$item->no_hp}}</td>
