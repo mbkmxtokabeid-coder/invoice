@@ -27,6 +27,10 @@ function getChartColorsArray(e) {
   }
 }
 
+// Konfigurasi Beban Harian Tokabe
+const BEBAN_HARIAN_TOKABE = 1000000;
+const TGL_AWAL_INVOICE_TOKABE = '2023-10-13'; // Tanggal invoice pertama Tokabe (TKBP00001)
+
 // console.log(totalPerHari);
 // CHART BAR UNTUK UMUM (DILUAR PO)
 var options,
@@ -251,10 +255,13 @@ else if (period === 'week') {
     return total + (dataMap.get(date) ?? 0);
   }, 0);
 
-  // 🔹 4. Buat data mingguan setelah dikurangi beban 500.000/hari
+  // 🔹 4. Buat data mingguan setelah dikurangi beban 1.000.000/hari (mulai dari invoice pertama tokabe)
   let finalWeeklyData = fullWeekDates.map(date => {
     const transaksi = dataMap.get(date);
-    return transaksi !== undefined ? transaksi - 500000 : -500000;
+    if (date < TGL_AWAL_INVOICE_TOKABE) {
+      return transaksi ?? 0;
+    }
+    return transaksi !== undefined ? (transaksi - BEBAN_HARIAN_TOKABE) : -BEBAN_HARIAN_TOKABE;
   });
 
   // 🔹 5. Hitung income mingguan
@@ -283,9 +290,9 @@ else if (period === 'week') {
       },
     },
     yaxis: {
-      min: -1000000,
+      min: -2000000,
       max: 5000000,
-      tickAmount: 5,
+      tickAmount: 7,
       axisBorder: { show: false },
       axisTicks: { show: false },
       labels: {
@@ -298,7 +305,7 @@ else if (period === 'week') {
       bar: {
         colors: {
           ranges: [
-            { from: -1000000, to: 0, color: '#F15B46' },
+            { from: -100000000, to: 0, color: '#F15B46' },
             { from: 0, to: 50000000, color: '#28A745' }
           ]
         }
@@ -310,7 +317,7 @@ else if (period === 'week') {
   if (elementHarga) {
     elementHarga.innerHTML = `
       Total Transaksi: <strong>Rp. ${totalTransaksiAsli.toLocaleString()}</strong><br>
-      Income Setelah Beban Rp.500.000/hari:<br>
+      Income Setelah Beban Rp.1.000.000/hari:<br>
       Positif Rp. ${totalPositif.toLocaleString()} - Negatif Rp. ${Math.abs(totalNegatif).toLocaleString()} = 
       <strong>Rp. ${netIncome.toLocaleString()}</strong>
     `;
@@ -335,10 +342,13 @@ else if (period === 'month') {
     return total + (dataMap.get(date) ?? 0);
   }, 0);
 
-  // Modifikasi: jika ada transaksi, kurangi 500.000. Jika tidak, isi -500.000
+  // Modifikasi: jika ada transaksi, kurangi 1.000.000. Jika tidak, isi -1.000.000 (mulai dari invoice pertama tokabe)
   let filteredTotalHarianArray = fullDateArray.map(date => {
     const transaksi = dataMap.get(date);
-    return transaksi !== undefined ? (transaksi - 500000) : -500000;
+    if (date < TGL_AWAL_INVOICE_TOKABE) {
+      return transaksi ?? 0;
+    }
+    return transaksi !== undefined ? (transaksi - BEBAN_HARIAN_TOKABE) : -BEBAN_HARIAN_TOKABE;
   });
 
   // Hitung total positif dan negatif dari data yang sudah dikurangi
@@ -354,7 +364,7 @@ else if (period === 'month') {
 
   // Logging
   console.log("Total Transaksi Asli:", totalTransaksiAsli);
-  console.log("Filtered Harian Array (sudah dikurangi 500rb):", filteredTotalHarianArray);
+  console.log("Filtered Harian Array (sudah dikurangi 1jt):", filteredTotalHarianArray);
   console.log("Total Positif:", totalPositif);
   console.log("Total Negatif:", totalNegatif);
   console.log("Total Income Setelah Perhitungan:", totalIncome);
@@ -375,9 +385,9 @@ else if (period === 'month') {
       }
     },
     yaxis: {
-      min: -1000000,
+      min: -2000000,
       max: 5000000,
-      tickAmount: 6,
+      tickAmount: 7,
       forceNiceScale: true,
       labels: {
         formatter: function (val) {
@@ -389,7 +399,7 @@ else if (period === 'month') {
       bar: {
         colors: {
           ranges: [
-            { from: -1000000, to: 0, color: '#F15B46' },
+            { from: -100000000, to: 0, color: '#F15B46' },
             { from: 0, to: 50000000, color: '#28A745' }
           ]
         }
@@ -402,7 +412,7 @@ else if (period === 'month') {
   if (elementHarga) {
     elementHarga.innerHTML = `
       Total Transaksi: <strong>Rp. ${totalTransaksiAsli.toLocaleString()}</strong><br>
-      Income Setelah Beban Rp.500.000/hari:<br>
+      Income Setelah Beban Rp.1.000.000/hari:<br>
       Positif Rp. ${totalPositif.toLocaleString()} - Negatif Rp. ${Math.abs(totalNegatif).toLocaleString()} = <strong>Rp. ${totalIncome.toLocaleString()}</strong>
     `;
   }
@@ -451,13 +461,19 @@ else if (period === 'year') {
 
   console.log("Total Bulanan Array:", totalBulananArray);
 
-  // ✅ Hitung total negatif di setiap bulan (dihitung dari jumlah hari x -500.000)
+  // ✅ Hitung total negatif di setiap bulan (dihitung dari jumlah hari x -1.000.000, dimulai sejak invoice pertama tokabe)
   let totalNegatifPerBulan = Array.from({ length: currentMonth }, (_, month) => {
     let daysInMonth = (month + 1 === currentMonth)
       ? currentDate // kalau bulan sekarang, hanya sampai hari ini
       : new Date(currentYear, month + 1, 0).getDate(); // jumlah hari dalam bulan
 
-    let totalNegatif = daysInMonth * -500000;
+    let totalNegatif = 0;
+    for (let day = 1; day <= daysInMonth; day++) {
+      let formattedDate = `${currentYear}-${("0" + (month + 1)).slice(-2)}-${("0" + day).slice(-2)}`;
+      if (formattedDate >= TGL_AWAL_INVOICE_TOKABE) {
+        totalNegatif -= BEBAN_HARIAN_TOKABE;
+      }
+    }
     console.log(`Total Negatif di Bulan ${month + 1}:`, totalNegatif);
     return totalNegatif;
   });
@@ -569,31 +585,34 @@ else if (period === 'lastYear') {
     return monthlyTotalMapLastYear.get(month) || 0;
   });
 
-  // ✅ Hitung negatif per bulan (berdasarkan jumlah tanggal yang gak ada)
+  // ✅ Hitung negatif per bulan (Beban Tetap -1.000.000/hari, dimulai sejak invoice pertama tokabe)
   let totalNegatifPerBulanLastYear = Array.from({ length: 12 }, (_, month) => {
     let daysInMonth = new Date(lastYear, month + 1, 0).getDate();
     let totalNegatif = 0;
 
     for (let day = 1; day <= daysInMonth; day++) {
       let formattedDate = `${lastYear}-${("0" + (month + 1)).slice(-2)}-${("0" + day).slice(-2)}`;
-      if (!dateArrayLastYearJS.includes(formattedDate)) {
-        totalNegatif += -500000;
+      if (formattedDate >= TGL_AWAL_INVOICE_TOKABE) {
+        totalNegatif -= BEBAN_HARIAN_TOKABE;
       }
     }
 
     return totalNegatif;
   });
 
-  // ✅ Total income Desember (bulan ke-12)
-  let totalIncomeBulanDes = totalBulananArrayLastYear[11] || 0;
-  let totalNegatifDes = totalNegatifPerBulanLastYear[11];
-  let totalIncomeFixDes = totalIncomeBulanDes + totalNegatifDes;
+  // ✅ Array income dengan formula
+  let totalWithFormulaArrayLastYear = totalBulananArrayLastYear.map((v, i) => v + totalNegatifPerBulanLastYear[i]);
+
+  // Total akumulasi setahun
+  const totalOriginalTahunLalu = totalBulananArrayLastYear.reduce((acc, val) => acc + val, 0);
+  const totalNegatifTahunLalu = totalNegatifPerBulanLastYear.reduce((acc, val) => acc + val, 0);
+  const totalWithFormulaTahunLalu = totalOriginalTahunLalu + totalNegatifTahunLalu;
 
   chart.updateOptions({
     series: [
       {
         name: "Monthly Income Last Year (With Formula)",
-        data: totalBulananArrayLastYear.map((v, i) => v + totalNegatifPerBulanLastYear[i]),
+        data: totalWithFormulaArrayLastYear,
         color: '#FFC107',
       },
       {
@@ -609,8 +628,8 @@ else if (period === 'lastYear') {
       }
     },
     yaxis: {
-      min: Math.min(...totalBulananArrayLastYear.map((v, i) => v + totalNegatifPerBulanLastYear[i]), 0),
-      max: Math.max(...totalBulananArrayLastYear.map((v, i) => v + totalNegatifPerBulanLastYear[i])) + 1000000,
+      min: Math.min(...totalWithFormulaArrayLastYear, 0),
+      max: Math.max(...totalWithFormulaArrayLastYear, ...totalBulananArrayLastYear) + 1000000,
       tickAmount: 6,
       forceNiceScale: true,
       labels: {
@@ -631,7 +650,11 @@ else if (period === 'lastYear') {
   });
 
   if (elementHarga) {
-    elementHarga.innerHTML = `Total Income Desember Tahun Lalu Rp. ${totalIncomeBulanDes.toLocaleString()} - Negatif Rp. ${totalNegatifDes.toLocaleString()} = Rp. ${totalIncomeFixDes.toLocaleString()}`;
+    elementHarga.innerHTML = `
+      Total Income Januari-Desember (${lastYear}): <strong>Rp ${totalOriginalTahunLalu.toLocaleString()}</strong><br>
+      Total Beban Januari-Desember (${lastYear}): <strong>Rp ${Math.abs(totalNegatifTahunLalu).toLocaleString()}</strong><br>
+      Total After Formula Januari-Desember (${lastYear}): <strong>Rp ${totalWithFormulaTahunLalu.toLocaleString()}</strong>
+    `;
   }
 }
 }

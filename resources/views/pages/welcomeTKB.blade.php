@@ -496,7 +496,7 @@
         
 
     </script>
-    <script src="{{asset('js/halaman/dashboardtokabe.js')}}"></script>
+    <script src="{{asset('js/halaman/dashboardtokabe.js')}}?v=2.0"></script>
 
 
 @endsection

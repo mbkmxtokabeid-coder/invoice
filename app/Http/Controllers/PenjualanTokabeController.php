@@ -77,6 +77,55 @@ class PenjualanTokabeController extends Controller
         
         $jumlahBatal = number_format(($dataBatal->sum('total_pembayaran') / 1000000), 2);
         $totalLunasThn = $jumlahLunas + $dpTahun;
+
+        // Hitung akumulasi PPN dan PPH untuk role Pemilik (Tahun berjalan & non Batal)
+        $invoicesTahunIni = PenjualanTokabe::whereYear('tgl_penjualan', $yearNow)
+            ->where('status', '!=', 'Batal')
+            ->get();
+
+        $totalPpnNominal = 0;
+        $countPpn = 0;
+        $totalPphNominal = 0;
+        $countPph = 0;
+
+        foreach ($invoicesTahunIni as $invItem) {
+            $hasPpn = !empty($invItem->ppn) && (float)$invItem->ppn > 0;
+            $hasDiskon = !empty($invItem->diskon) && (float)$invItem->diskon > 0;
+            $hasPotongan = !empty($invItem->potongan) && (float)$invItem->potongan > 0;
+            $hasPph = !empty($invItem->pph) && (float)$invItem->pph > 0;
+
+            $autoPpnNominal = 0;
+            if (!$hasPpn && !$hasDiskon && !$hasPotongan && !$hasPph && $invItem->total_pembayaran > $invItem->total_harga && $invItem->total_harga > 0) {
+                $autoPpnNominal = $invItem->total_pembayaran - $invItem->total_harga;
+                $hasPpn = true;
+            }
+
+            if ($hasPpn) {
+                $ppnAmount = !empty($invItem->ppn) ? (($invItem->ppn / 100) * $invItem->total_harga) : $autoPpnNominal;
+                $totalPpnNominal += $ppnAmount;
+                $countPpn++;
+            }
+
+            if ($hasPph) {
+                $pphAmount = ($invItem->pph / 100) * $invItem->total_harga;
+                $totalPphNominal += $pphAmount;
+                $countPph++;
+            }
+        }
+
+        $totalPpnJuta = $totalPpnNominal / 1000000;
+        if ($totalPpnJuta >= 1000) {
+            $jumlahPpnPerTahun = intval($totalPpnJuta);
+        } else {
+            $jumlahPpnPerTahun = number_format($totalPpnJuta, 2);
+        }
+
+        $totalPphJuta = $totalPphNominal / 1000000;
+        if ($totalPphJuta >= 1000) {
+            $jumlahPphPerTahun = intval($totalPphJuta);
+        } else {
+            $jumlahPphPerTahun = number_format($totalPphJuta, 2);
+        }
         
         foreach ($penjualan as $inv) {
             $inv->formatted_tgl_penjualan = Carbon::parse($inv->tgl_penjualan)->format('d M Y');
@@ -88,7 +137,7 @@ class PenjualanTokabeController extends Controller
             }
         }
 
-        return  view('pages.invoices.tokabe.daftar-invoiceTokabe', compact('invoices', 'perusahaan', 'penjualan', 'jlhInvoice', 'lunas', 'belumLunas', 'batal', 'totalLunasThn',  'jumlahBatal', 'jumlahInvoice', 'jumlahBBPerTahun', 'jumlahBBPerBulan', 'jumlahPerBulan', 'jumlahPerTahun', 'belumLunasMonth'));
+        return  view('pages.invoices.tokabe.daftar-invoiceTokabe', compact('invoices', 'perusahaan', 'penjualan', 'jlhInvoice', 'lunas', 'belumLunas', 'batal', 'totalLunasThn',  'jumlahBatal', 'jumlahInvoice', 'jumlahBBPerTahun', 'jumlahBBPerBulan', 'jumlahPerBulan', 'jumlahPerTahun', 'belumLunasMonth', 'jumlahPpnPerTahun', 'totalPpnNominal', 'countPpn', 'jumlahPphPerTahun', 'totalPphNominal', 'countPph'));
     }
 
     public function addInvoice()

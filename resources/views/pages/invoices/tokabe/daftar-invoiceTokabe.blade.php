@@ -216,6 +216,58 @@
               </div><!-- end card -->
           </div><!-- end col -->
           @endif
+
+          @if (in_array(Auth::user()->role, ['Pemilik', 'Admin', 'AdminTKB']))
+          <div class="col-xl-3 col-md-6">
+              <!-- card PPN -->
+              <div class="card">
+                  <div class="card-body bg-info">
+                      <div class="d-flex align-items-center">
+                          <div class="flex-grow-1">
+                              <h4 class="fs-22 fw-semibold ff-secondary mb-2 text-white" title="Total PPN: Rp {{ number_format($totalPpnNominal, 0, ',', '.') }}">Rp<span class="counter-value" data-target="{{$jumlahPpnPerTahun}}">0</span>M</h4>
+                              <p class="text-uppercase fw-medium fs-14 text-white mb-0">Jumlah PPN Tahun <script>document.write(new Date().getFullYear())</script>
+                              </p>
+                          </div>
+                          <div class="avatar-sm flex-shrink-0">
+                              <span class="avatar-title bg-light rounded-circle fs-3">
+                                  <i class="las la-receipt fs-24 text-info"></i>
+                              </span>
+                          </div>
+                      </div>
+                      <div class="d-flex align-items-end justify-content-between mt-4">
+                          <div>
+                              <span class="badge bg-success me-1">{{$countPpn}}</span> <span class="text-white">Invoice Tokabe dengan PPN</span>
+                          </div>
+                      </div>
+                  </div><!-- end card body -->
+              </div><!-- end card -->
+          </div><!-- end col -->
+
+          <div class="col-xl-3 col-md-6">
+              <!-- card PPH -->
+              <div class="card">
+                  <div class="card-body bg-warning">
+                      <div class="d-flex align-items-center">
+                          <div class="flex-grow-1">
+                              <h4 class="fs-22 fw-semibold ff-secondary mb-2 text-white" title="Total PPH: Rp {{ number_format($totalPphNominal, 0, ',', '.') }}">Rp<span class="counter-value" data-target="{{$jumlahPphPerTahun}}">0</span>M</h4>
+                              <p class="text-uppercase fw-medium fs-14 text-white mb-0">Jumlah PPH Tahun <script>document.write(new Date().getFullYear())</script>
+                              </p>
+                          </div>
+                          <div class="avatar-sm flex-shrink-0">
+                              <span class="avatar-title bg-light rounded-circle fs-3">
+                                  <i class="las la-percentage fs-24 text-warning"></i>
+                              </span>
+                          </div>
+                      </div>
+                      <div class="d-flex align-items-end justify-content-between mt-4">
+                          <div>
+                              <span class="badge bg-success me-1">{{$countPph}}</span> <span class="text-white">Invoice Tokabe dengan PPH</span>
+                          </div>
+                      </div>
+                  </div><!-- end card body -->
+              </div><!-- end card -->
+          </div><!-- end col -->
+          @endif
       </div>
 
       <div class="row">

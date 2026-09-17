@@ -34,6 +34,7 @@ class PenjualanTokabe extends Model
         'status',
         'diskon',
         'ppn',
+        'pph',
         'total_pembayaran',
         'sisa_pembayaran',
         'approval',
