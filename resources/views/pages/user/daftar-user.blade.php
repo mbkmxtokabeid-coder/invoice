@@ -13,6 +13,7 @@
   <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
           <div class="modal-body text-center p-5">
+            <input type="hidden" name="user_delete_id" id="user_id">
             <input type="hidden" name="spb_delete_id" id="spb_id">
             <lord-icon
             src="https://cdn.lordicon.com/tdrtiskw.json"
@@ -22,14 +23,14 @@
             style="width:150px;height:150px">
             </lord-icon>
             <div class="mt-4">
-              <h4 class="mb-3">Apakah ingin menghapus data?</h4>
+              <h4 class="mb-3" id="deleteModalText">Apakah ingin menghapus data karyawan?</h4>
               <div class="hstack gap-2 justify-content-center">
                   <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                  <form id="deleteForm" action="/delete-spb" method="POST">
+                  <form id="deleteForm" action="" method="POST">
                     @csrf
                     @method('delete')
 
-                    <button type="submit" class="btn btn-danger mt-3">
+                    <button type="submit" class="btn btn-danger">
                       <i class="las la-trash-alt fs-18 align-middle me-2"></i>
                       Delete
                     </button>
@@ -145,14 +146,14 @@
                             <li>
                               <a class="dropdown-item" href="{{route('user.edit',$user->id)}}"><i class="las la-pen fs-18 align-middle me-2 text-muted"></i>Edit</a>
                             </li>
-                            {{-- <li class="dropdown-divider"></li>
-
-                              <li>
-                                <button data-bs-toggle="modal" data-bs-target=".bs-example-modal-center" id="spb-id" value="{{$user->id}}" class="dropdown-item hapus-btn">
-                                  <i class="las la-trash-alt fs-18 align-middle me-2 text-muted"></i>
-                                  Delete
+                            @if (Auth::check() && strtolower(Auth::user()->role) === 'pemilik')
+                            <li class="dropdown-divider"></li>
+                            <li>
+                              <button type="button" data-bs-toggle="modal" data-bs-target="#deleteModal" value="{{$user->id}}" data-id="{{$user->id}}" data-nama="{{$user->nama}}" data-url="{{ route('user.delete', $user->id) }}" class="dropdown-item text-danger hapus-btn">
+                                <i class="las la-trash-alt fs-18 align-middle me-2 text-danger"></i>Hapus Karyawan
                               </button>
-                              </li> --}}
+                            </li>
+                            @endif
                           </ul>
                       </div>
                       </td>
@@ -184,6 +185,6 @@
 <script src="{{asset('js/pages/datatables.init.js')}}"></script>
 <!-- Modal Js -->
 
-<script src="{{asset('js/halaman/spb.js')}}"></script>
+<script src="{{asset('js/halaman/user.js')}}"></script>
 
 @endsection

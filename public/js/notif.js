@@ -18,41 +18,36 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
-// Initialize Firebase Cloud Messaging and get a reference to the service
-const messaging = getMessaging(app);
+const supportsMessaging =
+  window.isSecureContext &&
+  'serviceWorker' in navigator &&
+  'Notification' in window &&
+  'PushManager' in window;
 
-getToken(messaging, { vapidKey: 'BMqMkl2XsxFEdpIwRmXicwKuAO8GKg2vXuo3NQ58M5w9dI-d1uC8dIadam3hGBHLEpCgCzx8CX9XuRXiYTucP_E' }).then((currentToken) => {
-    
-    
-  if (currentToken) {
-      storeToken(currentToken);
-  } else {
-    reqPermission();
-    console.log('No registration token available. Request permission to generate one.');
-    // ...
-  }
-}).catch((err) => {
-  console.log('An error occurred while retrieving token. ', err);
-  // ...
-});
+if (supportsMessaging) {
+  const app = initializeApp(firebaseConfig);
+  const messaging = getMessaging(app);
 
-function reqPermission() {
-  Notification.requestPermission().then((permission) => {
-    if (permission === 'granted') {
-      console.log('Notification permission granted.');
-      // TODO(developer): Retrieve a registration token for use with FCM.
-      // ...
-    } else {
-      alert('Unable to get permission to notify.');
-    }
-  });
+  getToken(messaging, { vapidKey: 'BMqMkl2XsxFEdpIwRmXicwKuAO8GKg2vXuo3NQ58M5w9dI-d1uC8dIadam3hGBHLEpCgCzx8CX9XuRXiYTucP_E' })
+    .then((currentToken) => {
+      if (currentToken) {
+        storeToken(currentToken);
+      }
+    })
+    .catch((err) => {
+      console.warn('Push notification is unavailable in this browser.', err);
+    });
 }
 
 function storeToken(token) {
-  let csrf = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+  const csrfMeta = document.querySelector('meta[name="csrf-token"]');
+  if (!csrfMeta || !window.jQuery) {
+    return;
+  }
+
+  const csrf = csrfMeta.getAttribute('content');
    $.ajax({
-    url: window.location.origin + '/invoice/token-notif',
+    url: window.location.origin + '/token-notif',
     type: 'POST',
     data: {
       token: token,

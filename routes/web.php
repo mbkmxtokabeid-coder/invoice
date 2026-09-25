@@ -55,6 +55,7 @@ Route::group(['middleware' => ['auth']], function () {
             Route::get('/status-user/{id}', [UserController::class, 'status'])->name('user.status');
             Route::get('/edit-user/{id}', [UserController::class, 'edit'])->name('user.edit');
             Route::put('/update-user/{id}', [UserController::class, 'update'])->name('user.update');
+            Route::delete('/delete-user/{id}', [UserController::class, 'delete'])->name('user.delete');
             
             // ROUTE BUDGET
             Route::get('/tambah-budget', [BudgetController::class, 'tambah'])->name('budget.add');

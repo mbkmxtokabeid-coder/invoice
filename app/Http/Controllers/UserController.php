@@ -114,4 +114,27 @@ class UserController extends Controller
       return redirect('/stok-tinta');
     }
   }
+
+  function delete($id)
+  {
+    $user = User::find($id);
+    if (!$user) {
+      Alert::error('User tidak ditemukan');
+      return redirect()->back();
+    }
+
+    if (auth()->id() == $id) {
+      Alert::error('Tidak dapat menghapus akun sendiri');
+      return redirect()->back();
+    }
+
+    try {
+      $user->delete();
+      Alert::success('Karyawan Berhasil dihapus');
+    } catch (\Exception $e) {
+      Alert::error('Gagal menghapus karyawan');
+    }
+
+    return redirect()->route('user.index');
+  }
 }
